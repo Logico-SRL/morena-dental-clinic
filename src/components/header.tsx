@@ -67,6 +67,11 @@ export default function Header() {
               SIWE
             </Link>
           </li>
+          <li className={styles.navItem}>
+            <Link href="/protected">
+              protected
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>

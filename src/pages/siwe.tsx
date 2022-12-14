@@ -12,7 +12,7 @@ function Siwe() {
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   const handleLogin = async () => {
     try {
@@ -41,11 +41,19 @@ function Siwe() {
   }
 
   useEffect(() => {
-    console.log(isConnected);
-    if (isConnected && !session) {
-      handleLogin()
+    console.log(`isConnected: ${isConnected}, session: ${session}`);
+
+    const tm = setTimeout(() => {
+      if (isConnected && !session) {
+        handleLogin()
+      }
+    }, 300)
+
+    return () => {
+      clearTimeout(tm);
     }
-  }, [isConnected])
+
+  }, [isConnected, session])
 
   return (
     <Layout>

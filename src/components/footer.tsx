@@ -1,13 +1,13 @@
 import Link from "next/link"
 import styles from "./footer.module.css"
-import packageJSON from "../package.json"
+// import packageJSON from "../package.json"
 
 export default function Footer() {
   return (
     <footer className={styles.footer}>
       <hr />
       <ul className={styles.navItems}>
-        <li className={styles.navItem}>
+        {/* <li className={styles.navItem}>
           <a href="https://next-auth.js.org">Documentation</a>
         </li>
         <li className={styles.navItem}>
@@ -20,10 +20,10 @@ export default function Footer() {
           <Link href="/policy">
             Policy
           </Link>
-        </li>
-        <li className={styles.navItem}>
+        </li> */}
+        {/* <li className={styles.navItem}>
           <em>next-auth@{packageJSON.dependencies["next-auth"]}</em>
-        </li>
+        </li> */}
       </ul>
     </footer>
   )
