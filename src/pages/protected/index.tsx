@@ -2,19 +2,20 @@ import { useSession, getSession } from "next-auth/react"
 import Layout from "../../components/layout"
 import type { GetServerSidePropsResult, NextPageContext } from "next"
 import { Session } from "next-auth";
+import { useAuthSession } from "../../hooks/useAuthSession";
 
-const ServerSidePage: React.FunctionComponent<{ session: Session }> = ({ session }) => {
+const ServerSidePage: React.FunctionComponent<{}> = ({ }) => {
   // As this page uses Server Side Rendering, the `session` will be already
   // populated on render without needing to go through a loading stage.
   // This is possible because of the shared context configured in `_app.js` that
   // is used by `useSession()`.
-  // const { data: session, status } = useSession()
   // const loading = status === "loading"
+  const { userId } = useAuthSession();
 
   return (
     <Layout>
-      <h1>Server Side Rendering</h1>
-      <p>{JSON.stringify(session)}</p>
+      <h1>Protected by middleware</h1>
+      <p>{userId}</p>
       {/* <p>
         This page uses the universal <strong>getSession()</strong> method in{" "}
         <strong>getServerSideProps()</strong>.
@@ -39,22 +40,22 @@ const ServerSidePage: React.FunctionComponent<{ session: Session }> = ({ session
 export default ServerSidePage;
 
 // Export the `session` prop to use sessions with Server Side Rendering
-export async function getServerSideProps(context: NextPageContext): Promise<GetServerSidePropsResult<any>> {
+// export async function getServerSideProps(context: NextPageContext): Promise<GetServerSidePropsResult<any>> {
 
-  const session = await getSession(context);
+//   const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false
-      }
-    }
-  }
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: '/',
+//         permanent: false
+//       }
+//     }
+//   }
 
-  return {
-    props: {
-      session
-    },
-  }
-}
+//   return {
+//     props: {
+//       session
+//     },
+//   }
+// }

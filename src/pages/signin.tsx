@@ -4,15 +4,19 @@ import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
 import Layout from "../components/layout"
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { useEffect, useState } from "react"
+import { useAuthSession } from "../hooks/useAuthSession"
+import { useRouter } from "next/router"
 
-function Siwe() {
+function SignIn() {
   const { signMessageAsync } = useSignMessage()
   const { chain } = useNetwork()
   const { address, isConnected } = useAccount()
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
-  const { data: session } = useSession()
+
+  const { userId, isLoggedIn } = useAuthSession();
+  const { query, push } = useRouter();
 
   const handleLogin = async () => {
     try {
@@ -41,46 +45,55 @@ function Siwe() {
   }
 
   useEffect(() => {
-    console.log(`isConnected: ${isConnected}, session: ${session}`);
+    console.log(`isConnected: ${isConnected}, userId: ${userId}`);
 
     const tm = setTimeout(() => {
-      if (isConnected && !session) {
+      if (isConnected && !userId) {
         handleLogin()
+      } else if (isConnected && userId) {
+        const u = query['callbackUrl'] as string | undefined;
+        u && push(u);
+
       }
-    }, 300)
+    }, 400)
 
     return () => {
       clearTimeout(tm);
     }
 
-  }, [isConnected, session])
+  }, [isConnected, userId, query])
+
+  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (!isConnected) {
+      connect()
+    } else {
+      handleLogin()
+    }
+  }
 
   return (
     <Layout>
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          if (!isConnected) {
-            connect()
-          } else {
-            handleLogin()
-          }
-        }}
-      >
+      {!isLoggedIn ? <button
+        onClick={onButtonClick}>
         Sign-in
-      </button>
+      </button> :
+        <p>
+          Already logged in: {userId}
+        </p>
+      }
     </Layout>
   )
 }
 
-export async function getServerSideProps(context: any) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
-}
+// export async function getServerSideProps(context: any) {
+//   return {
+//     props: {
+//       csrfToken: await getCsrfToken(context),
+//     },
+//   }
+// }
 
-Siwe.Layout = Layout
+SignIn.Layout = Layout
 
-export default Siwe
+export default SignIn

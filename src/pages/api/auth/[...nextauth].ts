@@ -1,11 +1,14 @@
+import { NextApiRequest, NextApiResponse } from "next"
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
+import defaultDataSource from "../../../db/dataSource"
+import { AppUserEntity } from "../../../repository/entities/appUser"
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-export default async function auth(req: any, res: any) {
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
     CredentialsProvider({
       name: "Ethereum",
@@ -23,6 +26,7 @@ export default async function auth(req: any, res: any) {
       },
       async authorize(credentials) {
         try {
+          console.info('authorize', credentials);
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
           const nextAuthUrl = new URL(process.env.NEXTAUTH_URL)
 
@@ -33,12 +37,25 @@ export default async function auth(req: any, res: any) {
           })
 
           if (result.success) {
+
+            console.info(`result.success`, siwe.address);
+            const usersRepo = await (await defaultDataSource()).getRepository(AppUserEntity);
+            console.info(`userRepo resolved`);
+            const user = await usersRepo.findOneBy({ id: siwe.address });
+            console.info(`userRepo user`, user);
+
+            if (!user || !user.allowed) {
+              return null
+            }
+
             return {
               id: siwe.address,
+              name: user.name
             }
           }
           return null
         } catch (e) {
+          console.error(`authorize`, e);
           return null
         }
       },
@@ -46,7 +63,7 @@ export default async function auth(req: any, res: any) {
   ]
 
   const isDefaultSigninPage =
-    req.method === "GET" && req.query.nextauth.includes("signin")
+    req.method === "GET" && req.query.nextauth?.includes("signin")
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
@@ -60,12 +77,39 @@ export default async function auth(req: any, res: any) {
       strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+      signIn: `/signin`
+    },
     callbacks: {
-      async session({ session, token }: { session: any; token: any }) {
-        session.address = token.sub
-        session.user.name = token.sub
-        session.user.image = "https://www.fillmurray.com/128/128"
-        return session
+      async jwt({ token, account, profile, user }) {
+        console.info(`nextAuth callbacks jwt`, token, account, profile, user);
+        const isLogin = !!user;
+        if (isLogin) {
+          console.info(`nextAuth callbacks jwt isLogin`);
+          return {
+            id: user?.id,
+            name: user?.name
+          };
+        }
+
+        return token;
+      },
+      async session({ session, token, user }) {
+
+        console.info(`nextAuth callbacks session`, session, token, user);
+
+        // if (isLogin) {
+        return {
+          expires: session.expires,
+          user: {
+            id: token.id as string,
+            name: token.name as string
+          }
+        }
+        // }
+        // else {
+        // return session;
+        // }
       },
     },
   })
