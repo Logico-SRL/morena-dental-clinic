@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link"
-import { useDisconnect } from "wagmi"
 import { useAuthSession } from "../../hooks/useAuthSession"
 import UserControls from "@uc"
 import styles from "./header.module.scss"

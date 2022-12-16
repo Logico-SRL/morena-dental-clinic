@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -41,14 +41,10 @@
     ]
   },
   "include": [
-    "process.d.ts",
-    "next-env.d.ts",
-    "next-auth.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx",
   ],
   "exclude": [
-    "node_modules"
-  ]
+    "node_modules",
+  ],
 }

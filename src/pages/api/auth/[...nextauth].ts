@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
 import defaultDataSource from "../../../db/dataSource"
+import { processEnv } from "../../../processEnv"
 import { AppUserEntity } from "../../../repository/entities/appUser"
 
 // For more information on each option (and a full list of options) go to
@@ -28,7 +29,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         try {
           // console.info('authorize', credentials);
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
-          const nextAuthUrl = new URL(process.env.NEXTAUTH_URL)
+          const nextAuthUrl = new URL(processEnv().nextAuthUrl)
 
           const result = await siwe.verify({
             signature: credentials?.signature || "",
@@ -76,7 +77,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     session: {
       strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: processEnv().nextAuthSecret,
     pages: {
       signIn: `/signin`
     },

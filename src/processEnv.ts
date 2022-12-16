@@ -1,13 +1,10 @@
 export const processEnv = () => {
     return {
-        // logLevel: process.env.LOG_LEVEL || 'info',
-        // logApiBody: process.env.LOG_API_BODY || false,
-        // logFolder: process.env.LOG_FOLDER || './logs',
-        // authPrivKey: process.env.NEXTAUTH_SECRET,
-        // currentEnvName: process.env.NEXT_PUBLIC_CURRENT_ENV_NAME,
-        // version: process.env.NEXT_PUBLIC_VERSION,
-        // lastOpenDay: process.env.LAST_OPEN_DAY ? +process.env.LAST_OPEN_DAY : 15,
-        // cronSecret: process.env.CRON_SECRET,
+        nextAuthUrl: process.env.NEXTAUTH_URL || '',
+        nextAuthSecret: process.env.NEXTAUTH_SECRET,
+        currentEnvName: process.env.NEXT_PUBLIC_CURRENT_ENV_NAME,
+        logLevel: process.env.LOG_LEVEL,
+
         db: {
             type: process.env.DB_TYPE,
             host: process.env.DB_HOST,
