@@ -1,3 +1,4 @@
+// import 'server-only';
 import { DataSourceOptions } from "typeorm";
 import { processEnv } from "../processEnv";
 import { AppUserEntity } from "../repository/entities/appUser";
@@ -17,4 +18,4 @@ export const dbConfig: DataSourceOptions = {
     },
 };
 
-console.info('dbConfig', dbConfig)
+// console.info('dbConfig', dbConfig)

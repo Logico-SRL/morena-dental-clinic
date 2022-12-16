@@ -26,7 +26,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       },
       async authorize(credentials) {
         try {
-          console.info('authorize', credentials);
+          // console.info('authorize', credentials);
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
           const nextAuthUrl = new URL(process.env.NEXTAUTH_URL)
 
@@ -38,11 +38,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
           if (result.success) {
 
-            console.info(`result.success`, siwe.address);
+            // console.info(`result.success`, siwe.address);
             const usersRepo = await (await defaultDataSource()).getRepository(AppUserEntity);
-            console.info(`userRepo resolved`);
+            // console.info(`userRepo resolved`);
             const user = await usersRepo.findOneBy({ id: siwe.address });
-            console.info(`userRepo user`, user);
+            // console.info(`userRepo user`, user);
 
             if (!user || !user.allowed) {
               return null
@@ -82,10 +82,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     },
     callbacks: {
       async jwt({ token, account, profile, user }) {
-        console.info(`nextAuth callbacks jwt`, token, account, profile, user);
+        // console.info(`nextAuth callbacks jwt`, token, account, profile, user);
         const isLogin = !!user;
         if (isLogin) {
-          console.info(`nextAuth callbacks jwt isLogin`);
+          // console.info(`nextAuth callbacks jwt isLogin`);
           return {
             id: user?.id,
             name: user?.name
@@ -96,7 +96,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       },
       async session({ session, token, user }) {
 
-        console.info(`nextAuth callbacks session`, session, token, user);
+        // console.info(`nextAuth callbacks session`, session, token, user);
 
         // if (isLogin) {
         return {

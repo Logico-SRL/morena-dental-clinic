@@ -11,7 +11,7 @@ export const middleware = withAuth(function middleware(request: NextRequestWithA
 }, {
     callbacks: {
         authorized: ({ token }) => {
-            console.info(`authorized token`, token);
+            // console.info(`authorized token`, token);
             return !!token;
         },
     }

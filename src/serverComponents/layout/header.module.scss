@@ -1,0 +1,9 @@
+.userAvatar {
+  margin-left: auto !important;
+  :global(.ant-menu-submenu-title) {
+    height: 100%;
+  }
+  &:global(.ant-menu-item-selected) {
+    color: inherit !important;
+  }
+}

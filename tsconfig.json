@@ -21,13 +21,32 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@uc": [
+        "src/userControls/index.ts"
+      ],
+      "@icons": [
+        "src/userControls/icons/index.ts"
+      ]
+    },
+    "typeRoots": [
+      "@types",
+      "node_modules/@types"
+    ]
   },
   "include": [
     "process.d.ts",
     "next-env.d.ts",
     "next-auth.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

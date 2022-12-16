@@ -1,0 +1,27 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  max-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  header,
+  footer {
+    overflow: hidden;
+    // background-color: lightblue;
+    // flex: auto;
+  }
+  main {
+    margin: 0;
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+  }
+}
