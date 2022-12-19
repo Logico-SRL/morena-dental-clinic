@@ -1,31 +1,24 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, Suspense } from "react";
 // import { DataSource } from "typeorm";
 import { Patients } from "../../clientComponents/patients";
+import { Pippo } from "./pippo";
 // import { UserData } from "../../clientComponents/userData";
 // import { dbConfig } from "../../db/dbConfig";
 // import { NodeIOCContainer } from "../../inversify/inversify.node.config";
 // import { IOCServiceTypes } from "../../inversify/iocTypes";
 
-// const getData = async () => {
-
-// const patientsService = NodeIOCContainer.get<IPatientsService>(IOCServiceTypes.PatientsService);
-// return await patientsService.list();
-
-// const serv = NodeIOCContainer.get<IDbService>(IOCServiceTypes.DbService);
-// const repo = await serv.patientsRepo();
-// return await repo.find();
-
-
-//     const dt = new DataSource(dbConfig);
-//     return [];
-
-// }
 
 const PatientsPage = async ({ children }: PropsWithChildren) => {
+
+
 
     return (
         <>
             <h1>Pazienti</h1>
+            <Suspense>
+                <Pippo />
+            </Suspense>
+
             <Patients />
         </>
     )
