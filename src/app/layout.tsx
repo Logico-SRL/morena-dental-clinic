@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import '../styles/global.scss';
 import '../styles/antd.less';
 

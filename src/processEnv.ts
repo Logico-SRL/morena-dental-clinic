@@ -1,5 +1,7 @@
 export const processEnv = () => {
-    return {
+    // console.info('processEnv start');
+
+    const ret = {
         nextAuthUrl: process.env.NEXTAUTH_URL || '',
         nextAuthSecret: process.env.NEXTAUTH_SECRET,
         currentEnvName: process.env.NEXT_PUBLIC_CURRENT_ENV_NAME,
@@ -17,4 +19,6 @@ export const processEnv = () => {
 
         }
     }
+    // console.info('processEnv', ret);
+    return ret;
 }

@@ -3,7 +3,8 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
-import defaultDataSource from "../../../db/dataSource"
+import { NodeIOCContainer } from "../../../inversify/inversify.node.config"
+import { IOCServiceTypes } from "../../../inversify/iocTypes"
 import { processEnv } from "../../../processEnv"
 import { AppUserEntity } from "../../../repository/entities/appUser"
 
@@ -39,8 +40,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
           if (result.success) {
 
+            const dbService = NodeIOCContainer.get<IDbService>(IOCServiceTypes.DbService);
             // console.info(`result.success`, siwe.address);
-            const usersRepo = await (await defaultDataSource()).getRepository(AppUserEntity);
+            const usersRepo = await dbService.usersRepo();
             // console.info(`userRepo resolved`);
             const user = await usersRepo.findOneBy({ id: siwe.address });
             // console.info(`userRepo user`, user);

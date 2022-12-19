@@ -1,7 +1,10 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import Layout from "../serverComponents/rootPageLayout";
+// import { NodeIOCContainer } from "../inversify/inversify.node.config";
 
 const Home: FunctionComponent<PropsWithChildren> = ({ children }) => {
+
+    // const loaded = NodeIOCContainer.id;
+
     return (
         <>
             <h1>NextAuth.js Example</h1>
@@ -10,8 +13,6 @@ const Home: FunctionComponent<PropsWithChildren> = ({ children }) => {
                 <a href="https://next-auth.js.org">NextAuth.js</a> and
                 Sign-In with Ethereum for authentication.
             </p>
-
-
         </>
     )
 }
