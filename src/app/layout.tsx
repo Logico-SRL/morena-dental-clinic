@@ -9,7 +9,7 @@ import { cookies } from 'next/headers';
 import { unstable_getServerSession, } from "next-auth/next"
 import { checkSSRAuthSession } from '../utils/checkSSRAuthSession';
 
-const RootLayout = async ({ children }: PropsWithChildren) => {
+const RootLayout: LayoutComponent = async ({ children }) => {
 
     return (
         <html lang="en">

@@ -26,7 +26,6 @@ export class DbService implements IDbService {
     }
 
     constructor() {
-        console.info('DbService constructor', dbConfig);
         this._dataSource = new DataSource(dbConfig);
     }
 

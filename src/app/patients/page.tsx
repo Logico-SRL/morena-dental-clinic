@@ -1,10 +1,9 @@
+import { NextPage } from "next";
 import React, { PropsWithChildren, Suspense } from "react";
 import { Patients } from "../../clientComponents/patients";
 
 
-const PatientsPage = async ({ children }: PropsWithChildren) => {
-
-
+const PatientsPage: PageComponent = async () => {
 
     return (
         <>

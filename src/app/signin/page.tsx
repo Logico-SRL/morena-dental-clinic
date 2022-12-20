@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useAuthSession } from "../../hooks/useAuthSession"
 import { useEffect } from "react"
 
-const SignIn = () => {
+const SignIn: PageComponent = () => {
     const { signMessageAsync } = useSignMessage()
     const { chain } = useNetwork()
     const { address, isConnected } = useAccount()

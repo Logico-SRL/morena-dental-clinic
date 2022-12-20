@@ -1,7 +1,8 @@
-import { FunctionComponent, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
+import { NextPage } from 'next'
 // import { NodeIOCContainer } from "../inversify/inversify.node.config";
 
-const Home: FunctionComponent<PropsWithChildren> = ({ children, ...rest }) => {
+const Home: PageComponent = () => {
 
     // console.info('Home ..rest', rest);
     // const loaded = NodeIOCContainer.id;

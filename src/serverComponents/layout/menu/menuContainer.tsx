@@ -14,7 +14,7 @@ const MenuContainerComp = async () => {
     //     }, 5000);
     // })
 
-    console.info('loggedInMenu', loggedInMenu);
+    // console.info('loggedInMenu', loggedInMenu);
     const items = isLoggedIn ? await loggedInMenu(session) : loggedOutMenu
 
     return <UserControls.Menu
