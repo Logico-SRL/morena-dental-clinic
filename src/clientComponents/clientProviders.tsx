@@ -4,6 +4,7 @@ import { PropsWithChildren } from "react"
 import { WagmiConfig, createClient, configureChains } from "wagmi"
 import { mainnet } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
+import { IoCProvider } from "../inversify/useService"
 
 export const { chains, provider } = configureChains(
     [mainnet],
@@ -17,10 +18,12 @@ const client = createClient({
 
 export const Providers: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
     return (
-        <WagmiConfig client={client}>
-            <SessionProvider refetchInterval={0}>
-                {children}
-            </SessionProvider>
-        </WagmiConfig>
+        <IoCProvider>
+            <WagmiConfig client={client}>
+                <SessionProvider refetchInterval={0}>
+                    {children}
+                </SessionProvider>
+            </WagmiConfig>
+        </IoCProvider>
     )
 }
