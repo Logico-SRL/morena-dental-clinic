@@ -5,9 +5,31 @@ import { IOCServiceTypes } from "../../inversify/iocTypes";
 export class PatientsService implements IPatientsService {
 
     private readonly dbService: IDbService;
+    private readonly externalPatientsService: IExternalPatientsService;
 
-    constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
+    constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService,
+        @inject(IOCServiceTypes.ExternalPatientsService) externalPatientsService: IExternalPatientsService) {
         this.dbService = dbService;
+        this.externalPatientsService = externalPatientsService;
+    }
+    public import = async (externalPatientId: string) => {
+        this.externalPatientsService.getFromUno(externalPatientId);
+        throw new Error("not implemented");
+
+    }
+
+    public searchExternal = async (params: IPatientSearchParams) => {
+        this.externalPatientsService.searchFromUno(params);
+        throw new Error("not implemented");
+    }
+
+    public save = async (patient: IPatient) => {
+        throw new Error("not implemented");
+
+    }
+
+    public find = async (patientId: string) => {
+        throw new Error("not implemented");
     }
 
     public list = async () => {

@@ -1,3 +1,5 @@
+'use client'
+
 import React from "react"
 import { useDisconnect } from "wagmi"
 import { signOut } from 'next-auth/react'

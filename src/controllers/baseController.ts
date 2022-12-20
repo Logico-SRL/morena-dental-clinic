@@ -6,8 +6,8 @@ import { getSession } from "next-auth/react";
 @injectable()
 export class BaseController implements IApiController {
 
-    public req: NextApiRequest | undefined = undefined
-    public res: NextApiResponse | undefined = undefined
+    public req: NextApiRequest;
+    public res: NextApiResponse;
 
     protected get Credentials(): Promise<Session> {
         return getSession({ req: this.req }).then(sess => {

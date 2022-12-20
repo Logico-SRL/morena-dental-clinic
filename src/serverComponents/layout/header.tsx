@@ -1,11 +1,11 @@
-"use client"
-import { useAuthSession } from "../../hooks/useAuthSession"
+// "use client"
 import UserControls from "@uc"
-import { loggedOutMenu } from "./menu/loggedOutMenu"
-import { loggedInMenu } from "./menu/loggedInMenu"
+import { Suspense } from "react"
+import { MenuContainer } from "./menu/menuContainer"
+
 
 export const Header = () => {
-  const { isLoggedIn } = useAuthSession()
+  // const { isLoggedIn } = useAuthSession()
 
   return (
     <UserControls.Header>
@@ -13,13 +13,10 @@ export const Header = () => {
         <style>{`.nojs-show { opacity: 1; top: 0; }`}</style>
       </noscript>
 
+      <Suspense>
+        <MenuContainer />
+      </Suspense>
 
-      <UserControls.Menu
-        theme="dark"
-        mode="horizontal"
-        // defaultSelectedKeys={['2']}
-        items={isLoggedIn ? loggedInMenu : loggedOutMenu}
-      />
 
     </UserControls.Header>
   )

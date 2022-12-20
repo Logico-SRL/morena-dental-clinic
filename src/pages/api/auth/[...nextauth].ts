@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import NextAuth from "next-auth"
+import NextAuth, { AuthOptions } from "next-auth"
+import { Provider } from "next-auth/providers"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
 import { SiweMessage } from "siwe"
@@ -7,11 +8,17 @@ import { NodeIOCContainer } from "../../../inversify/inversify.node.config"
 import { IOCServiceTypes } from "../../../inversify/iocTypes"
 import { processEnv } from "../../../processEnv"
 import { AppUserEntity } from "../../../repository/entities/appUser"
+import { nextAuthOptions } from "./nextAuthOptions"
+
+
+
+
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-  const providers = [
+
+  const providers: Provider[] = [
     CredentialsProvider({
       name: "Ethereum",
       credentials: {
@@ -35,6 +42,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           const result = await siwe.verify({
             signature: credentials?.signature || "",
             domain: nextAuthUrl.host,
+            //TODO => check request compatibiltiy
             nonce: await getCsrfToken({ req }),
           })
 
@@ -65,55 +73,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     }),
   ]
 
-  const isDefaultSigninPage =
-    req.method === "GET" && req.query.nextauth?.includes("signin")
+  const isDefaultSigninPage = req.method === "GET" && req.query.nextauth?.includes("signin")
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
     providers.pop()
   }
 
-  return await NextAuth(req, res, {
-    // https://next-auth.js.org/configuration/providers/oauth
-    providers,
-    session: {
-      strategy: "jwt",
-    },
-    secret: processEnv().nextAuthSecret,
-    pages: {
-      signIn: `/signin`
-    },
-    callbacks: {
-      async jwt({ token, account, profile, user }) {
-        // console.info(`nextAuth callbacks jwt`, token, account, profile, user);
-        const isLogin = !!user;
-        if (isLogin) {
-          // console.info(`nextAuth callbacks jwt isLogin`);
-          return {
-            id: user?.id,
-            name: user?.name
-          };
-        }
-
-        return token;
-      },
-      async session({ session, token, user }) {
-
-        // console.info(`nextAuth callbacks session`, session, token, user);
-
-        // if (isLogin) {
-        return {
-          expires: session.expires,
-          user: {
-            id: token.id as string,
-            name: token.name as string
-          }
-        }
-        // }
-        // else {
-        // return session;
-        // }
-      },
-    },
-  })
+  return await NextAuth(req, res, { ...nextAuthOptions, providers })
 }

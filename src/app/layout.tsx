@@ -5,8 +5,12 @@ import '../styles/antd.less';
 import { FunctionComponent, PropsWithChildren } from "react";
 import { Providers } from "../clientComponents/clientProviders";
 import RootPageLayout from "../serverComponents/rootPageLayout";
+import { cookies } from 'next/headers';
+import { unstable_getServerSession, } from "next-auth/next"
+import { checkSSRAuthSession } from '../utils/checkSSRAuthSession';
 
-const RootLayout: FunctionComponent<PropsWithChildren> = ({ children, ...rest }) => {
+const RootLayout = async ({ children }: PropsWithChildren) => {
+
     return (
         <html lang="en">
             <head>
