@@ -1,11 +1,11 @@
 'use client'
-import { getCsrfToken, signIn, useSession } from "next-auth/react"
+import { getCsrfToken, signIn } from "next-auth/react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 import { SiweMessage } from "siwe"
 import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { useRouter, useSearchParams } from "next/navigation"
 import { useAuthSession } from "../../hooks/useAuthSession"
-import { useEffect } from "react"
 
 const SignIn: PageComponent = () => {
     const { signMessageAsync } = useSignMessage()
@@ -53,7 +53,8 @@ const SignIn: PageComponent = () => {
                 handleLogin()
             } else if (isConnected && userId) {
                 const u = query.get('callbackUrl') as string | undefined;
-                u && push(u);
+
+                u ? push(u) : push(`/`);
 
             }
         }, 400)

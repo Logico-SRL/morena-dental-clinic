@@ -1,0 +1,22 @@
+.userAvatar {
+  margin-left: auto !important;
+  :global(.ant-menu-submenu-title) {
+    height: 100%;
+  }
+  &:global(.ant-menu-item-selected) {
+    color: inherit !important;
+  }
+}
+
+.header {
+  background-color: #001529;
+  height: 64px;
+  padding-inline: 50px;
+  line-height: 64px;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  > ul {
+    width: 100%;
+  }
+}

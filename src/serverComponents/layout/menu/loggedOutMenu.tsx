@@ -2,13 +2,13 @@
 import Link from "next/link";
 
 export const loggedOutMenu = [{
-    key: 'home',
+    key: '/',
     label: <Link href="/">
         Home
     </Link>
 },
 {
-    key: 'sigin',
+    key: '/signin',
     label: <Link href="/signin">
         Signin
     </Link>

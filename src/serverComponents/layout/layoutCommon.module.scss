@@ -1,0 +1,11 @@
+@import "../../styles/colors.scss";
+.container {
+  min-height: 100%;
+  .left {
+    border-right: 1px solid $border;
+    padding: 20px;
+  }
+  .right {
+    padding: 20px;
+  }
+}

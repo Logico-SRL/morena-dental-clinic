@@ -1,16 +1,15 @@
-import { NextPage } from "next";
-import React, { PropsWithChildren, Suspense } from "react";
 import { Patients } from "../../clientComponents/patients";
+import { SplittedPage } from "../../serverComponents/layout/splittedPage";
 
 
 const PatientsPage: PageComponent = async () => {
 
-    return (
-        <>
-            <h1>Pazienti</h1>
-            <Patients />
-        </>
-    )
+    const Comp = () => <>
+        <h1>Pazienti</h1>
+        <Patients />
+    </>
+
+    return (<SplittedPage Left={Comp} />)
 }
 
 export default PatientsPage;

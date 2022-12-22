@@ -6,9 +6,9 @@ import styles from "./footer.module.scss"
 export const Footer = () => {
   return (
     <UserControls.Footer className={styles.footer}>
-      <UserControls.Typography.Paragraph>
+      <UserControls.Typography.Text>
         ©2022 Logico SRL
-      </UserControls.Typography.Paragraph>
+      </UserControls.Typography.Text>
     </UserControls.Footer>
   )
 }

@@ -1,12 +1,18 @@
 import { UserData } from "../../clientComponents/userData";
+import { SplittedPage } from "../../serverComponents/layout/splittedPage";
 
-const Home: PageComponent = () => {
-    return (
+const Protected: PageComponent = () => {
+
+    const Comp = () => (
         <>
             <h1>Page protected by middleware</h1>
             <UserData />
         </>
     )
+
+    return (<SplittedPage Left={Comp} />)
+
+
 }
 
-export default Home;
+export default Protected;
