@@ -1,4 +1,5 @@
 type IExternalPatient = {
     id: string,
-    name: string
+    name: string,
+    surname: string
 }

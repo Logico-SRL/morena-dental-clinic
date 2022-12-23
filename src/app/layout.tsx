@@ -1,13 +1,9 @@
 import 'reflect-metadata';
-import '../styles/global.scss';
 import '../styles/antd.less';
+import '../styles/global.scss';
 
-import { FunctionComponent, PropsWithChildren } from "react";
-import { Providers } from "../clientComponents/clientProviders";
-import RootPageLayout from "../serverComponents/rootPageLayout";
-import { cookies } from 'next/headers';
-import { unstable_getServerSession, } from "next-auth/next"
-import { checkSSRAuthSession } from '../utils/checkSSRAuthSession';
+import { Providers } from "../components/providers/clientProviders";
+import RootPageLayout from "../components/rootPageLayout";
 
 const RootLayout: LayoutComponent = async ({ children }) => {
 

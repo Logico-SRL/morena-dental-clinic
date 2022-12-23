@@ -12,8 +12,8 @@ export class PatientsService implements IPatientsService {
         this.dbService = dbService;
         this.externalPatientsService = externalPatientsService;
     }
-    public import = async (externalPatientId: string) => {
-        this.externalPatientsService.getFromUno(externalPatientId);
+    public import = async (externalPatient: IExternalPatient) => {
+        // this.externalPatientsService.getFromUno(externalPatientId);
         throw new Error("not implemented");
 
     }

@@ -1,5 +1,5 @@
-import { UserData } from "../../clientComponents/userData";
-import { SplittedPage } from "../../serverComponents/layout/splittedPage";
+import { SplittedPage } from "../../components/layout/splittedPage";
+import { UserData } from "../../components/userData";
 
 const Protected: PageComponent = () => {
 

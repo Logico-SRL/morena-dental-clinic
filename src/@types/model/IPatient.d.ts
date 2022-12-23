@@ -1,4 +1,5 @@
 type IPatient = {
     id: string,
-    name: string
+    name: string,
+    externalId?: string
 }

@@ -1,13 +1,16 @@
 import Avatar from "./components/avatar";
+import Card from "./components/card";
 import Col from "./components/col";
 import Content from "./components/content";
 import Divider from "./components/divider";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import Layout from "./components/layout";
+import List from "./components/list";
 import Menu from "./components/menu";
 import Row from "./components/row";
 import Sider from "./components/sider";
+import Skeleton from "./components/skeleton";
 import Space from "./components/space";
 import Typography from "./components/typography";
 
@@ -23,7 +26,10 @@ const UserControls = {
     Sider,
     Row,
     Col,
-    Divider
+    Divider,
+    List,
+    Card,
+    Skeleton
 }
 
 export default UserControls;

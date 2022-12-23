@@ -1,4 +1,4 @@
-import { SplittedPage } from "../../serverComponents/layout/splittedPage";
+import { SplittedPage } from "../../components/layout/splittedPage";
 
 
 const TreatmentsPage: PageComponent = async () => {

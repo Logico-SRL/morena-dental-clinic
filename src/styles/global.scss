@@ -1,3 +1,5 @@
+@import "./colors.scss";
+
 html,
 body {
   width: 100vw;
@@ -25,6 +27,14 @@ body {
     // padding: 20px;
     div[data-nextjs-scroll-focus-boundary] {
       height: 100%;
+    }
+
+    .touchable {
+      cursor: pointer;
+      &:hover {
+        // transform: scale(1.01);
+        background-color: darken($color: $background, $amount: 0.1);
+      }
     }
   }
 }

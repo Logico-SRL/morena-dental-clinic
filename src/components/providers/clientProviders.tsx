@@ -1,10 +1,10 @@
 "use client"
 import { SessionProvider } from "next-auth/react"
 import { PropsWithChildren } from "react"
-import { WagmiConfig, createClient, configureChains } from "wagmi"
+import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { mainnet } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import { IoCProvider } from "../inversify/useService"
+import { IoCProvider } from "../../inversify/useService"
 
 export const { chains, provider } = configureChains(
     [mainnet],

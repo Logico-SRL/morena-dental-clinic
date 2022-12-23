@@ -1,5 +1,5 @@
-import { Patients } from "../../clientComponents/patients";
-import { SplittedPage } from "../../serverComponents/layout/splittedPage";
+import { SplittedPage } from "../../components/layout/splittedPage";
+import { Patients } from "../../components/patients/patients";
 
 
 const PatientsPage: PageComponent = async () => {

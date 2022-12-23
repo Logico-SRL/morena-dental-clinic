@@ -1,4 +1,4 @@
-import { SplittedPage } from "../serverComponents/layout/splittedPage";
+import { SplittedPage } from "../components/layout/splittedPage";
 // import { NodeIOCContainer } from "../inversify/inversify.node.config";
 
 const Home: PageComponent = () => {

@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({
     name: "patients"
@@ -10,5 +10,8 @@ export class PatientEntity {
 
     @Column({ nullable: true })
     name?: string
+
+    @Column({ nullable: true })
+    externalId?: string
 
 }
