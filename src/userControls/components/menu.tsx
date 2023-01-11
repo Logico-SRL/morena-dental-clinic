@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import { Menu, MenuProps } from 'antd';
 import { usePathname } from 'next/navigation';
 

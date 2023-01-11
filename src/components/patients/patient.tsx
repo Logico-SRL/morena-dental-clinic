@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 
 import { usePatient } from "../../hooks/usePatient";
 // import { usePatient } from "../../hooks/usePatient";

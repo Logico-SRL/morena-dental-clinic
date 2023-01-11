@@ -1,8 +1,8 @@
-'use client'
+// 'use client'
 
+import { signOut } from 'next-auth/react'
 import React from "react"
 import { useDisconnect } from "wagmi"
-import { signOut } from 'next-auth/react'
 
 export const Disconnect = () => {
     const { disconnect } = useDisconnect()

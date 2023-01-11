@@ -1,13 +1,13 @@
-'use client'
-import UserControls from "@uc";
+// 'use client'
 import { AntdIcons } from "@icons";
+import UserControls from "@uc";
 // import { useAuthSession } from "../../hooks/useAuthSession";
+import { useAuthSession } from "../../hooks/useAuthSession";
 import styles from './user.module.scss';
-import { Session } from "next-auth";
 
-export const UserAvatar: React.FunctionComponent<{ className?: string, session: Session | null }> = ({ className, session }) => {
+export const UserAvatar: React.FunctionComponent<{ className?: string }> = ({ className }) => {
 
-    // const { userId, userName, isLoggedIn, isLoading } = useAuthSession()
+    const { userId, userName, isLoggedIn, isLoading } = useAuthSession()
 
     const onAvatarClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -18,10 +18,10 @@ export const UserAvatar: React.FunctionComponent<{ className?: string, session: 
     return (<div className={styles.avatarContainer} onClick={onAvatarClick}>
         <div className={styles.nameContainer}>
             <UserControls.Typography.Text style={{ display: 'block' }}>
-                {session?.user?.name}
+                {userName}
             </UserControls.Typography.Text>
             <UserControls.Typography.Text style={{ display: 'block' }}>
-                {session?.user?.id}
+                {userId}
             </UserControls.Typography.Text>
         </div>
         <UserControls.Avatar size={'large'} className={className} icon={<AntdIcons.UserOutlined />} />

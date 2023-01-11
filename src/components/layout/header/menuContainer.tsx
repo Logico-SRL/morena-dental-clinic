@@ -1,13 +1,13 @@
+import { useAuthSession } from "../../../hooks/useAuthSession"
 import UserControls from "../../../userControls"
-import { checkSSRAuthSession } from "../../../utils/checkSSRAuthSession"
 import { loggedInHeader } from "./loggedInHeader"
 import { loggedOutHeader } from "./loggedOutHeader"
 
-const MenuContainerComp = async () => {
+const MenuContainerComp = () => {
 
-    const { isLoggedIn, session } = await checkSSRAuthSession();
+    const { isLoggedIn } = useAuthSession();
     // const items = isLoggedIn ? await loggedInMenu(session) : loggedOutMenu
-    const items = isLoggedIn ? await loggedInHeader(session) : loggedOutHeader
+    const items = isLoggedIn ? loggedInHeader : loggedOutHeader
 
     return <UserControls.Menu
         theme="dark"

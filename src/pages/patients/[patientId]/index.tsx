@@ -2,7 +2,7 @@ import { SplittedPage } from "../../../components/layout/splittedPage";
 import { Patient } from "../../../components/patients/patient";
 
 
-const PatientsPage: PageComponent = async ({ params }) => {
+const PatientsPage: PageComponent = ({ params }) => {
     const { patientId } = params as { patientId: string }
 
     const Comp = () => <>

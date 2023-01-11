@@ -1,13 +1,13 @@
+import { useAuthSession } from "../../../hooks/useAuthSession"
 import UserControls from "../../../userControls"
-import { checkSSRAuthSession } from "../../../utils/checkSSRAuthSession"
 import { loggedInMenu } from "./loggedInMenu"
 import { loggedOutMenu } from "./loggedOutMenu"
 
-const SiderContainerComp = async () => {
+const SiderContainerComp = () => {
 
-    const { isLoggedIn, session } = await checkSSRAuthSession();
+    const { isLoggedIn } = useAuthSession();
     // const items = isLoggedIn ? await loggedInMenu(session) : loggedOutMenu
-    const items = isLoggedIn ? await loggedInMenu(session) : loggedOutMenu
+    const items = isLoggedIn ? loggedInMenu : loggedOutMenu
 
     return <UserControls.Menu
         theme="dark"

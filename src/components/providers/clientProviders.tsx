@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 import { SessionProvider } from "next-auth/react"
 import { PropsWithChildren } from "react"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
@@ -16,11 +16,11 @@ const client = createClient({
     provider,
 })
 
-export const Providers: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
+export const Providers: React.FunctionComponent<PropsWithChildren<{ session: any }>> = ({ children, session }) => {
     return (
         <IoCProvider>
             <WagmiConfig client={client}>
-                <SessionProvider refetchInterval={0}>
+                <SessionProvider refetchInterval={0} session={session}>
                     {children}
                 </SessionProvider>
             </WagmiConfig>

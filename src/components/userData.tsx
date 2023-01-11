@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import { useAuthSession } from "../hooks/useAuthSession";
 
 export const UserData = () => {

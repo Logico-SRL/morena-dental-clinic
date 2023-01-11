@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import UserControls from "@uc"
 import styles from "./footer.module.scss"
 // import packageJSON from "../package.json"

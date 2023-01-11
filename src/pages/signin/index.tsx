@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import { getCsrfToken, signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from "react"

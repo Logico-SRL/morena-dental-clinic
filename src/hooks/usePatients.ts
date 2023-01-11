@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import React from "react"
 import { IOCServiceTypes } from "../inversify/iocTypes"
 import { useService } from "../inversify/useService"
