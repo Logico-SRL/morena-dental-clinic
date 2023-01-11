@@ -9,19 +9,25 @@ export const usePatients = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
 
     React.useEffect(() => {
-        const controller = new AbortController()
-        setLoading(true)
-        httpService.get<IPatient[]>(`/api/patients`, { AbortSignal: controller.signal }).then(d => {
-            console.info('/api/patients p', d)
-            setPatients(d.data);
-        }).finally(() => {
-            setLoading(false)
-        })
+        const controller = getFilteredPatients({})
 
         return () => {
             controller.abort();
         }
     }, [])
 
-    return { patients, loading };
+    const getFilteredPatients = (params: IPatientSearchParams) => {
+        const controller = new AbortController()
+        setLoading(true)
+        const pars = new URLSearchParams(params);
+        httpService.get<IPatient[]>(`/api/patients?${pars.toString()}`, { AbortSignal: controller.signal }).then(d => {
+            console.info('/api/patients p', d)
+            setPatients(d.data);
+        }).finally(() => {
+            setLoading(false)
+        })
+        return controller;
+    }
+
+    return { patients, loading, getFilteredPatients };
 }

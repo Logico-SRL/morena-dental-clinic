@@ -1,14 +1,18 @@
 // 'use client'
 
 import { useRouter } from "next/navigation";
-import { usePatients } from "../../hooks/usePatients";
 import UserControls from "../../userControls";
 import { PatientListItem } from "./patientListItem";
 
 
-export const Patients = () => {
+type PropType = {
+    patients: IPatient[],
+    loading: boolean
+}
 
-    const { patients, loading } = usePatients();
+export const Patients: React.FunctionComponent<PropType> = ({ patients, loading }) => {
+
+
     const router = useRouter();
     const onClick = (patient: IPatient) => {
         router.push(`/patients/${patient.id}`)

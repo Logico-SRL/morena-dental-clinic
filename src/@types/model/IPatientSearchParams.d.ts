@@ -1,3 +1,0 @@
-type IPatientSearchParams = {
-    fullText: string
-}

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import NextAuth, { AuthOptions } from "next-auth"
+import NextAuth from "next-auth"
 import { Provider } from "next-auth/providers"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { getCsrfToken } from "next-auth/react"
@@ -7,7 +7,6 @@ import { SiweMessage } from "siwe"
 import { NodeIOCContainer } from "../../../inversify/inversify.node.config"
 import { IOCServiceTypes } from "../../../inversify/iocTypes"
 import { processEnv } from "../../../processEnv"
-import { AppUserEntity } from "../../../repository/entities/appUser"
 import { nextAuthOptions } from "./nextAuthOptions"
 
 

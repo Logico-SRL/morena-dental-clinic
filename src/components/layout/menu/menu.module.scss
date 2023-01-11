@@ -1,0 +1,9 @@
+@import "../../../styles/colors.scss";
+
+.menuItem {
+  display: inline-flex;
+  //   flex-direction: column;
+  align-items: center;
+  height: auto;
+  padding-right: 20px;
+}

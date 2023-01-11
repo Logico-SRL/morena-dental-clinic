@@ -1,4 +1,5 @@
 import Avatar from "./components/avatar";
+import Button from "./components/button";
 import Card from "./components/card";
 import Col from "./components/col";
 import Content from "./components/content";
@@ -8,6 +9,7 @@ import Header from "./components/header";
 import Layout from "./components/layout";
 import List from "./components/list";
 import Menu from "./components/menu";
+import Radio from "./components/radio";
 import Row from "./components/row";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
@@ -29,7 +31,9 @@ const UserControls = {
     Divider,
     List,
     Card,
-    Skeleton
+    Skeleton,
+    Radio,
+    Button
 }
 
 export default UserControls;

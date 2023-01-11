@@ -37,4 +37,8 @@ body {
       }
     }
   }
+  .ant-menu-vertical > .ant-menu-item {
+    height: auto;
+    line-height: auto;
+  }
 }

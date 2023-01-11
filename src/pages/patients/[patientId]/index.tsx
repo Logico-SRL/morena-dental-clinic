@@ -6,16 +6,10 @@ import { Patient } from "../../../components/patients/patient";
 const PatientsPage: PageComponent = ({ }) => {
 
     const { query } = useRouter()
-
-
     const { patientId } = query as { patientId: string }
 
-    const Comp = () => <>
-        <h1>Paziente</h1>
-        <Patient patientId={patientId} />
-    </>
 
-    return (<SplittedPage Left={Comp} />)
+    return (<SplittedPage Left={<Patient patientId={patientId} />} />)
 }
 
 export default PatientsPage;
