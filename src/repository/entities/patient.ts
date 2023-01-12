@@ -20,4 +20,10 @@ export class PatientEntity {
     @Column({ nullable: true })
     externalId?: string
 
+    @Column({ nullable: true })
+    age?: number
+
+    @Column({ nullable: true })
+    gender?: string
+
 }

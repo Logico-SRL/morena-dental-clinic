@@ -2,5 +2,8 @@ type agesKeysType = import('../../../configurations/ages').agesKeysType
 
 type IPatientSearchParams = {
     age?: agesKeysType,
-    fullText?: string
+    gender?: gendersKeysType,
+    fullText?: string,
+    fromVisitDate?: Date,
+    toVisitDate?: Date,
 }

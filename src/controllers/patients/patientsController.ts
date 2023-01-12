@@ -12,7 +12,16 @@ export class PatientsController extends BaseController {
     }
 
     GET = async () => {
-        const results = await this.patientsService.list();
+        let pars: IPatientSearchParams = this.req.query
+        // console.info('pars.fromVisitDate', new Date(pars.fromVisitDate as any).getDate());
+        if (pars.fromVisitDate) {
+            pars.fromVisitDate = new Date(pars.fromVisitDate)
+        }
+        if (pars.toVisitDate) {
+            pars.toVisitDate = new Date(pars.toVisitDate)
+        }
+
+        const results = await this.patientsService.list(pars);
         return this.res.status(200).json(results)
     }
 

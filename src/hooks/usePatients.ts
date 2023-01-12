@@ -47,7 +47,15 @@ export const usePatients = () => {
     const fetchFilteredPatients = (params: IPatientSearchParams) => {
         const controller = new AbortController()
         loadingPatientsStore.set(true);
-        const pars = new URLSearchParams(params);
+        const { fromVisitDate, toVisitDate, ...rest } = params
+        let p: any = rest;
+        if (fromVisitDate)
+            p.fromVisitDate = fromVisitDate.toISOString()
+
+        if (toVisitDate)
+            p.toVisitDate = toVisitDate.toISOString()
+
+        const pars = new URLSearchParams(p);
         httpService.get<IPatient[]>(`/api/patients?${pars.toString()}`, { AbortSignal: controller.signal }).then(d => {
             patientsStore.set(d.data);
         }).finally(() => {
@@ -64,8 +72,19 @@ export const usePatients = () => {
         }).finally(() => {
             loadingPatientsStore.set(false);
         })
-
     }
 
-    return { patients, loadingPatients, fetchAllPatients, fetchFilteredPatients, createPatient };
+    const savePatient = async (p: IPatient) => {
+        loadingPatientsStore.set(true);
+        httpService.put<IPatient>(`/api/patients/${p.id}`, p).then(d => {
+            const curr = [...patientsStore.get()];
+            const ind = curr.findIndex(c => c.id === p.id);
+            curr.splice(ind, 1, p)
+            patientsStore.set(curr);
+        }).finally(() => {
+            loadingPatientsStore.set(false);
+        })
+    }
+
+    return { patients, loadingPatients, fetchAllPatients, fetchFilteredPatients, createPatient, savePatient };
 }

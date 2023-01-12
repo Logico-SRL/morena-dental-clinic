@@ -1,4 +1,5 @@
 import { FormInstance } from "antd";
+import { gendersArr, gendersKeysType } from "../../configurations/genders";
 import UserControls from "../../userControls";
 
 
@@ -23,6 +24,20 @@ export const PatientForm = ({ form }: PropType) => {
 
         <Form.Item name={'fiscalCode'} label={'Fiscal Code'}>
             <UserControls.Input style={{ textTransform: 'uppercase' }} />
+        </Form.Item>
+
+        <Form.Item name={'age'} label={'Age'}>
+            <UserControls.InputNumber />
+        </Form.Item>
+
+        <Form.Item name={'gender'} label={'Gender'} initialValue={'unknown' as gendersKeysType}>
+            <UserControls.Radio.Group>
+                {gendersArr.map(gender => (
+                    <UserControls.Radio key={gender.key} value={gender.key}>
+                        {gender.value}
+                    </UserControls.Radio>
+                ))}
+            </UserControls.Radio.Group>
         </Form.Item>
     </Form>
 }

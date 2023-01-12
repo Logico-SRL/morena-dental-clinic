@@ -3,11 +3,13 @@ import Button from "./components/button";
 import Card from "./components/card";
 import Col from "./components/col";
 import Content from "./components/content";
+import DatePicker from "./components/datePicker";
 import Divider from "./components/divider";
 import Footer from "./components/footer";
 import Form from "./components/form";
 import Header from "./components/header";
 import Input from "./components/input";
+import InputNumber from "./components/inputNumber";
 import Layout from "./components/layout";
 import List from "./components/list";
 import Menu from "./components/menu";
@@ -41,7 +43,9 @@ const UserControls = {
     Modal,
     Form,
     notification,
-    Input
+    Input,
+    InputNumber,
+    DatePicker
 }
 
 export default UserControls;

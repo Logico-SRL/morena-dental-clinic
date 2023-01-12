@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
+import { EditPatientModal } from "../../components/patients/editPatientModal";
 import { NewPatientModal } from "../../components/patients/newPatientModal";
 import { Patients } from "../../components/patients/patients";
 import { PatientsFilter } from "../../components/patients/patientsFilter";
@@ -33,6 +34,9 @@ const PatientsPage: PageComponent = () => {
     const { patients, loadingPatients, fetchFilteredPatients, fetchAllPatients } = usePatients();
 
     const [showNewPatientModal, setShowNewPatientModal] = useState(false);
+    const [showEditPatientModal, setShowEditPatientModal] = useState(false);
+    const [editingPatient, setEditingPatient] = useState<IPatient>();
+
 
     useEffect(() => {
         const c = fetchAllPatients();
@@ -49,16 +53,23 @@ const PatientsPage: PageComponent = () => {
 
     const onModalCancel = () => {
         setShowNewPatientModal(false);
+        setShowEditPatientModal(false);
+    }
+
+    const onPatientEdit = (patient: IPatient) => {
+        setEditingPatient(patient);
+        setShowEditPatientModal(true);
     }
 
     return (<>
         <SplittedPage
             LeftTitle={<Title onAddClick={onAddClick} />}
             RightTitle={<FilterTitle />}
-            Left={<Patients patients={patients} loading={loadingPatients} />}
+            Left={<Patients patients={patients} loading={loadingPatients} onPatientEdit={onPatientEdit} />}
             Right={<PatientsFilter submitSearch={fetchFilteredPatients} />}
         />
         <NewPatientModal open={showNewPatientModal} onCancel={onModalCancel} />
+        <EditPatientModal open={showEditPatientModal} onCancel={onModalCancel} patient={editingPatient} />
     </>)
 }
 

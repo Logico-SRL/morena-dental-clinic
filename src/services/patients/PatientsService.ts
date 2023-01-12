@@ -16,7 +16,6 @@ export class PatientsService implements IPatientsService {
     public import = async (externalPatient: IExternalPatient) => {
         // this.externalPatientsService.getFromUno(externalPatientId);
         throw new Error("not implemented");
-
     }
 
 
@@ -47,7 +46,7 @@ export class PatientsService implements IPatientsService {
 
     }
 
-    public list = async () => {
+    public list = async (params: IPatientSearchParams) => {
 
         const repo = (await this.dbService.patientsRepo())
         const patEntities = await repo.find();
@@ -67,5 +66,7 @@ const repoPatientToPatient = (p: PatientEntity): IPatient => {
         familyName: p.familyName || '',
         fiscalCode: p.fiscalCode || '',
         externalId: p.externalId || '',
+        age: p.age || 0,
+        gender: 'unknown'
     }
 }

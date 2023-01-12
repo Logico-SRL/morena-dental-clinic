@@ -15,9 +15,9 @@ export class HttpService implements IHttpService {
     post<T, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<R> {
         return axios.post(url, data, config);
     }
-    // put<T,  D = any>(url: string, data?: D | undefined, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    //     throw new Error("Method not implemented.");
-    // }
+    put<T, R = AxiosResponse<T>, D = any>(url: string, data?: D | undefined, config?: AxiosRequestConfig): Promise<R> {
+        return axios.put(url, data, config);
+    }
     // patch<T,  D = any>(url: string, data?: D | undefined, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     //     throw new Error("Method not implemented.");
     // }
