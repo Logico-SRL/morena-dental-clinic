@@ -1,7 +1,6 @@
 // 'use client'
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
-import React from "react";
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 
@@ -26,35 +25,47 @@ export const usePatients = () => {
     const patients = useStore(patientsStore);
     const loadingPatients = useStore(loadingPatientsStore);
 
-    React.useEffect(() => {
+    // React.useEffect(() => {
 
-        // console.info('usePatients patients', patients);
+    //     // console.info('usePatients patients', patients);
 
-        if (patients.length == 0) {
-            const controller = getFilteredPatients({})
-            return () => {
-                controller.abort();
-            }
-        }
+    //     if (patients.length == 0) {
+    //         const controller = getFilteredPatients({})
+    //         return () => {
+    //             controller.abort();
+    //         }
+    //     }
 
-    }, [patients])
+    // }, [patients])
 
-    const getFilteredPatients = (params: IPatientSearchParams) => {
+    const fetchAllPatients = () => {
+        return fetchFilteredPatients({})
+
+    }
+
+
+    const fetchFilteredPatients = (params: IPatientSearchParams) => {
         const controller = new AbortController()
         loadingPatientsStore.set(true);
-        // setLoading(true)
         const pars = new URLSearchParams(params);
         httpService.get<IPatient[]>(`/api/patients?${pars.toString()}`, { AbortSignal: controller.signal }).then(d => {
-            // console.info('/api/patients p', d)
-            // setPatients(d.data);
             patientsStore.set(d.data);
         }).finally(() => {
-            // patientsStore.setKey('loadingPatients', false);
             loadingPatientsStore.set(false);
-            // setLoading(false)
         })
         return controller;
     }
 
-    return { patients, loadingPatients, getFilteredPatients };
+    const createPatient = async (p: IPatient) => {
+        loadingPatientsStore.set(true);
+        httpService.post<IPatient>(`/api/patients`, p).then(d => {
+            const curr = patientsStore.get();
+            patientsStore.set([...curr, d.data]);
+        }).finally(() => {
+            loadingPatientsStore.set(false);
+        })
+
+    }
+
+    return { patients, loadingPatients, fetchAllPatients, fetchFilteredPatients, createPatient };
 }

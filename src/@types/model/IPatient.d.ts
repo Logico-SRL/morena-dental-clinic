@@ -1,3 +1,3 @@
 type RepoPatient = import('../../repository/entities/patient').PatientEntity
 
-type IPatient = Pick<RepoPatient, 'id' | 'name' | 'externalId'>
+type IPatient = Required<RepoPatient>; // Pick<typeof RepoPatient, 'id' | 'firstName' | 'familyName' | 'fiscalCode' | 'externalId'>

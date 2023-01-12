@@ -9,7 +9,13 @@ export class PatientEntity {
     id: string;
 
     @Column({ nullable: true })
-    name?: string
+    firstName?: string
+
+    @Column({ nullable: true })
+    familyName?: string
+
+    @Column({ nullable: true })
+    fiscalCode?: string
 
     @Column({ nullable: true })
     externalId?: string

@@ -11,7 +11,7 @@ const Comp = (props: MenuProps) => {
     // const path = (asPath || '').split()
     const selectedKeys = [asPath || '']
 
-    console.info(`selectedKeys => ${selectedKeys}`)
+    // console.info(`selectedKeys => ${selectedKeys}`)
 
     return <Menu {...props} selectedKeys={selectedKeys} />
 

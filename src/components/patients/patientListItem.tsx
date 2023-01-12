@@ -13,7 +13,7 @@ export const PatientListItem = (onClick: (patient: IPatient) => void) => (patien
     }
     // const patient = usePatient(patientId);
     return <UserControls.List.Item className="touchable" onClick={onPatientClick}>
-        <UserControls.List.Item.Meta title={patient.id} description={patient.name} />
+        <UserControls.List.Item.Meta title={patient.id} description={patient.firstName} />
         {/* {patient.name}
         </UserControls.List.Item.Meta> */}
     </UserControls.List.Item>

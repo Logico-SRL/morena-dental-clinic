@@ -21,14 +21,14 @@ const externalPatients: IExternalPatient[] = [
 const patients: IPatient[] = [
     {
         id: '1',
-        name: 'pippo'
+        firstName: 'pippo'
     },
     {
         id: '2',
-        name: 'paperino'
+        firstName: 'paperino'
     }, {
         id: '3',
-        name: 'pluto'
+        firstName: 'pluto'
     }
 ]
 
@@ -40,7 +40,7 @@ export class PatientsServiceMocked implements IPatientsService {
     public import = async (externalPatient: IExternalPatient) => {
         const p: IPatient = {
             id: v1(),
-            name: externalPatient.name,
+            firstName: externalPatient.name,
             externalId: externalPatient.id
         }
 

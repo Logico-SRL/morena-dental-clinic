@@ -1,13 +1,13 @@
 import { SplittedPage } from "../../components/layout/splittedPage";
 
 
-const TreatmentsPage: PageComponent = () => {
+const LibraryPage: PageComponent = () => {
 
     const Comp = () => (<>
-        <h1>Trattamenti</h1>
+        <h1>Library</h1>
     </>)
     return (<SplittedPage Left={<Comp />} />)
 
 }
 
-export default TreatmentsPage;
+export default LibraryPage;

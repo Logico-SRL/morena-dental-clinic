@@ -14,7 +14,7 @@ const Home: PageComponent = () => {
         </p>
     </>
 
-    return (<SplittedPage Left={Comp} Right={() => (<p>Right part of the splitted Page</p>)} />)
+    return (<SplittedPage Left={<Comp />} Right={<p>Right part of the splitted Page</p>} />)
 }
 
 export default Home;

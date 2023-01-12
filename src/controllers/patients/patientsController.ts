@@ -12,8 +12,14 @@ export class PatientsController extends BaseController {
     }
 
     GET = async () => {
-        let results = await this.patientsService.list();
+        const results = await this.patientsService.list();
         return this.res.status(200).json(results)
+    }
+
+    POST = async () => {
+        const p = this.req.body as IPatient
+        const ret = await this.patientsService.create(p);
+        return this.res.status(200).json(ret)
     }
 
 }

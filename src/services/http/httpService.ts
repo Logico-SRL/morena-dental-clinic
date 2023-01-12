@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
-import { IOCServiceTypes } from "../../inversify/iocTypes";
-import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { injectable } from "inversify";
 
 @injectable()
 export class HttpService implements IHttpService {
@@ -13,9 +12,9 @@ export class HttpService implements IHttpService {
     // delete<T,  D = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     //     throw new Error("Method not implemented.");
     // }
-    // post<T,  D = any>(url: string, data?: D | undefined, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    //     throw new Error("Method not implemented.");
-    // }
+    post<T, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<R> {
+        return axios.post(url, data, config);
+    }
     // put<T,  D = any>(url: string, data?: D | undefined, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     //     throw new Error("Method not implemented.");
     // }

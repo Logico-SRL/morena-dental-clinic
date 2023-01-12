@@ -17,6 +17,7 @@ function MyApp({ Component,
       <IoCProvider>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <title>Morena-Dental-Clinic</title>
         </Head>
         <Providers session={session}>
           <RootPageLayout>

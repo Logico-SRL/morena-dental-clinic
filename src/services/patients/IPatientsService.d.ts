@@ -4,5 +4,6 @@ type IPatientsService = {
     searchExternal: (params: IPatientSearchParams) => Promise<IPatient[]>;
     import: (externalPatient: IExternalPatient) => Promise<IPatient>;
     save: (patient: IPatient) => Promise<IPatient>;
+    create: (patient: IPatient) => Promise<IPatient>;
 
 }

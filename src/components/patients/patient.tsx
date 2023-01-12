@@ -9,7 +9,7 @@ export const Patient = ({ patientId }: { patientId: string }) => {
     const { patient, loadingPatient } = usePatient(patientId);
 
     return <UserControls.Skeleton loading={loadingPatient}>
-        <UserControls.Card title={patient?.name}>
+        <UserControls.Card title={patient?.firstName}>
             <UserControls.Typography.Title level={3}>
                 {`id: ${patient?.id}`}
             </UserControls.Typography.Title>

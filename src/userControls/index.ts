@@ -5,10 +5,14 @@ import Col from "./components/col";
 import Content from "./components/content";
 import Divider from "./components/divider";
 import Footer from "./components/footer";
+import Form from "./components/form";
 import Header from "./components/header";
+import Input from "./components/input";
 import Layout from "./components/layout";
 import List from "./components/list";
 import Menu from "./components/menu";
+import Modal from "./components/modal";
+import notification from "./components/notification";
 import Radio from "./components/radio";
 import Row from "./components/row";
 import Sider from "./components/sider";
@@ -33,7 +37,11 @@ const UserControls = {
     Card,
     Skeleton,
     Radio,
-    Button
+    Button,
+    Modal,
+    Form,
+    notification,
+    Input
 }
 
 export default UserControls;
