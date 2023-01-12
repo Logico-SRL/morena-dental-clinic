@@ -1,13 +1,15 @@
 // 'use client'
 import { Menu, MenuProps } from 'antd';
-import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 
 const Comp = (props: MenuProps) => {
 
     // const [selectedKeys, setSelectedKeys] = useState<string[]>([])
 
-    const pathname = usePathname();
-    const selectedKeys = [pathname || '']
+    const { asPath } = useRouter();
+
+    // const path = (asPath || '').split()
+    const selectedKeys = [asPath || '']
 
     console.info(`selectedKeys => ${selectedKeys}`)
 

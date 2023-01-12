@@ -25,12 +25,12 @@ const FilterTitle = () => {
 
 const PatientsPage: PageComponent = () => {
 
-    const { patients, loading, getFilteredPatients } = usePatients();
+    const { patients, loadingPatients, getFilteredPatients } = usePatients();
 
     return (<SplittedPage
         LeftTitle={<Title />}
         RightTitle={<FilterTitle />}
-        Left={<Patients patients={patients} loading={loading} />}
+        Left={<Patients patients={patients} loading={loadingPatients} />}
         Right={<PatientsFilter submitSearch={getFilteredPatients} />}
     />)
 }
