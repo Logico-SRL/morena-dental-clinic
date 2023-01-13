@@ -1,9 +1,11 @@
+import 'antd/dist/reset.css';
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "reflect-metadata";
 import ErrorBoundary from "../components/error/ErrorBoundary";
 import { Providers } from "../components/providers/clientProviders";
 import RootPageLayout from "../components/rootPageLayout";
+import { useRedirectEvent } from '../hooks/useRedirectEvent';
 import { IoCProvider } from "../inversify/useService";
 import "../styles/global.scss";
 
@@ -11,6 +13,7 @@ function MyApp({ Component,
   pageProps: { session, ...pageProps },
   ...rest }: AppProps) {
 
+  useRedirectEvent();
 
   return (
     <ErrorBoundary>

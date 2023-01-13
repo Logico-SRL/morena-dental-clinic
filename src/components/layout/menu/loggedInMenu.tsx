@@ -1,6 +1,5 @@
 // "server only";
 import Link from "next/link";
-import UserControls from "../../../userControls";
 import { AntdIcons } from "../../../userControls/icons";
 import classnames from './menu.module.scss';
 
@@ -10,37 +9,35 @@ import classnames from './menu.module.scss';
 export const loggedInMenu = [{
     key: '/',
     label: <Link href="/" className={classnames.menuItem}>
-        <UserControls.Space>
-            <AntdIcons.AppstoreOutlined />
-            BOARD
-        </UserControls.Space>
+        <AntdIcons.AppstoreOutlined />
+        BOARD
     </Link>
 },
 {
     key: '/projects',
     label: <Link href="/projects" className={classnames.menuItem}>
-        <UserControls.Space>
-            <AntdIcons.TaobaoOutlined />
-            PROJECTS
-        </UserControls.Space>
+
+        <AntdIcons.TaobaoOutlined />
+        PROJECTS
+
     </Link>
 },
 {
     key: '/patients',
     label: <Link href="/patients" className={classnames.menuItem}>
-        <UserControls.Space>
-            <AntdIcons.UserOutlined />
-            PATIENTS
-        </UserControls.Space>
+
+        <AntdIcons.UserOutlined />
+        PATIENTS
+
     </Link>
 },
 {
     key: '/library',
     label: <Link href="/library" className={classnames.menuItem}>
-        <UserControls.Space>
-            <AntdIcons.ContainerOutlined />
-            LIBRARY
-        </UserControls.Space>
+
+        <AntdIcons.ContainerOutlined />
+        LIBRARY
+
     </Link>
 }]
 

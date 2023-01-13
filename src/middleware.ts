@@ -1,8 +1,5 @@
 // middleware.ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { getSession } from 'next-auth/react';
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware"
+import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 
 
 // This function can be marked `async` if using `await` inside
@@ -11,9 +8,21 @@ export const middleware = withAuth(function middleware(request: NextRequestWithA
 }, {
     callbacks: {
         authorized: ({ token }) => {
+            // if (token)
+            //     return true
+            // else {
+            //     // const resp = NextResponse.next({
+            //     //     status: 405,
+            //     //     statusText: 'Not Allowed'
+            //     // })
+            //     // return resp;
+            //     throw new Error("not-authorized");
+            // }
+
             // console.info(`authorized token`, token);
             return !!token;
         },
+
     }
 })
 
@@ -21,6 +30,6 @@ export const middleware = withAuth(function middleware(request: NextRequestWithA
 export const config = {
     matcher: [
         // '/((?!api|_next/static|favicon.ico).*)',
-        '/protected/:path*'
+        '/api/protected/:path*'
     ]
 }

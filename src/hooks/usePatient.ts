@@ -20,8 +20,8 @@ export const usePatient = (patientId: string) => {
 
             const controller = new AbortController()
             loadingPatientStore.set(true);
-            httpService.get<IPatient>(`/api/patients/${patientId}`, { AbortSignal: controller.signal }).then(d => {
-                console.info(`/api/patients/${patientId}`, d)
+            httpService.get<IPatient>(`/api/protected/patients/${patientId}`, { AbortSignal: controller.signal }).then(d => {
+                console.info(`/api/protected/patients/${patientId}`, d)
                 patientStore.set(d.data);
             })
                 .finally(() => {

@@ -10,7 +10,7 @@ const SiderContainerComp = () => {
     const items = isLoggedIn ? loggedInMenu : loggedOutMenu
 
     return <UserControls.Menu
-        theme="dark"
+        // theme="dark"
         mode="vertical"
         items={items}
     />

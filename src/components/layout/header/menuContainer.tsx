@@ -10,9 +10,11 @@ const MenuContainerComp = () => {
     const items = isLoggedIn ? loggedInHeader : loggedOutHeader
 
     return <UserControls.Menu
-        theme="dark"
-        mode="horizontal"
+        // theme="dark"
+        style={{ backgroundColor: 'inherit', marginLeft: 'auto', width: 'fit-content' }}
+        // mode="horizontal"
         items={items}
+        inlineCollapsed={false}
     />
 }
 

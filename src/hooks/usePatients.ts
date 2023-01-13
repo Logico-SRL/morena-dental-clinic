@@ -56,17 +56,23 @@ export const usePatients = () => {
             p.toVisitDate = toVisitDate.toISOString()
 
         const pars = new URLSearchParams(p);
-        httpService.get<IPatient[]>(`/api/patients?${pars.toString()}`, { AbortSignal: controller.signal }).then(d => {
-            patientsStore.set(d.data);
-        }).finally(() => {
-            loadingPatientsStore.set(false);
-        })
+        httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { AbortSignal: controller.signal })
+            .then(d => {
+                patientsStore.set(d.data);
+            })
+            .catch(() => {
+                patientsStore.set([]);
+
+            })
+            .finally(() => {
+                loadingPatientsStore.set(false);
+            })
         return controller;
     }
 
     const createPatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
-        httpService.post<IPatient>(`/api/patients`, p).then(d => {
+        httpService.post<IPatient>(`/api/protected/patients`, p).then(d => {
             const curr = patientsStore.get();
             patientsStore.set([...curr, d.data]);
         }).finally(() => {
@@ -76,7 +82,7 @@ export const usePatients = () => {
 
     const savePatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
-        httpService.put<IPatient>(`/api/patients/${p.id}`, p).then(d => {
+        httpService.put<IPatient>(`/api/protected/patients/${p.id}`, p).then(d => {
             const curr = [...patientsStore.get()];
             const ind = curr.findIndex(c => c.id === p.id);
             curr.splice(ind, 1, p)

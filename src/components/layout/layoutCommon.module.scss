@@ -6,6 +6,7 @@
   flex: 1;
   .titleRow {
     flex: 0;
+    background-color: $siderBG;
   }
   .contentRow {
     flex: 1;
@@ -26,7 +27,7 @@
     min-height: 0;
     height: auto;
     display: flex;
-    background-color: $light-grey;
+    // background-color: $light-grey;
     align-items: center;
   }
 }
@@ -36,6 +37,8 @@
 }
 
 .sider {
-  background-color: $dark-background;
+  &:global(.ant-layout-sider) {
+    background-color: $siderBG;
+  }
   // padding: 0 10px;
 }

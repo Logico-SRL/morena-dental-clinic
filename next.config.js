@@ -1,6 +1,6 @@
-const withLess = require('next-with-less');
+// const withLess = require('next-with-less');
 
-const nextConfig = withLess({
+const nextConfig = {
     reactStrictMode: true,
     experimental: { appDir: false },
     webpack(config) {
@@ -10,7 +10,8 @@ const nextConfig = withLess({
         };
         return config;
     },
-});
+};
 
 // module.exports = createJestConfig(nextConfig);
+// module.exports = withLess(nextConfig);
 module.exports = nextConfig;
