@@ -44,7 +44,7 @@ export class DbService implements IDbService {
         return (await this.dataSource).getRepository(PatientEntity);
     }
 
-    categoriesRepo = async () => {
+    projectCategoriesRepo = async () => {
         return (await this.dataSource).getRepository(CategoryEntity);
     }
 

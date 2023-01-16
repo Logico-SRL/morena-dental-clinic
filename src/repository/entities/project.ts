@@ -14,20 +14,22 @@ export class ProjectEntity {
     @Column()
     title: string
 
-    @Column()
-    @ManyToOne(type => ProjectCategoryEntity, cat => cat.id)
+    // @Column()
+    @ManyToOne(type => ProjectCategoryEntity)
+    // @ManyToMany(type => ProjectCategoryEntity)
     category: CategoryEntity
 
-    @Column()
-    @ManyToOne(type => ProjectCategoryEntity, cat => cat.id)
+    // @Column()
+    @ManyToOne(type => ProjectCategoryEntity)
+    // @ManyToMany(type => ProjectCategoryEntity)
     subCategory: CategoryEntity
 
-    @Column({ type: 'nvarchar', length: 65535 })
+    @Column({ type: 'text' })
     medicalHistory: string
 
-    @Column({ type: 'nvarchar', length: 65535 })
+    @Column({ type: 'text' })
     notes: string
 
-    @ManyToOne(type => PatientEntity, pat => pat.id)
+    @ManyToOne(type => PatientEntity, pat => pat.projects)
     patient: PatientEntity
 }

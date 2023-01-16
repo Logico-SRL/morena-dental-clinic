@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { repoPatientToPatient } from "../patients/PatientsService";
 
 @injectable()
 export class ProjectsService implements IProjectsService {
@@ -10,7 +11,22 @@ export class ProjectsService implements IProjectsService {
         this.dbService = dbService;
     }
     list = async () => {
-        throw new Error("not implemented");
+        const repo = (await this.dbService.projectsRepo())
 
+        const projs = await repo.find({
+            relations: ['category', 'subCategory', 'patient']
+        });
+
+        return projs.map<IProject>(repoProjToProj)
+
+    }
+}
+
+const repoProjToProj = (p: ProjectEntity): IProject => {
+    return {
+        ...p,
+        category: p.category,
+        subcategory: p.subCategory,
+        patient: repoPatientToPatient(p.patient)
     }
 }

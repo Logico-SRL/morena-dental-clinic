@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn, Relation } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { ProjectEntity } from ".";
 
 @Entity({
@@ -36,11 +36,11 @@ export class PatientEntity {
     @Column({ nullable: true })
     bloodGroup?: string
 
-    @Column({ nullable: true, type: 'nvarchar', length: 65535 })
+    @Column({ nullable: true, type: 'text' })
     notes?: string
 
     // @Column()
-    @OneToMany(type => ProjectEntity, pro => pro.id)
-    projects: Relation<ProjectEntity>[]
+    @OneToMany(type => ProjectEntity, pro => pro.patient)
+    projects: ProjectEntity[]
 
 }

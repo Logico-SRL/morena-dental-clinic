@@ -1,5 +1,5 @@
 type IProjectCategoriesService = {
-    list: () => Promise<IProjectCategory>
+    list: () => Promise<IProjectCategory[]>
     // list: (params: IPatientSearchParams) => Promise<IPatient[]>;
     // find: (patientId: string) => Promise<IPatient | undefined>;
     // searchExternal: (params: IPatientSearchParams) => Promise<IPatient[]>;

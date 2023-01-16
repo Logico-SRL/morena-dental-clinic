@@ -86,7 +86,7 @@ export class PatientsService implements IPatientsService {
 
 }
 
-const repoPatientToPatient = (p: PatientEntity): IPatient => {
+export const repoPatientToPatient = (p: PatientEntity): IPatient => {
     return {
         id: p.id,
         firstName: p.firstName || '',
