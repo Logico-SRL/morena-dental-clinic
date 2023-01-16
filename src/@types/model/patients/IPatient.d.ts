@@ -1,5 +1,5 @@
 type Dayjs = import("dayjs").Dayjs;
-type RepoPatient = import('../../repository/entities/patient').PatientEntity
+type RepoPatient = import('../../../repository/entities/index').PatientEntity
 
 
 type IPatient = Required<

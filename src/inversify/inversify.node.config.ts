@@ -1,9 +1,11 @@
 import { Container, interfaces } from "inversify";
 import { PatientController } from "../controllers/patients/patientController";
 import { PatientsController } from "../controllers/patients/patientsController";
+import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
 import { DbService } from "../services/db/DbService";
 import { ExternalPatientsService } from "../services/externalPatients/ExternalPatientsService";
 import { PatientsService } from "../services/patients/PatientsService";
+import { ProjectsService } from "../services/projects/ProjectsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
 
@@ -11,6 +13,8 @@ const NodeIOCContainer = new Container();
 
 NodeIOCContainer.bind<DbService>(IOCServiceTypes.DbService).to(DbService).inSingletonScope();
 NodeIOCContainer.bind<IPatientsService>(IOCServiceTypes.PatientsService).to(PatientsService).inSingletonScope();
+NodeIOCContainer.bind<IProjectCategoriesService>(IOCServiceTypes.CategoriesService).to(ProjectCategoriesService).inSingletonScope();
+NodeIOCContainer.bind<IProjectsService>(IOCServiceTypes.ProjectsService).to(ProjectsService).inSingletonScope();
 NodeIOCContainer.bind<IExternalPatientsService>(IOCServiceTypes.ExternalPatientsService).to(ExternalPatientsService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);

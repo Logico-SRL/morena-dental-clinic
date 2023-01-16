@@ -1,10 +1,9 @@
-import 'reflect-metadata'
 import { injectable } from "inversify";
+import 'reflect-metadata';
 // import { defaultDataSource } from "../../db/dataSource";
-import { dbConfig } from "../../db/dbConfig";
 import { DataSource } from "typeorm";
-import { PatientEntity } from '../../repository/entities/patient';
-import { AppUserEntity } from '../../repository/entities/appUser';
+import { dbConfig } from "../../db/dbConfig";
+import { AppUserEntity, CategoryEntity, PatientEntity, ProjectEntity } from '../../repository/entities';
 // import { AppUserEntity } from "../../repository/entities/appUser";
 // import { PatientEntity } from "../../repository/entities/patient";
 
@@ -43,5 +42,13 @@ export class DbService implements IDbService {
 
     patientsRepo = async () => {
         return (await this.dataSource).getRepository(PatientEntity);
+    }
+
+    categoriesRepo = async () => {
+        return (await this.dataSource).getRepository(CategoryEntity);
+    }
+
+    projectsRepo = async () => {
+        return (await this.dataSource).getRepository(ProjectEntity);
     }
 }

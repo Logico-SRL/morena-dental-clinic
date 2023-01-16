@@ -98,6 +98,7 @@ const repoPatientToPatient = (p: PatientEntity): IPatient => {
         dateOfBirth: p.dateOfBirth ? dayjs(p.dateOfBirth) : undefined,
         bloodGroup: p.bloodGroup || '',
         emergencyPhone: p.emergencyPhone || '',
-        notes: p.notes || ''
+        notes: p.notes || '',
+        projects: p.projects || []
     }
 }

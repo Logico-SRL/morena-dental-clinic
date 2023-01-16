@@ -1,7 +1,7 @@
 // import 'server-only';
 import { processEnv } from "../processEnv";
-import { AppUserEntity } from "../repository/entities/appUser";
-import { PatientEntity } from "../repository/entities/patient";
+import { AppUserEntity, CategoryEntity, PatientEntity, ProjectEntity } from "../repository/entities";
+
 
 export const dbConfig = {
     type: processEnv().db.type as 'mssql',
@@ -12,7 +12,7 @@ export const dbConfig = {
     port: processEnv().db.port,
     synchronize: true,
     logging: false,
-    entities: [AppUserEntity, PatientEntity],
+    entities: [AppUserEntity, PatientEntity, ProjectEntity, CategoryEntity],
     options: {
         encrypt: false
     },
