@@ -1,18 +1,66 @@
 // 'use client'
 
+import { genders } from "../../configurations/genders";
 import { usePatient } from "../../hooks/usePatient";
 // import { usePatient } from "../../hooks/usePatient";
 import UserControls from "../../userControls";
+import { AntdIcons } from "../../userControls/icons";
 
 export const Patient = ({ patientId }: { patientId: string }) => {
 
     const { patient, loadingPatient } = usePatient(patientId);
+    // const form = UserControls.Form.useForm()
 
     return <UserControls.Skeleton loading={loadingPatient}>
-        <UserControls.Card title={patient?.firstName}>
-            <UserControls.Typography.Title level={3}>
-                {`id: ${patient?.id}`}
-            </UserControls.Typography.Title>
-        </UserControls.Card>
+        <UserControls.Form layout="vertical">
+            <UserControls.Row>
+                <UserControls.Col xs={3}>
+                    <UserControls.Avatar icon={<AntdIcons.UserOutlined />} />
+                </UserControls.Col>
+                <UserControls.Col xs={21}>
+                    <UserControls.Row>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Family name'}>
+                                {patient?.familyName}
+                            </UserControls.Form.Item>
+                        </UserControls.Col>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Gender'}>
+                                {patient && patient.gender ? genders[patient.gender] : genders.unknown}
+                            </UserControls.Form.Item>
+
+                        </UserControls.Col>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Blood group'}>
+                                {patient?.bloodGroup}
+                            </UserControls.Form.Item>
+                        </UserControls.Col>
+                    </UserControls.Row>
+
+                    <UserControls.Row>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Name'}>
+                                {patient?.firstName}
+                            </UserControls.Form.Item>
+                        </UserControls.Col>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Date of birth'}>
+                                {patient?.dateOfBirth?.toISOString()}
+                            </UserControls.Form.Item>
+                        </UserControls.Col>
+                        <UserControls.Col xs={6}>
+                            <UserControls.Form.Item label={'Emergency phone'}>
+                                {patient?.emergencyPhone}
+                            </UserControls.Form.Item>
+                        </UserControls.Col>
+                    </UserControls.Row>
+                    <UserControls.Row>
+                        <UserControls.Form.Item label={'Notes'}>
+                            {patient?.notes}
+                        </UserControls.Form.Item>
+                    </UserControls.Row>
+                </UserControls.Col>
+            </UserControls.Row>
+        </UserControls.Form>
     </UserControls.Skeleton>
 }

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { inject, injectable } from "inversify";
 import { Between, Equal, FindManyOptions, MoreThanOrEqual } from "typeorm";
 import { ulid } from "ulid";
@@ -93,6 +94,10 @@ const repoPatientToPatient = (p: PatientEntity): IPatient => {
         fiscalCode: p.fiscalCode || '',
         externalId: p.externalId || '',
         age: p.age || 0,
-        gender: p.gender || 'unknown'
+        gender: (p.gender || 'unknown') as gendersKeysType,
+        dateOfBirth: p.dateOfBirth ? dayjs(p.dateOfBirth) : undefined,
+        bloodGroup: p.bloodGroup || '',
+        emergencyPhone: p.emergencyPhone || '',
+        notes: p.notes || ''
     }
 }

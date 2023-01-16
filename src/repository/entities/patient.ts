@@ -26,4 +26,16 @@ export class PatientEntity {
     @Column({ nullable: true })
     gender?: string
 
+    @Column({ nullable: true })
+    dateOfBirth?: Date
+
+    @Column({ nullable: true })
+    emergencyPhone?: string
+
+    @Column({ nullable: true })
+    bloodGroup?: string
+
+    @Column({ nullable: true, type: 'nvarchar', length: 'MAX' })
+    notes?: string
+
 }

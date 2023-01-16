@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
 
 
 // type PatientsStoreType = {
@@ -58,7 +59,7 @@ export const usePatients = () => {
         const pars = new URLSearchParams(p);
         httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { AbortSignal: controller.signal })
             .then(d => {
-                patientsStore.set(d.data);
+                patientsStore.set(convertPropsToDayjsArr(['dateOfBirth'], d.data));
             })
             .catch(() => {
                 patientsStore.set([]);
@@ -74,7 +75,7 @@ export const usePatients = () => {
         loadingPatientsStore.set(true);
         httpService.post<IPatient>(`/api/protected/patients`, p).then(d => {
             const curr = patientsStore.get();
-            patientsStore.set([...curr, d.data]);
+            patientsStore.set([...curr, convertPropsToDayjs(['dateOfBirth'], d.data)]);
         }).finally(() => {
             loadingPatientsStore.set(false);
         })

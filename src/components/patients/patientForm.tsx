@@ -30,6 +30,22 @@ export const PatientForm = ({ form }: PropType) => {
             <UserControls.InputNumber />
         </Form.Item>
 
+        <Form.Item name={'dateOfBirth'} label={'Date of birth'}>
+            <UserControls.DatePicker />
+        </Form.Item>
+
+        <Form.Item name={'bloodGroup'} label={'Blood group'}>
+            <UserControls.Input />
+        </Form.Item>
+
+        <Form.Item name={'emergencyPhone'} label={'Emergency phone'}>
+            <UserControls.Input placeholder="+39 " />
+        </Form.Item>
+
+        <Form.Item name={'notes'} label={'Notes'}>
+            <UserControls.Input.TextArea rows={8} />
+        </Form.Item>
+
         <Form.Item name={'gender'} label={'Gender'} initialValue={'unknown' as gendersKeysType}>
             <UserControls.Radio.Group>
                 {gendersArr.map(gender => (

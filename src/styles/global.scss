@@ -8,7 +8,7 @@ body {
   padding: 0;
 }
 
-body {
+body.morena-dental-clinic-app {
   max-height: 100vh;
   overflow: hidden;
   display: flex;
@@ -40,5 +40,29 @@ body {
   .ant-menu-vertical > .ant-menu-item {
     height: auto;
     line-height: auto;
+  }
+
+  .ant-form-vertical .ant-form-item .ant-form-item-label {
+    padding-bottom: 0px;
+    margin-bottom: -5px;
+
+    label {
+      color: $label;
+    }
+  }
+
+  .ant-form-horizontal .ant-form-item .ant-form-item-label {
+    label {
+      color: $label;
+    }
+  }
+
+  .ant-modal .ant-modal-content {
+    padding-right: 0;
+    .ant-modal-body {
+      padding-right: 24px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
   }
 }
