@@ -14,6 +14,7 @@ const MenuContainerComp = () => {
         style={{ backgroundColor: 'inherit', marginLeft: 'auto', width: 'fit-content' }}
         // mode="horizontal"
         items={items}
+        mode={'inline'}
         inlineCollapsed={false}
     />
 }

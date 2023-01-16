@@ -1,5 +1,7 @@
 import { inject, injectable } from "inversify";
+import { Between, Equal, FindManyOptions, MoreThanOrEqual } from "typeorm";
 import { ulid } from "ulid";
+import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 
 @injectable()
@@ -49,7 +51,31 @@ export class PatientsService implements IPatientsService {
     public list = async (params: IPatientSearchParams) => {
 
         const repo = (await this.dbService.patientsRepo())
-        const patEntities = await repo.find();
+
+        let opts: FindManyOptions<PatientEntity> = {
+            where: {
+
+            }
+        }
+
+        if (params.age) {
+            const age = ages[params.age];
+
+            opts.where = {
+                ...opts.where,
+                'age': age.query.to ? Between(age.query.from, age.query.to) : MoreThanOrEqual(age.query.from)
+            }
+        }
+
+        if (params.gender) {
+
+            opts.where = {
+                ...opts.where,
+                'gender': Equal(params.gender)
+            }
+        }
+
+        const patEntities = await repo.find(opts);
 
         const patients = patEntities.map<IPatient>(repoPatientToPatient)
 
@@ -67,6 +93,6 @@ const repoPatientToPatient = (p: PatientEntity): IPatient => {
         fiscalCode: p.fiscalCode || '',
         externalId: p.externalId || '',
         age: p.age || 0,
-        gender: 'unknown'
+        gender: p.gender || 'unknown'
     }
 }
