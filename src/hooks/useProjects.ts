@@ -4,12 +4,15 @@ import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 
 const projectsStore = atom<IProject[]>([]);
-const loadingProjectssStore = atom<boolean>(false)
+// const projectStore = atom<IProject | undefined>(undefined);
+const loadingProjectsStore = atom<boolean>(false)
+// const loadingProjectStore = atom<boolean>(false)
 
 export const useProjects = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const projects = useStore(projectsStore);
-    const loadingProjects = useStore(loadingProjectssStore);
+    // const project = useStore(projectsStore);
+    const loadingProjects = useStore(loadingProjectsStore);
 
     const fetchAllProjects = () => {
         return fetchFilteredProjects({})
@@ -17,7 +20,7 @@ export const useProjects = () => {
 
     const fetchFilteredProjects = (params: IProjectSearchParams) => {
         const controller = new AbortController()
-        loadingProjectssStore.set(true);
+        loadingProjectsStore.set(true);
 
         httpService.get<IProject[]>(`/api/protected/projects`, { AbortSignal: controller.signal })
             .then(d => {
@@ -28,12 +31,16 @@ export const useProjects = () => {
 
             })
             .finally(() => {
-                loadingProjectssStore.set(false);
+                loadingProjectsStore.set(false);
             })
         return controller;
     }
 
 
 
-    return { projects, loadingProjects, fetchAllProjects, fetchFilteredProjects };
+    const createProject = async (project: IProject) => {
+        throw new Error("not implemented");
+    }
+
+    return { projects, loadingProjects, fetchAllProjects, fetchFilteredProjects, createProject };
 }
