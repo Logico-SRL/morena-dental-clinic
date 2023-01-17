@@ -54,27 +54,30 @@ export const useCategories = () => {
         return controller;
     }
 
-    const createCategory = async (p: IProjectCategory) => {
-        // loadingPatientsStore.set(true);
-        httpService.post<IProjectCategory>(`/api/protected/projectscategories`, p).then(d => {
-            const curr = categoriesStore.get();
-            categoriesStore.set([...curr, d.data]);
-        }).finally(() => {
-            // loadingPatientsStore.set(false);
-        })
+    const callCreateCategoryApi = async (p: IProjectCategory) => {
+        return httpService.post<IProjectCategory>(`/api/protected/projectscategories`, p);
     }
 
-    // const savePatient = async (p: IPatient) => {
-    //     loadingPatientsStore.set(true);
-    //     httpService.put<IPatient>(`/api/protected/patients/${p.id}`, p).then(d => {
-    //         const curr = [...categoriesStore.get()];
-    //         const ind = curr.findIndex(c => c.id === p.id);
-    //         curr.splice(ind, 1, p)
-    //         categoriesStore.set(curr);
-    //     }).finally(() => {
-    //         loadingPatientsStore.set(false);
-    //     })
-    // }
+    const createCategory = async (p: IProjectCategory) => {
+        const res = await callCreateCategoryApi(p)
+        const curr = categoriesStore.get();
+        categoriesStore.set([...curr, res.data]);
 
-    return { categories, createCategory };
+    }
+
+    const createSubCategory = async (p: IProjectCategory) => {
+        const res = await callCreateCategoryApi(p)
+        const curr = categoriesStore.get();
+        const el = curr.find(c => c.id == p.parentCategory?.id)
+        if (el) {
+            if (!el.childrenCategories) {
+                el.childrenCategories = []
+            }
+
+            el.childrenCategories.push(res.data)
+        }
+        categoriesStore.set([...curr]);
+    }
+
+    return { categories, createCategory, createSubCategory };
 }

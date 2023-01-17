@@ -12,7 +12,7 @@ type PropType = {
 }
 export const NewSubCategoryModal = ({ open, onCancel, form, parentCategory }: PropType) => {
 
-    const { createCategory } = useCategories()
+    const { createSubCategory } = useCategories()
     const Form = UserControls.Form;
     const [notif] = UserControls.notification.useNotification();
 
@@ -29,7 +29,7 @@ export const NewSubCategoryModal = ({ open, onCancel, form, parentCategory }: Pr
         form.validateFields().
             then(async (cat) => {
                 cat.parentCategory = parentCategory;
-                await createCategory(cat);
+                await createSubCategory(cat);
                 notif.success({
                     message: 'Done',
                     description: 'Category correctly created',

@@ -20,4 +20,10 @@ export class ProjectController extends BaseController {
         return this.res.status(200).json(result)
     }
 
+    PUT = async () => {
+        const proj = this.req.body as IProject
+        const result = await this.projectsService.save(proj);
+        return this.res.status(200).json(result)
+    }
+
 }

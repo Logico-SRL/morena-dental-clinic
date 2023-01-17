@@ -1,5 +1,5 @@
 import { FormInstance } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useCategories } from "../../hooks/useCategories";
 import { usePatients } from "../../hooks/usePatients";
 import UserControls from "../../userControls";
@@ -13,12 +13,11 @@ type PropType = {
     onSave: (proj: IProject) => void,
     loading: boolean,
     submitText: string,
-    initialProject?: IProject
 }
 
 
 
-export const ProjectForm = ({ form, onSave, loading, submitText, initialProject }: PropType) => {
+export const ProjectForm = ({ form, onSave, loading, submitText }: PropType) => {
 
     const Form = UserControls.Form;
     const [categoryForm] = Form.useForm<IProjectCategory>();
@@ -27,32 +26,38 @@ export const ProjectForm = ({ form, onSave, loading, submitText, initialProject 
     const { patients } = usePatients()
     const { categories } = useCategories()
 
-    const patientsOptions: AutoCompleteOptionType<IPatient>[] = patients.map(p => {
 
-        const val = `${p.firstName} - ${p.familyName}. ${p.fiscalCode}`
+    const patientsOptions: SearchSelectOptionType<IPatient>[] = patients.map(p => {
+
+        const val = `${p.firstName} - ${p.familyName}: ${p.fiscalCode}`
 
         return {
             label: val,
-            value: val,
-            id: p.id,
+            value: p.id,
+            // key: p.id,
+            // id: p.id,
             item: p
         }
     })
 
-    const categoriesOptions: AutoCompleteOptionType<IProjectCategory>[] = categories.map(cat => ({
-        value: cat.name,
+    const categoriesOptions: SearchSelectOptionType<IProjectCategory>[] = categories.map(cat => ({
+        value: cat.id,
         label: cat.name,
-        id: cat.id,
+        // id: cat.id,
         item: cat
         // label: cat.name
     }))
 
-    const [selectedCat, setSelectedCat] = useState<IProjectCategory>();
+    // const [selectedCat, setSelectedCat] = useState<IProjectCategory>();
+    const selectedCatId = Form.useWatch(['category', 'id'], form);
+    const selectedCat = useMemo(() => {
+        return categories.find(c => c.id === selectedCatId)
+    }, [selectedCatId, categories])
 
-    const subCategoriesOptions: AutoCompleteOptionType<IProjectCategory>[] = selectedCat ? selectedCat.childrenCategories.map(cat => ({
-        value: cat.name,
+    const subCategoriesOptions: SearchSelectOptionType<IProjectCategory>[] = selectedCat ? selectedCat.childrenCategories.map(cat => ({
+        value: cat.id,
         label: cat.name,
-        id: cat.id,
+        // id: cat.id,
         item: cat
         // label: cat.name
     })) : []
@@ -102,22 +107,29 @@ export const ProjectForm = ({ form, onSave, loading, submitText, initialProject 
 
 
     }
-    const onPatientSelect = (_: any, { item }: AutoCompleteOptionType<IPatient>) => {
+    const onPatientSelect = (_: any, { item }: SearchSelectOptionType<IPatient>) => {
         form.setFieldValue('patient', item)
     }
 
-    const onCategorySelect = (_: any, { item }: AutoCompleteOptionType<IProjectCategory>) => {
-        setSelectedCat(item);
+    const onCategorySelect = (_: any, { item }: SearchSelectOptionType<IProjectCategory>) => {
+        // setSelectedCat(item);
         form.setFieldValue('category', item)
+        form.setFieldValue('subCategory', null)
     }
 
-    const onSubCategorySelect = (_: any, { item }: AutoCompleteOptionType<IProjectCategory>) => {
+    const onSubCategorySelect = (_: any, { item }: SearchSelectOptionType<IProjectCategory>) => {
         form.setFieldValue('subCategory', item)
     }
 
+    const filterOnLabel = (inputValue: string, option?: SearchSelectOptionType<any>) => option!.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+
+    const onValuesChange = (changedValues: any, values: any) => {
+        console.info('onValuesChange', changedValues, values)
+
+    }
 
     return <UserControls.Skeleton loading={loading}>
-        <Form form={form} labelCol={{ span: 6 }}>
+        <Form form={form} labelCol={{ span: 6 }} onValuesChange={onValuesChange}>
             <Form.Item name={'id'} label={'Id'} required>
                 <UserControls.Input disabled />
             </Form.Item>
@@ -128,84 +140,62 @@ export const ProjectForm = ({ form, onSave, loading, submitText, initialProject 
 
             <Form.Item name={['patient', 'id']} label={'Patient'} required
                 rules={[{ required: true, message: 'required value' }]}
-                initialValue={initialProject && initialProject.patient}
             >
 
-                {/* <Form.Item noStyle>
-                {({ getFieldValue }) => {
-                    const val = getFieldValue(['patient', 'id'])
-                    console.info('val', val)
-
-                    return <Form.Item name={['patient', 'id']} label={'Patient'} required
-                        rules={[{ required: true, message: 'required value' }]}
-                        initialValue={initialProject && initialProject.patient}
-                    >
-                        <UserControls.AutoComplete
-                            value={patientsOptions.find(o => o.id === val)}
-                            options={patientsOptions}
-                            onSelect={onPatientSelect}
-                            filterOption={(inputValue, option) =>
-                                option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                            }
-                        />
-                    </Form.Item>
-                }} */}
-
-                {/* <UserControls.Row gutter={20}>
-                    <UserControls.Col flex={1}> */}
-
-                <UserControls.AutoComplete
+                <UserControls.Select
+                    showSearch
+                    allowClear
                     options={patientsOptions}
                     onSelect={onPatientSelect}
-                    filterOption={(inputValue, option) =>
-                        option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
+                    filterOption={filterOnLabel}
                 />
-                {/* </UserControls.Col>
-                </UserControls.Row> */}
-                {/* <UserControls.Select options={} /> */}
             </Form.Item>
 
-            <Form.Item name={['category', 'id']} label={'Category'} required rules={[{ required: true, message: 'required value' }]}>
-                <UserControls.Row gutter={20}>
-                    <UserControls.Col flex={1}>
-                        <UserControls.AutoComplete
-                            searchValue={categorySearch}
-                            onSearch={setCategorySearch}
-                            options={categoriesOptions}
-                            onSelect={onCategorySelect}
-                            filterOption={(inputValue, option) =>
-                                option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                            }
-                        />
-                    </UserControls.Col>
-                    <UserControls.Col>
-                        <UserControls.Button icon={<AntdIcons.PlusOutlined />} onClick={addCategory} />
-                    </UserControls.Col>
-                </UserControls.Row>
+            <Form.Item label={'Category'}>
+                <Form.Item name={['category', 'id']} required rules={[{ required: true, message: 'required value' }]}
+                    style={{ display: 'inline-block', width: 'calc(80% - 8px)', margin: 0 }}>
+                    <UserControls.Select
+                        showSearch
+                        allowClear
+                        // searchValue={categorySearch}
+                        // onSearch={setCategorySearch}
+                        options={categoriesOptions}
+                        onSelect={onCategorySelect}
+                        filterOption={filterOnLabel}
+                    />
+                </Form.Item>
+                <Form.Item style={{ display: 'inline-block', width: 'calc(20%)', margin: '0 0 0 8px' }}>
+                    <UserControls.Button icon={<AntdIcons.PlusOutlined />} onClick={addCategory} />
+                </Form.Item>
             </Form.Item>
 
-            <Form.Item name={['subCategory', 'id']} label={'Subcategory'}>
-                <UserControls.Row gutter={20}>
-                    <UserControls.Col flex={1}>
-                        <UserControls.AutoComplete
-                            searchValue={subCategorySearch}
-                            onSearch={setSubCategorySearch}
-                            disabled={!selectedCat}
+            <Form.Item label={'Subcategory'}>
+
+                <Form.Item
+                    style={{ display: 'inline-block', width: 'calc(80% - 8px)', margin: 0 }}
+                    shouldUpdate={true}
+                >
+                    {({ getFieldValue }) => <Form.Item name={['subCategory', 'id']}>
+                        <UserControls.Select
+                            showSearch
+                            allowClear
+                            // searchValue={subCategorySearch}
+                            // onSearch={setSubCategorySearch}
+                            disabled={!getFieldValue(['category', 'id'])}
                             options={subCategoriesOptions}
                             onSelect={onSubCategorySelect}
-                            filterOption={(inputValue, option) =>
-                                option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                            }
+                            filterOption={filterOnLabel}
                         />
-                    </UserControls.Col>
-                    <UserControls.Col>
-                        <UserControls.Button
-                            disabled={!selectedCat}
-                            icon={<AntdIcons.PlusOutlined />} onClick={addSubCategory} />
-                    </UserControls.Col>
-                </UserControls.Row>
+                    </Form.Item>
+                    }
 
+                </Form.Item>
+                <Form.Item style={{ display: 'inline-block', width: 'calc(20%)', margin: '0 0 0 8px' }}>
+
+                    <UserControls.Button
+                        disabled={!selectedCat}
+                        icon={<AntdIcons.PlusOutlined />} onClick={addSubCategory} />
+                </Form.Item>
             </Form.Item>
 
             <Form.Item name={'medicalHistory'} label={'Medical history'}>

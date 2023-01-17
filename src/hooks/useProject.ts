@@ -36,7 +36,10 @@ export const useProject = (projectId: string) => {
     }, [projectId, project])
 
     const saveProject = async (project: IProject) => {
-        throw new Error("not implemented");
+        httpService.put<IProject>(`/api/protected/projects/${projectId}`, project)
+            .then(d => {
+                projectStore.set(d.data);
+            })
     }
 
     return { project, loadingProject, saveProject };
