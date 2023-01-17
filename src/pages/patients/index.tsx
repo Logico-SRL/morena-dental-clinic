@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditPatientModal } from "../../components/patients/editPatientModal";
 import { NewPatientModal } from "../../components/patients/newPatientModal";
@@ -31,21 +31,21 @@ const FilterTitle = () => {
 
 const PatientsPage: PageComponent = () => {
 
-    const { patients, loadingPatients, fetchFilteredPatients, fetchAllPatients } = usePatients();
+    const { patients, loadingPatients, fetchFilteredPatients } = usePatients();
 
     const [showNewPatientModal, setShowNewPatientModal] = useState(false);
     const [showEditPatientModal, setShowEditPatientModal] = useState(false);
     const [editingPatient, setEditingPatient] = useState<IPatient>();
 
 
-    useEffect(() => {
-        const c = fetchAllPatients();
+    // useEffect(() => {
+    //     const c = fetchAllPatients();
 
-        return () => {
-            c.abort();
-        }
+    //     return () => {
+    //         c.abort();
+    //     }
 
-    }, [])
+    // }, [])
 
     const onAddClick = () => {
         setShowNewPatientModal(true);

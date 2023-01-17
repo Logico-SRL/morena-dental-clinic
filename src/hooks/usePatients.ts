@@ -1,6 +1,7 @@
 // 'use client'
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
+import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
@@ -17,6 +18,7 @@ import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPro
 // })
 
 const patientsStore = atom<IPatient[]>([]);
+let initialized = false;
 const loadingPatientsStore = atom<boolean>(false)
 
 export const usePatients = () => {
@@ -26,18 +28,19 @@ export const usePatients = () => {
     const patients = useStore(patientsStore);
     const loadingPatients = useStore(loadingPatientsStore);
 
-    // React.useEffect(() => {
+    useEffect(() => {
 
-    //     // console.info('usePatients patients', patients);
+        // console.info('usePatients patients', patients);
 
-    //     if (patients.length == 0) {
-    //         const controller = getFilteredPatients({})
-    //         return () => {
-    //             controller.abort();
-    //         }
-    //     }
+        if (!initialized) {
+            initialized = true;
+            const controller = fetchAllPatients()
+            return () => {
+                controller.abort();
+            }
+        }
 
-    // }, [patients])
+    }, [])
 
     const fetchAllPatients = () => {
         return fetchFilteredPatients({})
@@ -93,5 +96,5 @@ export const usePatients = () => {
         })
     }
 
-    return { patients, loadingPatients, fetchAllPatients, fetchFilteredPatients, createPatient, savePatient };
+    return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient };
 }

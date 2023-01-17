@@ -12,6 +12,7 @@ const IOCControllerTypes = {
     PatientsController: Symbol.for("PatientsController"),
     PatientController: Symbol.for("PatientController"),
     ProjectsController: Symbol.for("ProjectsController"),
+    ProjectController: Symbol.for("ProjectController"),
     ProjectsCategoriesController: Symbol.for("ProjectsCategoriesController"),
 }
 

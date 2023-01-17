@@ -1,7 +1,7 @@
 type ProjectEntity = import('../../../repository/entities/index').ProjectEntity
 
-type IProject = Omit<ProjectEntity, 'category' | 'subcategory' | 'patient'> & {
+type IProject = Omit<ProjectEntity, 'category' | 'subCategory' | 'patient'> & {
     category?: IProjectCategory,
-    subcategory: IProjectCategory,
+    subCategory: IProjectCategory,
     patient: IPatient
 }

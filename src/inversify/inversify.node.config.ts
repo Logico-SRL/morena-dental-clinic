@@ -2,6 +2,7 @@ import { Container, interfaces } from "inversify";
 import { PatientController } from "../controllers/patients/patientController";
 import { PatientsController } from "../controllers/patients/patientsController";
 import { ProjectsCategoriesController } from "../controllers/projectCategories/projectsCategoriesController";
+import { ProjectController } from "../controllers/projects/projectController";
 import { ProjectsController } from "../controllers/projects/projectsController";
 import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
 import { DbService } from "../services/db/DbService";
@@ -22,6 +23,7 @@ NodeIOCContainer.bind<IExternalPatientsService>(IOCServiceTypes.ExternalPatients
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectController).to(ProjectController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsCategoriesController).to(ProjectsCategoriesController);
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)

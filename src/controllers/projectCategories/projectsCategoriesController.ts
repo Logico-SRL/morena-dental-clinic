@@ -16,4 +16,10 @@ export class ProjectsCategoriesController extends BaseController {
         return this.res.status(200).json(results)
     }
 
+    POST = async () => {
+        const cat = this.req.body as IProjectCategory
+        const results = await this.projectCategoriesService.create(cat);
+        return this.res.status(200).json(results)
+    }
+
 }

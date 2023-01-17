@@ -86,19 +86,38 @@ export class PatientsService implements IPatientsService {
 
 }
 
-export const repoPatientToPatient = (p: PatientEntity): IPatient => {
+export const repoPatientToPatient = (p: PatientEntity | undefined): IPatient => {
+    const def: IPatient = {
+        id: '',
+        firstName: '',
+        familyName: '',
+        fiscalCode: '',
+        externalId: '',
+        age: 0,
+        gender: 'unknown',
+        dateOfBirth: undefined,
+        bloodGroup: '',
+        emergencyPhone: '',
+        notes: '',
+        projects: []
+    }
+    if (!p)
+        return def;
+
     return {
-        id: p.id,
-        firstName: p.firstName || '',
-        familyName: p.familyName || '',
-        fiscalCode: p.fiscalCode || '',
-        externalId: p.externalId || '',
-        age: p.age || 0,
-        gender: (p.gender || 'unknown') as gendersKeysType,
-        dateOfBirth: p.dateOfBirth ? dayjs(p.dateOfBirth) : undefined,
-        bloodGroup: p.bloodGroup || '',
-        emergencyPhone: p.emergencyPhone || '',
-        notes: p.notes || '',
-        projects: p.projects || []
+        ...def,
+        ...p,
+        // id: p?.id || '',
+        // firstName: p?.firstName || '',
+        // familyName: p?.familyName || '',
+        // fiscalCode: p?.fiscalCode || '',
+        // externalId: p?.externalId || '',
+        // age: p?.age || 0,
+        gender: (p?.gender || 'unknown') as gendersKeysType,
+        dateOfBirth: p?.dateOfBirth ? dayjs(p?.dateOfBirth) : undefined,
+        // bloodGroup: p?.bloodGroup || '',
+        // emergencyPhone: p?.emergencyPhone || '',
+        // notes: p?.notes || '',
+        // projects: p?.projects || []
     }
 }

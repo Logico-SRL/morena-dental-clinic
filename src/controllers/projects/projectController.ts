@@ -3,22 +3,20 @@ import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { BaseController } from "../baseController";
 
 @injectable()
-export class ProjectsController extends BaseController {
+export class ProjectController extends BaseController {
     private projectsService: IProjectsService;
+
+    private get projectId() { return (this.req.query as { projectId: string }).projectId }
 
     constructor(@inject(IOCServiceTypes.ProjectsService) serv: IProjectsService) {
         super();
         this.projectsService = serv;
     }
 
-    GET = async () => {
-        const results = await this.projectsService.list();
-        return this.res.status(200).json(results)
-    }
 
-    POST = async () => {
-        const proj = this.req.body as IProject
-        const result = await this.projectsService.create(proj);
+
+    GET = async () => {
+        const result = await this.projectsService.find(this.projectId);
         return this.res.status(200).json(result)
     }
 

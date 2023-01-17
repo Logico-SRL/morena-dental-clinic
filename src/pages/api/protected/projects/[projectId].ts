@@ -1,4 +1,4 @@
 import { buildController } from "../../../../controllers/buildController"
 import { IOCControllerTypes } from "../../../../inversify/iocTypes"
 
-export default buildController(IOCControllerTypes.ProjectsCategoriesController)
+export default buildController(IOCControllerTypes.ProjectController)

@@ -6,6 +6,7 @@ import { useService } from "../inversify/useService";
 const projectsStore = atom<IProject[]>([]);
 // const projectStore = atom<IProject | undefined>(undefined);
 const loadingProjectsStore = atom<boolean>(false)
+const creatingProjectsStore = atom<boolean>(false)
 // const loadingProjectStore = atom<boolean>(false)
 
 export const useProjects = () => {
@@ -13,6 +14,7 @@ export const useProjects = () => {
     const projects = useStore(projectsStore);
     // const project = useStore(projectsStore);
     const loadingProjects = useStore(loadingProjectsStore);
+    const creatingProjects = useStore(creatingProjectsStore);
 
     const fetchAllProjects = () => {
         return fetchFilteredProjects({})
@@ -39,8 +41,19 @@ export const useProjects = () => {
 
 
     const createProject = async (project: IProject) => {
-        throw new Error("not implemented");
+        loadingProjectsStore.set(false);
+        httpService.post<IProject>(`/api/protected/projects`, project)
+            .then(d => {
+                projectsStore.set([...projects, d.data]);
+            })
+            .catch(() => {
+                projectsStore.set([]);
+
+            })
+            .finally(() => {
+                loadingProjectsStore.set(false);
+            })
     }
 
-    return { projects, loadingProjects, fetchAllProjects, fetchFilteredProjects, createProject };
+    return { projects, loadingProjects, fetchAllProjects, fetchFilteredProjects, createProject, creatingProjects };
 }

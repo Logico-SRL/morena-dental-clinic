@@ -1,3 +1,4 @@
+import AutoComplete from "./components/autocomplete";
 import Avatar from "./components/avatar";
 import Button from "./components/button";
 import Card from "./components/card";
@@ -17,6 +18,7 @@ import Modal from "./components/modal";
 import notification from "./components/notification";
 import Radio from "./components/radio";
 import Row from "./components/row";
+import Select from "./components/select";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
 import Space from "./components/space";
@@ -45,7 +47,9 @@ const UserControls = {
     notification,
     Input,
     InputNumber,
-    DatePicker
+    DatePicker,
+    Select,
+    AutoComplete
 }
 
 export default UserControls;
