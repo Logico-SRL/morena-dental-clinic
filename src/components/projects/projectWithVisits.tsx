@@ -69,8 +69,16 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                 <SectionHeader title={project?.title || ''} links={<Links onClick={onAllProjectsClick} onEditClick={onEdit} />} />
             </UserControls.Col>
             <UserControls.Col xs={24} style={{ paddingTop: 20 }}>
-                {(project?.visits || []).map((v, index) => (<VisitButton key={v.id} text={visitUtils.getName(v, project?.visits || [])} onClick={() => onVisitClick(v)} />))}
-                <VisitButton text={<AntdIcons.PlusOutlined />} onClick={onAddVisitClick} />
+                <UserControls.Row gutter={[10, 10]}>
+                    {(project?.visits || []).map((v, index) => (
+                        <UserControls.Col key={v.id}>
+                            <VisitButton text={visitUtils.getName(v, project?.visits || [])} onClick={() => onVisitClick(v)} />
+                        </UserControls.Col>
+                    ))}
+                    <UserControls.Col>
+                        <VisitButton text={<AntdIcons.PlusOutlined />} onClick={onAddVisitClick} />
+                    </UserControls.Col>
+                </UserControls.Row>
             </UserControls.Col>
         </UserControls.Row>
     </UserControls.Form>

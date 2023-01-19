@@ -23,7 +23,6 @@ export const useProject = (projectId: string) => {
             loadingProjectStore.set(true);
             httpService.get<IProject>(`/api/protected/projects/${projectId}`, { AbortSignal: controller.signal }).then(d => {
 
-
                 const proj = d.data;
                 console.info('proj.visits', proj.visits)
                 if (proj.patient) {
@@ -42,6 +41,26 @@ export const useProject = (projectId: string) => {
         }
     }, [projectId, project])
 
+    const setVisit = (visit: IVisit) => {
+
+        const curr = projectStore.get();
+        if (!curr) {
+            return;
+        }
+        if (!curr.visits) {
+            curr.visits = [visit]
+        } else {
+            const idx = curr.visits.findIndex(v => v.id === visit.id)
+            if (idx >= 0) {
+                curr.visits.splice(idx, 1, visit)
+            } else {
+                curr.visits.push(visit)
+            }
+        }
+
+        projectStore.set(curr);
+    }
+
     const saveProject = async (project: IProject) => {
         httpService.put<IProject>(`/api/protected/projects/${projectId}`, project)
             .then(d => {
@@ -54,5 +73,5 @@ export const useProject = (projectId: string) => {
             })
     }
 
-    return { project, loadingProject, saveProject };
+    return { project, loadingProject, saveProject, setVisit };
 }

@@ -2,6 +2,7 @@ import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { convertPropsToDayjs } from '../utils/convertPropsToDayjs';
 
 // const projectsStore = atom<IProject[]>([]);
 const savingVisitStore = atom<boolean>(false)
@@ -41,10 +42,12 @@ export const useVisits = () => {
 
     const createVisit = async (projectId: string, visit: IVisit) => {
         savingVisitStore.set(true);
-        httpService.post<IVisit>(`/api/protected/projects/${projectId}/visits`, visit)
-            // .then(d => {
-            //     projectsStore.set([...projects, d.data]);
-            // })
+        return httpService.post<IVisit>(`/api/protected/projects/${projectId}/visits`, visit)
+            .then(d => {
+                const vis = convertPropsToDayjs(['visitDate'], d.data);
+                return vis;
+                // projectsStore.set([...projects, d.data]);
+            })
             // .catch(() => {
             //     projectsStore.set([]);
 

@@ -24,6 +24,7 @@ export const useVisit = (projectId: string, visitId: string) => {
 
                 const vis = convertPropsToDayjs(['visitDate'], d.data);
                 visitStore.set(vis);
+                // return vis;
             })
                 .finally(() => {
                     loadingVisitStore.set(false);
@@ -37,11 +38,11 @@ export const useVisit = (projectId: string, visitId: string) => {
     }, [projectId, visitId])
 
     const saveVisit = async (projectId: string, visit: IVisit) => {
-        httpService.put<IVisit>(`/api/protected/projects/${projectId}/visits/${visit.id}`, visit)
+        return httpService.put<IVisit>(`/api/protected/projects/${projectId}/visits/${visit.id}`, visit)
             .then(d => {
                 const vis = convertPropsToDayjs(['visitDate'], d.data);
                 visitStore.set(vis);
-
+                return vis;
             })
     }
 

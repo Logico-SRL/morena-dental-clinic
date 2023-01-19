@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useProject } from "../../hooks/useProject";
 import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
 import { VisitForm } from "./visitForm";
@@ -17,6 +18,8 @@ export const EditVisit = ({ projectId, visit }: PropType) => {
     const [notif] = UserControls.notification.useNotification();
     const { replace } = useRouter();
 
+    const { setVisit } = useProject(projectId)
+
     useEffect(() => {
         if (visit)
             form.setFieldsValue(visit)
@@ -26,7 +29,8 @@ export const EditVisit = ({ projectId, visit }: PropType) => {
     const onSave = async (visit: IVisit) => {
 
         // visit.project = project;
-        await saveVisit(projectId, visit);
+        const vis = await saveVisit(projectId, visit);
+        setVisit(vis);
         await notif.success({
             message: 'Done',
             description: 'Visit correctly created',
