@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
-import { repoPatientToPatient } from "../patients/PatientsService";
+import { repoProjToProj } from "../converters";
 
 @injectable()
 export class ProjectsService implements IProjectsService {
@@ -30,6 +30,7 @@ export class ProjectsService implements IProjectsService {
     create = async (project: IProject) => {
         const repo = (await this.dbService.projectsRepo())
         project.id = ulid();
+        project.createdOn = new Date();
         repo.insert(project);
         return project;
     }
@@ -37,7 +38,10 @@ export class ProjectsService implements IProjectsService {
         const repo = (await this.dbService.projectsRepo())
 
         const projs = await repo.find({
-            relations: ['category', 'subCategory', 'patient']
+            relations: ['category', 'subCategory', 'patient'],
+            order: {
+                'createdOn': 'DESC'
+            }
         });
 
         return projs.map<IProject>(repoProjToProj)
@@ -45,11 +49,3 @@ export class ProjectsService implements IProjectsService {
     }
 }
 
-const repoProjToProj = (p: ProjectEntity): IProject => {
-    return {
-        ...p,
-        category: p.category,
-        subCategory: p.subCategory,
-        patient: repoPatientToPatient(p.patient)
-    }
-}

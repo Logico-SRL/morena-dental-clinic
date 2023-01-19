@@ -1,6 +1,6 @@
-type CategoryEntity = import('../../../repository/entities/index').CategoryEntity
+type ProjectCategoryEntity = import('../../../repository/entities/index').ProjectCategoryEntity
 
-type IProjectCategory = Omit<CategoryEntity, 'parentCategory' | 'childrenCategories'> & {
+type IProjectCategory = Omit<ProjectCategoryEntity, 'parentCategory' | 'childrenCategories'> & {
     parentCategory?: IProjectCategory,
     childrenCategories: IProjectCategory[]
 }

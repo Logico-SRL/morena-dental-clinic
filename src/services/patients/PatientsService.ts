@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
 import { inject, injectable } from "inversify";
 import { Between, Equal, FindManyOptions, MoreThanOrEqual } from "typeorm";
 import { ulid } from "ulid";
 import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { repoPatientToPatient } from "../converters";
 
 @injectable()
 export class PatientsService implements IPatientsService {
@@ -41,7 +41,11 @@ export class PatientsService implements IPatientsService {
 
     public find = async (patientId: string) => {
         const repo = (await this.dbService.patientsRepo())
-        const found = await repo.findOneBy({ 'id': patientId });
+        const found = await repo.findOne({
+            where: { 'id': patientId },
+            relations: ['projects']
+        });
+
         if (found)
             return repoPatientToPatient(found);
         else
@@ -57,6 +61,7 @@ export class PatientsService implements IPatientsService {
             where: {
 
             }
+
         }
 
         if (params.age) {
@@ -81,43 +86,6 @@ export class PatientsService implements IPatientsService {
         const patients = patEntities.map<IPatient>(repoPatientToPatient)
 
         return patients;
-
-    }
-
-}
-
-export const repoPatientToPatient = (p: PatientEntity | undefined): IPatient => {
-    const def: IPatient = {
-        id: '',
-        firstName: '',
-        familyName: '',
-        fiscalCode: '',
-        externalId: '',
-        age: 0,
-        gender: 'unknown',
-        dateOfBirth: undefined,
-        bloodGroup: '',
-        emergencyPhone: '',
-        notes: '',
-        projects: []
-    }
-    if (!p)
-        return def;
-
-    return {
-        ...def,
-        ...p,
-        // id: p?.id || '',
-        // firstName: p?.firstName || '',
-        // familyName: p?.familyName || '',
-        // fiscalCode: p?.fiscalCode || '',
-        // externalId: p?.externalId || '',
-        // age: p?.age || 0,
-        gender: (p?.gender || 'unknown') as gendersKeysType,
-        dateOfBirth: p?.dateOfBirth ? dayjs(p?.dateOfBirth) : undefined,
-        // bloodGroup: p?.bloodGroup || '',
-        // emergencyPhone: p?.emergencyPhone || '',
-        // notes: p?.notes || '',
-        // projects: p?.projects || []
     }
 }
+

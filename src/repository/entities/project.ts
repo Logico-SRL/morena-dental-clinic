@@ -1,7 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-import { CategoryEntity, PatientEntity } from ".";
-import { ProjectCategoryEntity } from "./categories";
-
+import { PatientEntity, ProjectCategoryEntity } from ".";
 
 @Entity({
     name: "projects"
@@ -17,12 +15,12 @@ export class ProjectEntity {
     // @Column()
     @ManyToOne(type => ProjectCategoryEntity)
     // @ManyToMany(type => ProjectCategoryEntity)
-    category: CategoryEntity
+    category: ProjectCategoryEntity
 
     // @Column()
     @ManyToOne(type => ProjectCategoryEntity)
     // @ManyToMany(type => ProjectCategoryEntity)
-    subCategory: CategoryEntity
+    subCategory: ProjectCategoryEntity
 
     @Column({ type: 'text' })
     medicalHistory: string
@@ -32,4 +30,7 @@ export class ProjectEntity {
 
     @ManyToOne(type => PatientEntity, pat => pat.projects)
     patient: PatientEntity
+
+    @Column({ type: 'datetime', nullable: true })
+    createdOn: Date
 }
