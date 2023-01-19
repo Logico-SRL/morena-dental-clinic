@@ -9,6 +9,7 @@ body {
 }
 
 body.morena-dental-clinic-app {
+  background-color: #fff;
   max-height: 100vh;
   overflow: hidden;
   display: flex;
@@ -24,6 +25,7 @@ body.morena-dental-clinic-app {
     margin: 0;
     flex: 1;
     overflow: auto;
+    background-color: #fff;
     // padding: 20px;
     div[data-nextjs-scroll-focus-boundary] {
       height: 100%;

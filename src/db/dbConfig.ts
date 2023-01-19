@@ -1,5 +1,5 @@
 import { processEnv } from "../processEnv";
-import { AppUserEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity } from "../repository/entities";
+import { AppUserEntity, MediaEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity, VisitEntity } from "../repository/entities";
 
 
 export const dbConfig = {
@@ -11,7 +11,7 @@ export const dbConfig = {
     port: processEnv().db.port,
     synchronize: true,
     logging: false,
-    entities: [AppUserEntity, PatientEntity, ProjectEntity, ProjectCategoryEntity],
+    entities: [AppUserEntity, PatientEntity, ProjectEntity, ProjectCategoryEntity, VisitEntity, MediaEntity],
     options: {
         encrypt: false
     },

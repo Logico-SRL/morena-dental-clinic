@@ -3,7 +3,7 @@ import 'reflect-metadata';
 // import { defaultDataSource } from "../../db/dataSource";
 import { DataSource } from "typeorm";
 import { dbConfig } from "../../db/dbConfig";
-import { AppUserEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity } from '../../repository/entities';
+import { AppUserEntity, MediaEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity, VisitEntity } from '../../repository/entities';
 // import { AppUserEntity } from "../../repository/entities/appUser";
 // import { PatientEntity } from "../../repository/entities/patient";
 
@@ -27,14 +27,12 @@ export class DbService implements IDbService {
     constructor() {
         this._dataSource = new DataSource(dbConfig);
     }
-
-
-    // private dataSource = (): Promise<DataSource> => {
-
-
-    //     throw new Error(" not implemented");
-    //     // return defaultDataSource();
-    // }
+    visitsRepo = async () => {
+        return (await this.dataSource).getRepository(VisitEntity);
+    }
+    mediaRepo = async () => {
+        return (await this.dataSource).getRepository(MediaEntity);
+    }
 
     usersRepo = async () => {
         return (await this.dataSource).getRepository(AppUserEntity);

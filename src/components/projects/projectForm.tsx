@@ -6,6 +6,7 @@ import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { NewCategoryModal } from "../categories/newCategoryModal";
 import { NewSubCategoryModal } from "../categories/newSubCategoryModal";
+import { BackButton } from "../userControls/backButton";
 
 
 type PropType = {
@@ -207,9 +208,13 @@ export const ProjectForm = ({ form, onSave, loading, submitText }: PropType) => 
             </Form.Item>
 
             <Form.Item style={{ textAlign: 'center' }}>
-                <UserControls.Button size="large" type="primary" onClick={onFinish}>
-                    {submitText}
-                </UserControls.Button>
+                <UserControls.Space>
+                    <BackButton />
+
+                    <UserControls.Button size="large" type="primary" onClick={onFinish}>
+                        {submitText}
+                    </UserControls.Button>
+                </UserControls.Space>
             </Form.Item>
 
         </Form>

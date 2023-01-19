@@ -3,6 +3,7 @@ import { atom } from "nanostores";
 import React from "react";
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 
 const projectStore = atom<IProject | undefined>(undefined);
 const loadingProjectStore = atom<boolean>(false)
@@ -21,8 +22,14 @@ export const useProject = (projectId: string) => {
             const controller = new AbortController()
             loadingProjectStore.set(true);
             httpService.get<IProject>(`/api/protected/projects/${projectId}`, { AbortSignal: controller.signal }).then(d => {
-                // console.info(`/api/protected/patients/${patientId}`, d)
-                projectStore.set(d.data);
+
+
+                const proj = d.data;
+                console.info('proj.visits', proj.visits)
+                if (proj.patient) {
+                    proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
+                }
+                projectStore.set(proj);
             })
                 .finally(() => {
                     loadingProjectStore.set(false);
@@ -38,7 +45,12 @@ export const useProject = (projectId: string) => {
     const saveProject = async (project: IProject) => {
         httpService.put<IProject>(`/api/protected/projects/${projectId}`, project)
             .then(d => {
-                projectStore.set(d.data);
+                const proj = d.data;
+                if (proj.patient) {
+                    proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
+                }
+                projectStore.set(proj);
+
             })
     }
 

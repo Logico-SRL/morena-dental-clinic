@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-import { PatientEntity, ProjectCategoryEntity } from ".";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { PatientEntity, ProjectCategoryEntity, VisitEntity } from ".";
 
 @Entity({
     name: "projects"
@@ -33,4 +33,7 @@ export class ProjectEntity {
 
     @Column({ type: 'datetime', nullable: true })
     createdOn: Date
+
+    @OneToMany(type => VisitEntity, v => v.project)
+    visits?: VisitEntity[]
 }

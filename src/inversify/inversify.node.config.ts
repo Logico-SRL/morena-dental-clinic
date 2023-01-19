@@ -4,11 +4,15 @@ import { PatientsController } from "../controllers/patients/patientsController";
 import { ProjectsCategoriesController } from "../controllers/projectCategories/projectsCategoriesController";
 import { ProjectController } from "../controllers/projects/projectController";
 import { ProjectsController } from "../controllers/projects/projectsController";
+import { VisitController } from "../controllers/visits/visitController";
+import { VisitsController } from "../controllers/visits/visitsController";
 import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
 import { DbService } from "../services/db/DbService";
 import { ExternalPatientsService } from "../services/externalPatients/ExternalPatientsService";
+import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
+import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
 
@@ -19,12 +23,16 @@ NodeIOCContainer.bind<IPatientsService>(IOCServiceTypes.PatientsService).to(Pati
 NodeIOCContainer.bind<IProjectCategoriesService>(IOCServiceTypes.ProjectCategoriesService).to(ProjectCategoriesService).inSingletonScope();
 NodeIOCContainer.bind<IProjectsService>(IOCServiceTypes.ProjectsService).to(ProjectsService).inSingletonScope();
 NodeIOCContainer.bind<IExternalPatientsService>(IOCServiceTypes.ExternalPatientsService).to(ExternalPatientsService).inSingletonScope();
+NodeIOCContainer.bind<IVisitsService>(IOCServiceTypes.VisitsService).to(VisitsService).inSingletonScope();
+NodeIOCContainer.bind<IMediaService>(IOCServiceTypes.MediaService).to(MediaService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectController).to(ProjectController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsCategoriesController).to(ProjectsCategoriesController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitsController).to(VisitsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitController).to(VisitController);
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)
     .toFactory<IApiController, [symbol, NextApiRequest, NextApiResponse]>(context => {

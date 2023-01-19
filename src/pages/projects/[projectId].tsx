@@ -8,7 +8,7 @@ import { AntdIcons } from "../../userControls/icons";
 const LeftTitle = ({ onList }: { onList: () => void }) => {
     return <>
         <UserControls.Typography.Title level={3}>
-            NEW PROJECT
+            EDIT PROJECT
         </UserControls.Typography.Title>
         <UserControls.Button onClick={onList} size="large" style={{ marginLeft: 'auto' }} icon={<AntdIcons.UnorderedListOutlined />} />
     </>

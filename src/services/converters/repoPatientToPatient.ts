@@ -24,6 +24,6 @@ export const repoPatientToPatient = (p: PatientEntity | undefined): IPatient => 
         ...p,
         gender: (p?.gender || 'unknown') as gendersKeysType,
         dateOfBirth: p?.dateOfBirth ? dayjs(p?.dateOfBirth) : undefined,
-        projects: p.projects.map(p => repoProjToProj(p))
+        projects: (p.projects || []).map(p => repoProjToProj(p))
     }
 }

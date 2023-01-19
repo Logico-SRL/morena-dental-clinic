@@ -41,7 +41,7 @@ export const useProjects = () => {
 
 
     const createProject = async (project: IProject) => {
-        loadingProjectsStore.set(false);
+        creatingProjectsStore.set(true);
         httpService.post<IProject>(`/api/protected/projects`, project)
             .then(d => {
                 projectsStore.set([...projects, d.data]);
@@ -51,7 +51,7 @@ export const useProjects = () => {
 
             })
             .finally(() => {
-                loadingProjectsStore.set(false);
+                creatingProjectsStore.set(false);
             })
     }
 

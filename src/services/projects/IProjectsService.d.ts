@@ -1,10 +1,10 @@
-type IProjectsService = {
+type IVisitsService = {
 
-    list: () => Promise<IProject[]>;
-    find: (projectId: string) => Promise<IProject | undefined>;
-    // searchExternal: (params: IPatientSearchParams) => Promise<IPatient[]>;
-    // import: (externalPatient: IExternalPatient) => Promise<IPatient>;
-    save: (project: IProject) => Promise<IProject>;
-    create: (project: IProject) => Promise<IProject>;
+    // list: () => Promise<IVisit[]>;
+    find: (visitId: string) => Promise<IVisit | undefined>;
+    // // searchExternal: (params: IPatientSearchParams) => Promise<IPatient[]>;
+    // // import: (externalPatient: IExternalPatient) => Promise<IPatient>;
+    save: (projectId: string, visit: IVisit) => Promise<IVisit>;
+    create: (projectId: string, visit: IVisit) => Promise<IVisit>;
 
 }

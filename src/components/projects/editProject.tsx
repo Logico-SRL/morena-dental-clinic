@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserControls from "../../userControls";
 import { ProjectForm } from "./projectForm";
+import { ProjectWithVisits } from "./projectWithVisits";
 
 
 type PropType = {
@@ -17,6 +18,11 @@ export const EditProject = ({ project, saveProject, loadingProject }: PropType) 
     const [form] = Form.useForm<IProject>();
     const [notif] = UserControls.notification.useNotification();
     const { push } = useRouter();
+    const [inEdit, setInEdit] = useState(false);
+
+    const onEdit = () => {
+        setInEdit(true)
+    }
 
     useEffect(() => {
         project && form.setFieldsValue(project);
@@ -29,8 +35,12 @@ export const EditProject = ({ project, saveProject, loadingProject }: PropType) 
             description: 'Project correctly created',
             placement: 'bottomLeft'
         })
-        await push(`/projects`)
+
+        setInEdit(false);
+        // await push(`/projects`)
     }
 
-    return <ProjectForm form={form} onSave={onSave} loading={loadingProject} submitText={'Save'} initialProject={project} />
+    return inEdit ?
+        <ProjectForm form={form} onSave={onSave} loading={loadingProject} submitText={'Save'} /> :
+        <ProjectWithVisits project={project} onEdit={onEdit} />
 }
