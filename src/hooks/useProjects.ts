@@ -1,5 +1,6 @@
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
+import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 
@@ -8,6 +9,7 @@ const projectsStore = atom<IProject[]>([]);
 const loadingProjectsStore = atom<boolean>(false)
 const creatingProjectsStore = atom<boolean>(false)
 // const loadingProjectStore = atom<boolean>(false)
+const initializing = { current: false };
 
 export const useProjects = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
@@ -16,15 +18,36 @@ export const useProjects = () => {
     const loadingProjects = useStore(loadingProjectsStore);
     const creatingProjects = useStore(creatingProjectsStore);
 
-    const fetchAllProjects = () => {
-        return fetchFilteredProjects({})
+    useEffect(() => {
+
+
+        if (!initializing.current) {
+            console.info('useProjects', initializing.current);
+            initializing.current = true;
+
+            // initialized = true;
+            const controller = new AbortController();
+            fetchAllProjects(controller)
+                .then(() => {
+                    // initializing.current = true;
+                })
+            return () => {
+                console.info('useProjects dismounting');
+                controller.abort();
+                initializing.current = false;
+            }
+        }
+
+    }, [])
+    const fetchAllProjects = (controller: AbortController) => {
+        return fetchFilteredProjects({}, controller)
     }
 
-    const fetchFilteredProjects = (params: IProjectSearchParams) => {
-        const controller = new AbortController()
+    const fetchFilteredProjects = (params: IProjectSearchParams, controller?: AbortController) => {
+        // const controller = new AbortController()
         loadingProjectsStore.set(true);
 
-        httpService.get<IProject[]>(`/api/protected/projects`, { AbortSignal: controller.signal })
+        return httpService.get<IProject[]>(`/api/protected/projects`, { AbortSignal: controller?.signal })
             .then(d => {
                 projectsStore.set(d.data);
             })
@@ -35,7 +58,7 @@ export const useProjects = () => {
             .finally(() => {
                 loadingProjectsStore.set(false);
             })
-        return controller;
+        // return controller;
     }
 
 
@@ -55,5 +78,5 @@ export const useProjects = () => {
             })
     }
 
-    return { projects, loadingProjects, fetchAllProjects, fetchFilteredProjects, createProject, creatingProjects };
+    return { projects, loadingProjects, fetchFilteredProjects, createProject, creatingProjects };
 }

@@ -25,19 +25,23 @@ export const loggedInMenu = [{
 {
     key: '/patients',
     label: <Link href="/patients" className={classnames.menuItem}>
-
         <AntdIcons.UserOutlined />
         PATIENTS
-
     </Link>
 },
 {
     key: '/library',
     label: <Link href="/library" className={classnames.menuItem}>
-
         <AntdIcons.ContainerOutlined />
         LIBRARY
-
     </Link>
-}]
+},
+{
+    key: '/settings',
+    label: <Link href="/settings" className={classnames.menuItem}>
+        <AntdIcons.SettingOutlined />
+        SETTINGS
+    </Link>
+}
+]
 

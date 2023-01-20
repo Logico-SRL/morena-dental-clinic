@@ -3,10 +3,12 @@ import { atom } from "nanostores";
 import React from "react";
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { defaultVisit } from "../services/defaultValues";
 import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 
-const visitStore = atom<IVisit | undefined>(undefined);
+const visitStore = atom<IVisit>(defaultVisit());
 const loadingVisitStore = atom<boolean>(false)
+const fetchingId = { current: '' };
 
 export const useVisit = (projectId: string, visitId: string) => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
@@ -15,7 +17,9 @@ export const useVisit = (projectId: string, visitId: string) => {
 
     React.useEffect(() => {
 
-        if (projectId && visitId && (!visit || visit.id != visitId)) {
+        if (fetchingId.current != visitId && projectId && visitId && (visit.id != visitId)) {
+
+            fetchingId.current = visitId;
 
             const controller = new AbortController()
             loadingVisitStore.set(true);
@@ -28,6 +32,7 @@ export const useVisit = (projectId: string, visitId: string) => {
             })
                 .finally(() => {
                     loadingVisitStore.set(false);
+                    fetchingId.current = '';
                     // setLoading(false);
                 })
 

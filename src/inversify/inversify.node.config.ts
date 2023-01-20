@@ -4,6 +4,8 @@ import { PatientsController } from "../controllers/patients/patientsController";
 import { ProjectsCategoriesController } from "../controllers/projectCategories/projectsCategoriesController";
 import { ProjectController } from "../controllers/projects/projectController";
 import { ProjectsController } from "../controllers/projects/projectsController";
+import { SettingsController } from "../controllers/settings/settingsController";
+import { SettingsMediaSourceController } from "../controllers/settings/settingsMediaSourceController";
 import { VisitController } from "../controllers/visits/visitController";
 import { VisitsController } from "../controllers/visits/visitsController";
 import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
@@ -12,6 +14,7 @@ import { ExternalPatientsService } from "../services/externalPatients/ExternalPa
 import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
+import { SettingsService } from "../services/settings/SettingsService";
 import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
@@ -25,6 +28,7 @@ NodeIOCContainer.bind<IProjectsService>(IOCServiceTypes.ProjectsService).to(Proj
 NodeIOCContainer.bind<IExternalPatientsService>(IOCServiceTypes.ExternalPatientsService).to(ExternalPatientsService).inSingletonScope();
 NodeIOCContainer.bind<IVisitsService>(IOCServiceTypes.VisitsService).to(VisitsService).inSingletonScope();
 NodeIOCContainer.bind<IMediaService>(IOCServiceTypes.MediaService).to(MediaService).inSingletonScope();
+NodeIOCContainer.bind<ISettingsService>(IOCServiceTypes.SettingsService).to(SettingsService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
@@ -33,6 +37,8 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectController).to(P
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsCategoriesController).to(ProjectsCategoriesController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitsController).to(VisitsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitController).to(VisitController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SettingsController).to(SettingsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SettingsMediaSourcesController).to(SettingsMediaSourceController);
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)
     .toFactory<IApiController, [symbol, NextApiRequest, NextApiResponse]>(context => {

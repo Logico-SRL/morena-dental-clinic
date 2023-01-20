@@ -1,21 +1,10 @@
 import dayjs from "dayjs";
 import { repoProjToProj } from ".";
+import { defaultPatient } from "../defaultValues";
 
 export const repoPatientToPatient = (p: PatientEntity | undefined): IPatient => {
-    const def: IPatient = {
-        id: '',
-        firstName: '',
-        familyName: '',
-        fiscalCode: '',
-        externalId: '',
-        age: 0,
-        gender: 'unknown',
-        dateOfBirth: undefined,
-        bloodGroup: '',
-        emergencyPhone: '',
-        notes: '',
-        projects: []
-    }
+    const def = defaultPatient();
+
     if (!p)
         return def;
 

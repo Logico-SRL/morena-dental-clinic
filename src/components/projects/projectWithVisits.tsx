@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
+import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { visitUtils } from "../../utils/visitUtils";
 import { PatientInfo } from "../patients/patientInfo";
 import { SectionHeader } from "../userControls/sectionHeader";
+import classnames from './projects.module.scss';
 
 type PropType = {
     project: IProject | undefined,
@@ -22,8 +24,17 @@ const Links = ({ onClick, onEditClick }: { onClick: () => void, onEditClick: () 
     </UserControls.Space>
 }
 
-const VisitButton = ({ text, onClick }: { text: string | React.ReactNode, onClick: () => void }) => {
-    return <UserControls.Button onClick={onClick}>{text}</UserControls.Button>
+type VisitButtonPropType = {
+    text: string | React.ReactNode,
+    className?: string | undefined,
+    onClick: () => void,
+    disabled?: boolean;
+}
+
+const VisitButton = ({ text, onClick, className, disabled }: VisitButtonPropType) => {
+    return <UserControls.Button disabled={disabled} className={className} onClick={onClick}>
+        {text}
+    </UserControls.Button>
 }
 
 export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
@@ -31,6 +42,9 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
     const { push } = useRouter();
 
     const { patient } = project || {};
+
+    // const [selectedVisit, setSelectedVisit] = useState<IVisit>()
+    const { selectedVisit, setSelectedVisit } = useProject(project?.id || '')
 
     const onNewProjectClick = () => {
         push(`/projects/create`)
@@ -41,11 +55,16 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
     }
 
     const onVisitClick = (visit: IVisit) => {
-        push(`/projects/${project?.id}/visits/${visit.id}`)
+        setSelectedVisit(visit)
+        // push(`/projects/${project?.id}/visits/${visit.id}`)
     }
 
     const onAddVisitClick = () => {
         push(`/projects/${project?.id}/visits/create`)
+    }
+
+    const onEditVisitClick = () => {
+        selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}`)
     }
 
     return <UserControls.Form layout="vertical">
@@ -71,12 +90,17 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
             <UserControls.Col xs={24} style={{ paddingTop: 20 }}>
                 <UserControls.Row gutter={[10, 10]}>
                     {(project?.visits || []).map((v, index) => (
-                        <UserControls.Col key={v.id}>
-                            <VisitButton text={visitUtils.getName(v, project?.visits || [])} onClick={() => onVisitClick(v)} />
+                        <UserControls.Col key={v.id} >
+                            <VisitButton className={`${selectedVisit && v.id === selectedVisit.id ? classnames.selectedVisit : ''}`}
+                                text={visitUtils.getName(v, project?.visits || [])} onClick={() => onVisitClick(v)} />
                         </UserControls.Col>
                     ))}
+
                     <UserControls.Col>
-                        <VisitButton text={<AntdIcons.PlusOutlined />} onClick={onAddVisitClick} />
+                        <VisitButton disabled={!selectedVisit} text={<UserControls.Space><AntdIcons.EditOutlined />Edit Visit</UserControls.Space>} onClick={onEditVisitClick} />
+                    </UserControls.Col>
+                    <UserControls.Col>
+                        <VisitButton text={<UserControls.Space><AntdIcons.PlusOutlined />Add Visit</UserControls.Space>} onClick={onAddVisitClick} />
                     </UserControls.Col>
                 </UserControls.Row>
             </UserControls.Col>

@@ -3,24 +3,33 @@ import { atom } from "nanostores";
 import React from "react";
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { defaultProject } from "../services/defaultValues";
 import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 
-const projectStore = atom<IProject | undefined>(undefined);
+const projectStore = atom<IProject>(defaultProject());
+const selectedVisitStore = atom<IVisit | undefined>(undefined);
 const loadingProjectStore = atom<boolean>(false)
+const fetchingId = { current: '' };
+
 
 export const useProject = (projectId: string) => {
     // const [patient, setPatient] = React.useState<IPatient>()
     // const [loading, setLoading] = React.useState<boolean>(false)
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const project = useStore(projectStore);
+    const selectedVisit = useStore(selectedVisitStore);
     const loadingProject = useStore(loadingProjectStore);
 
     React.useEffect(() => {
 
-        if (projectId && (!project || project.id != projectId)) {
+        if (fetchingId.current != projectId && projectId && (project.id != projectId)) {
+
+            fetchingId.current = projectId;
+            // console.info(`loadingProject ${loadingProject}, projectId: ${projectId}, project.id ${project.id}`)
+            loadingProjectStore.set(true);
+            projectStore.set(defaultProject());
 
             const controller = new AbortController()
-            loadingProjectStore.set(true);
             httpService.get<IProject>(`/api/protected/projects/${projectId}`, { AbortSignal: controller.signal }).then(d => {
 
                 const proj = d.data;
@@ -28,10 +37,15 @@ export const useProject = (projectId: string) => {
                 if (proj.patient) {
                     proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
                 }
+
+                if (selectedVisit && (!proj.visits || !proj.visits.find(v => v.id === selectedVisit?.id))) {
+                    setSelectedVisit(undefined);
+                }
                 projectStore.set(proj);
             })
                 .finally(() => {
                     loadingProjectStore.set(false);
+                    fetchingId.current = '';
                     // setLoading(false);
                 })
 
@@ -39,7 +53,7 @@ export const useProject = (projectId: string) => {
                 controller.abort();
             }
         }
-    }, [projectId, project])
+    }, [projectId, project, selectedVisit])
 
     const setVisit = (visit: IVisit) => {
 
@@ -73,5 +87,9 @@ export const useProject = (projectId: string) => {
             })
     }
 
-    return { project, loadingProject, saveProject, setVisit };
+    const setSelectedVisit = (visit: IVisit | undefined) => {
+        selectedVisitStore.set(visit);
+    }
+
+    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit };
 }

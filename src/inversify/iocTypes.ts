@@ -7,6 +7,7 @@ const IOCServiceTypes = {
     HttpService: Symbol.for("HttpService"),
     VisitsService: Symbol.for("VisitsService"),
     MediaService: Symbol.for("MediaService"),
+    SettingsService: Symbol.for("SettingsService"),
 
 };
 const IOCControllerTypes = {
@@ -18,6 +19,8 @@ const IOCControllerTypes = {
     ProjectsCategoriesController: Symbol.for("ProjectsCategoriesController"),
     VisitsController: Symbol.for("VisitsController"),
     VisitController: Symbol.for("VisitController"),
+    SettingsController: Symbol.for("SettingsController"),
+    SettingsMediaSourcesController: Symbol.for("SettingsMediaSourcesController"),
 }
 
 export { IOCServiceTypes, IOCControllerTypes };

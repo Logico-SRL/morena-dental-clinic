@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditProject } from "../../components/projects/editProject";
+import { VisitMedia } from "../../components/screening/VisitMedia";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
@@ -8,11 +9,19 @@ import { AntdIcons } from "../../userControls/icons";
 const LeftTitle = ({ onList }: { onList: () => void }) => {
     return <>
         <UserControls.Typography.Title level={3}>
-            EDIT PROJECT
+            PROJECT
         </UserControls.Typography.Title>
         <UserControls.Button onClick={onList} size="large" style={{ marginLeft: 'auto' }} icon={<AntdIcons.UnorderedListOutlined />} />
     </>
 }
+
+const RightTitle = () => {
+    return <UserControls.Typography.Title level={4}>
+        SCREENING
+    </UserControls.Typography.Title>
+}
+
+
 
 const Comp: PageComponent = () => {
 
@@ -41,16 +50,11 @@ const Comp: PageComponent = () => {
         push(`/projects`)
     }
 
-    const RightTitle = () => {
-        return <UserControls.Typography.Title level={4}>
-            ONLINE LIBRARY
-        </UserControls.Typography.Title>
-    }
-
     return (<><SplittedPage
         LeftTitle={<LeftTitle onList={onList} />}
         RightTitle={<RightTitle />}
         Left={<EditProject project={project} loadingProject={loadingProject} saveProject={saveProject} />}
+        Right={<VisitMedia projectId={projectId} />}
     />
     </>)
 }

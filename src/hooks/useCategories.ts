@@ -7,7 +7,7 @@ import { useService } from "../inversify/useService";
 
 
 const categoriesStore = atom<IProjectCategory[]>([]);
-let initialized = false;
+const initializing = { current: false };
 // const loadingPatientsStore = atom<boolean>(false)
 
 export const useCategories = () => {
@@ -21,11 +21,12 @@ export const useCategories = () => {
 
         // console.info('usePatients patients', patients);
 
-        if (!initialized) {
-            initialized = true;
+        if (!initializing.current) {
+            initializing.current = true;
             const controller = fetchAllCategories()
             return () => {
                 controller.abort();
+                initializing.current = false;
             }
         }
 

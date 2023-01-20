@@ -1,7 +1,8 @@
-import { repoPatientToPatient, repoVisitToVisit } from "."
+import { repoPatientToPatient, repoVisitToVisit } from ".";
+import { defaultProject } from "../defaultValues";
 
 export const repoProjToProj = (p: ProjectEntity): IProject => {
-
+    const def = defaultProject();
     return {
         ...p,
         category: p.category,

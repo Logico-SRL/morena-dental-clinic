@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { Projects } from "../../components/projects/projects";
 import { useProjects } from "../../hooks/useProjects";
@@ -18,22 +17,22 @@ const LeftTitle = ({ onAddClick }: { onAddClick: () => void }) => {
 
 const Comp: PageComponent = () => {
 
-    const { projects, loadingProjects, fetchAllProjects } = useProjects()
+    const { projects, loadingProjects } = useProjects()
     // const [showNewProjectModal, setShowNewProjectModal] = useState(false);
     // const [showEditProjectModal, setShowEditProjectModal] = useState(false);
     // const [editingProject, setEditingProject] = useState<IProject>();
 
     const { push } = useRouter();
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const ab = fetchAllProjects();
+    //     const ab = fetchAllProjects();
 
-        return () => {
-            ab.abort();
-        }
+    //     return () => {
+    //         ab.abort();
+    //     }
 
-    }, [])
+    // }, [])
 
 
     const onAddClick = () => {

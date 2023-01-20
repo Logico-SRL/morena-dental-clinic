@@ -1,0 +1,3 @@
+type ISettings = {
+    mediaSources: IMediaSource[]
+}

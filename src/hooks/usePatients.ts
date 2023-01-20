@@ -6,20 +6,9 @@ import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
 
-
-// type PatientsStoreType = {
-//     patients: IPatient[],
-//     loadingPatients: boolean
-// }
-
-// const patientsStore = map<PatientsStoreType>({
-//     patients: [],
-//     loadingPatients: false
-// })
-
 const patientsStore = atom<IPatient[]>([]);
-let initialized = false;
 const loadingPatientsStore = atom<boolean>(false)
+const initializing = { current: false };
 
 export const usePatients = () => {
     // const [patients, setPatients] = React.useState<IPatient[]>([])
@@ -32,24 +21,30 @@ export const usePatients = () => {
 
         // console.info('usePatients patients', patients);
 
-        if (!initialized) {
-            initialized = true;
-            const controller = fetchAllPatients()
+        if (!initializing.current) {
+            initializing.current = true;
+            // initialized = true;
+            const controller = new AbortController();
+            fetchAllPatients(controller)
+                .then(() => {
+                    // initializing.current = true;
+                })
             return () => {
                 controller.abort();
+                initializing.current = false;
             }
         }
 
     }, [])
 
-    const fetchAllPatients = () => {
-        return fetchFilteredPatients({})
+    const fetchAllPatients = (controller?: AbortController) => {
+        return fetchFilteredPatients({}, controller)
 
     }
 
 
-    const fetchFilteredPatients = (params: IPatientSearchParams) => {
-        const controller = new AbortController()
+    const fetchFilteredPatients = (params: IPatientSearchParams, controller?: AbortController) => {
+        // const controller = new AbortController()
         loadingPatientsStore.set(true);
         const { fromVisitDate, toVisitDate, ...rest } = params
         let p: any = rest;
@@ -60,7 +55,7 @@ export const usePatients = () => {
             p.toVisitDate = toVisitDate.toISOString()
 
         const pars = new URLSearchParams(p);
-        httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { AbortSignal: controller.signal })
+        return httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { AbortSignal: controller?.signal })
             .then(d => {
                 patientsStore.set(convertPropsToDayjsArr(['dateOfBirth'], d.data));
             })
@@ -71,7 +66,7 @@ export const usePatients = () => {
             .finally(() => {
                 loadingPatientsStore.set(false);
             })
-        return controller;
+        // return controller;
     }
 
     const createPatient = async (p: IPatient) => {

@@ -1,0 +1,6 @@
+@import "../../styles/colors.scss";
+
+.selectedVisit {
+  background-color: $selectedBg;
+  color: $selectedColor;
+}

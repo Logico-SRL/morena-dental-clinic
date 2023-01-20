@@ -1,7 +1,8 @@
-import { useAuthSession } from "../../../hooks/useAuthSession"
-import UserControls from "../../../userControls"
-import { loggedInMenu } from "./loggedInMenu"
-import { loggedOutMenu } from "./loggedOutMenu"
+import { useAuthSession } from "../../../hooks/useAuthSession";
+import UserControls from "../../../userControls";
+import { loggedInMenu } from "./loggedInMenu";
+import { loggedOutMenu } from "./loggedOutMenu";
+import classnames from './menu.module.scss';
 
 const SiderContainerComp = () => {
 
@@ -11,6 +12,7 @@ const SiderContainerComp = () => {
 
     return <UserControls.Menu
         // theme="dark"
+        className={classnames.menu}
         mode="vertical"
         items={items}
     />

@@ -14,11 +14,12 @@ type PropType = {
     onSave: (proj: IProject) => void,
     loading: boolean,
     submitText: string,
+    onBack: () => void
 }
 
 
 
-export const ProjectForm = ({ form, onSave, loading, submitText }: PropType) => {
+export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropType) => {
 
     const Form = UserControls.Form;
     const [categoryForm] = Form.useForm<IProjectCategory>();
@@ -209,7 +210,7 @@ export const ProjectForm = ({ form, onSave, loading, submitText }: PropType) => 
 
             <Form.Item style={{ textAlign: 'center' }}>
                 <UserControls.Space>
-                    <BackButton />
+                    <BackButton onBack={onBack} />
 
                     <UserControls.Button size="large" type="primary" onClick={onFinish}>
                         {submitText}

@@ -12,6 +12,7 @@ type PropType = {
     saveProject: (proj: IProject) => void,
     loadingProject: boolean
 }
+
 export const EditProject = ({ project, saveProject, loadingProject }: PropType) => {
 
     const Form = UserControls.Form;
@@ -41,6 +42,6 @@ export const EditProject = ({ project, saveProject, loadingProject }: PropType) 
     }
 
     return inEdit ?
-        <ProjectForm form={form} onSave={onSave} loading={loadingProject} submitText={'Save'} /> :
+        <ProjectForm form={form} onSave={onSave} loading={loadingProject} submitText={'Save'} onBack={() => setInEdit(false)} /> :
         <ProjectWithVisits project={project} onEdit={onEdit} />
 }

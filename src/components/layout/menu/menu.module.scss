@@ -1,18 +1,36 @@
 @import "../../../styles/colors.scss";
 
-.menuItem {
-  display: inline-flex;
-  //   flex-direction: column;
-  align-items: center;
-  height: auto;
-  // padding-right: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  :global(.anticon) {
-    font-size: 30px;
+.menu {
+  padding-right: 10px;
+
+  :global(.ant-menu-item) {
+    line-height: normal;
+    height: auto;
+    padding: 0;
+    margin: 10px;
+    border-radius: 100%;
+    border: 1px solid #2e4151;
+
+    .menuItem {
+      display: inline-flex;
+      //   flex-direction: column;
+      align-items: center;
+      height: auto;
+      // padding-right: 20px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      aspect-ratio: 1;
+      // padding-top: 10px;
+      // padding-bottom: 10px;
+      padding: 0;
+      // margin-top: 5px;
+      font-size: 12px;
+
+      :global(.anticon) {
+        font-size: 24px !important;
+      }
+    }
   }
 }
