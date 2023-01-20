@@ -17,6 +17,12 @@ export class MediaEntity {
     @Column({ type: 'nvarchar' })
     path: string;
 
+    @Column({ type: 'text' })
+    b64Thumbnail: string;
+
+    @Column({ type: 'text' })
+    b64Preview: string;
+
     @Column({ type: 'text', default: '{}' })
     meta: string;
 

@@ -9,6 +9,7 @@ import Divider from "./components/divider";
 import Footer from "./components/footer";
 import Form from "./components/form";
 import Header from "./components/header";
+import Image from "./components/image";
 import Input from "./components/input";
 import InputNumber from "./components/inputNumber";
 import Layout from "./components/layout";
@@ -24,6 +25,7 @@ import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
 import Space from "./components/space";
 import Typography from "./components/typography";
+import Upload from "./components/upload";
 
 const UserControls = {
     Layout,
@@ -51,7 +53,9 @@ const UserControls = {
     DatePicker,
     Select,
     AutoComplete,
-    Segmented
+    Segmented,
+    Image,
+    Upload
 }
 
 export default UserControls;
