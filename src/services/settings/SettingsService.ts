@@ -26,4 +26,10 @@ export class SettingsService implements ISettingsService {
         await repo.insert(mediaSource);
         return await this.get();
     }
+
+    saveMediaSource = async (mediaSource: IMediaSource) => {
+        const repo = (await this.getMediaSourceRepo);
+        await repo.save(mediaSource);
+        return await this.get();
+    }
 }

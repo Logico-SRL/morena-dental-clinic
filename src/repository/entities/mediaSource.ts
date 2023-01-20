@@ -12,5 +12,7 @@ export class MediaSourceEntity {
     @Column({ type: 'nvarchar' })
     name: string;
 
+    @Column({ type: 'nvarchar', nullable: true })
+    basePath?: string;
 
 }

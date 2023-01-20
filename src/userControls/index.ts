@@ -18,6 +18,7 @@ import Modal from "./components/modal";
 import notification from "./components/notification";
 import Radio from "./components/radio";
 import Row from "./components/row";
+import Segmented from "./components/segmented";
 import Select from "./components/select";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
@@ -49,7 +50,8 @@ const UserControls = {
     InputNumber,
     DatePicker,
     Select,
-    AutoComplete
+    AutoComplete,
+    Segmented
 }
 
 export default UserControls;

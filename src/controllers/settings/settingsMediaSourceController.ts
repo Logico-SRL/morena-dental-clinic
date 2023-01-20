@@ -19,4 +19,13 @@ export class SettingsMediaSourceController extends BaseController {
         return this.res.status(200).json(result)
     }
 
+    PUT = async () => {
+        // const mediasourceId = this.req.query.mediasourceId as string;
+        const source = this.req.body as IMediaSource;
+        const result = await this.settingsService.saveMediaSource(source);
+        return this.res.status(200).json(result)
+    }
+
+
+
 }

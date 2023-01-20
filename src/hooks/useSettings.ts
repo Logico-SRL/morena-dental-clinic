@@ -59,7 +59,13 @@ export const useSettings = () => {
                 settingsStore.set(d.data);
             })
     }
+    const saveMediaSource = async (source: IMediaSource) => {
+        return httpService.put<ISettings>(`/api/protected/settings/mediasources/${source.id}`, source)
+            .then(d => {
+                settingsStore.set(d.data);
+            })
+    }
 
 
-    return { settings, loadingSettings, createMediaSource };
+    return { settings, loadingSettings, createMediaSource, saveMediaSource };
 }

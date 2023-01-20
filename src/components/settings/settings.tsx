@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSettings } from "../../hooks/useSettings";
+import { defaultMediaSource } from "../../services/defaultValues/defaultMediaSource";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { SectionHeader } from "../userControls/sectionHeader";
@@ -10,11 +11,21 @@ export const Settings = () => {
 
     const { settings } = useSettings();
     const [showMediaSourceModal, setShowMediaSourceModal] = useState(false)
+    const [form] = UserControls.Form.useForm<IMediaSource>()
 
+    const onAddSourceClick = () => {
+        form.setFieldsValue(defaultMediaSource());
+        setShowMediaSourceModal(true)
+    }
+
+    const onClick = (item: IMediaSource) => {
+        form.setFieldsValue(item);
+        setShowMediaSourceModal(true)
+    }
 
     return <UserControls.Row>
         <UserControls.Col xs={24}>
-            <SectionHeader title="MediaSources" links={<UserControls.Button icon={<AntdIcons.PlusOutlined />} onClick={() => setShowMediaSourceModal(true)}>
+            <SectionHeader title="MediaSources" links={<UserControls.Button icon={<AntdIcons.PlusOutlined />} onClick={onAddSourceClick}>
                 Add source
             </UserControls.Button>} />
         </UserControls.Col>
@@ -22,13 +33,24 @@ export const Settings = () => {
 
             <UserControls.List
                 dataSource={settings.mediaSources}
-                renderItem={MediaSourceItem}
+                renderItem={MediaSourceItem({ onClick })}
             />
         </UserControls.Col>
-        <MediaSourceModal open={showMediaSourceModal} onClose={() => setShowMediaSourceModal(false)} />
+        <MediaSourceModal open={showMediaSourceModal} onClose={() => setShowMediaSourceModal(false)} form={form} />
     </UserControls.Row>
 }
 
-const MediaSourceItem = (item: IMediaSource) => <UserControls.List.Item className="touchable" key={item.id}>
-    {item.name}
-</UserControls.List.Item>
+const MediaSourceItem = ({ onClick }: { onClick: (item: IMediaSource) => void }) => (item: IMediaSource) => (
+    <UserControls.List.Item className="touchable" key={item.id} onClick={() => onClick(item)}>
+        <UserControls.Col xs={24}>
+            <UserControls.Row>
+                <UserControls.Col xs={8}>
+                    {item.name}
+                </UserControls.Col>
+                <UserControls.Col xs={8}>
+                    {item.basePath || ' - '}
+                </UserControls.Col>
+            </UserControls.Row>
+        </UserControls.Col>
+    </UserControls.List.Item>
+)
