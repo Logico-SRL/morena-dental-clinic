@@ -74,24 +74,20 @@ export class FileUploadController extends BaseController {
             mimeType: ''
         }
 
-        // const fileId = ulid();
         let fileExtension = 'notfound'
 
-        // const mimeInfo: FileInfo = {
-        //     encoding: '',
-        //     filename: '',
-        //     mimeType: ''
-        // }
 
-        const files = await new Promise<{ b64Thumbnail: string, b64Preview: string }>((resolve) => {
-            // let b64File = '';
+        const files = await new Promise<{ b64Thumbnail: string, b64Preview: string }>((resolve, reject) => {
             const busboy = Busboy({ headers: this.req.headers });
-            // console.log(JSON.stringify(req.headers, null, 2));
 
-            // let fileData: any[] = [];
             const chunks: Array<Uint8Array> = [];
 
             busboy.on('file', (fieldname: string, file: Readable, { encoding, filename, mimeType }: FileInfo) => {
+
+                file.on('error', ({ message }) => {
+                    throw new Error(`File upload error: ${message}`);
+
+                })
 
                 console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
 
@@ -123,45 +119,56 @@ export class FileUploadController extends BaseController {
                 const saveTo = `${saveToDir}/${media.id}.${fileExtension}`;
                 media.path = saveTo;
 
-                fs.mkdir(saveToDir, { recursive: true }, (err) => {
-                    if (err) throw err;
-                });
+                fs.mkdirSync(saveToDir, { recursive: true });
 
                 console.info('saveTo', saveTo)
                 const stream = fs.createWriteStream(saveTo)
                 file.pipe(stream)
 
                 file.on('data', async (chunk: any) => {
-                    // console.log('File [' + fieldname + '] got ' + chunk.length + ' bytes');
-                    // fileData = fileData.concat(...data)
                     chunks.push(chunk)
-                    // fileData = [chunk]
                 });
 
                 file.on('end', async () => {
                     console.log('File [' + fieldname + '] Finished');
 
+
                     const buff = Buffer.concat(chunks);
-                    // const buffer = Buffer.from(buff.toString('base64'), 'base64');
+                    let b64Thumbnail = '';
+                    let b64Preview = '';
 
-                    // console.info('buffer length', buffer.length)
-                    //console.info('media.path', media.path)
+                    switch (media.type) {
+                        case 'image': {
 
-                    // const u8 = new Uint8Array(fileData);
-                    // console.log(`fileData length: ${fileData.length}, u8: ${u8.length}`);
+                            b64Thumbnail = await sharp(buff)
+                                .resize(200)
+                                .toBuffer()
+                                .then(b => b.toString('base64'))
+                                .catch(err => {
+                                    reject(err);
+                                    throw err;
 
-                    // b64File = Buffer.from(u8).toString('base64');
-                    const b64Thumbnail = await sharp(buff)
-                        .resize(200)
-                        .toBuffer()
-                        .then(b => b.toString('base64'))
-                    // const b64Thumbnail = '';
+                                })
+                            b64Preview = await sharp(buff)
+                                .resize(1024)
+                                .toBuffer()
+                                .then(b => b.toString('base64'))
+                                .catch(err => {
+                                    reject(err);
+                                    throw err;
+                                })
+                            break;
+                        }
+                        case 'video': {
+                            break;
+                        }
+                        case 'doc':
+                        default: {
 
-                    // const b64Preview = '';
-                    const b64Preview = await sharp(buff)
-                        .resize(1024)
-                        .toBuffer()
-                        .then(b => b.toString('base64'))
+                            break;
+                        }
+
+                    }
 
 
                     resolve({ b64Thumbnail, b64Preview })

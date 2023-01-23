@@ -1,4 +1,5 @@
-import { UploadProps } from "antd";
+import { ImageProps, UploadProps } from "antd";
+import { UploadChangeParam, UploadFile } from "antd/es/upload";
 import { useEffect, useRef, useState } from "react";
 import { useProject } from "../../hooks/useProject";
 import { useSettings } from "../../hooks/useSettings";
@@ -12,13 +13,15 @@ type PropType = {
     segmentValue: string | number,
     onSourceChange: (mediaSourceId: string | number) => void,
     selectedMediaSource?: IMediaSource,
-    projectId: string
+    projectId: string,
+    setSelectedVisit: (visit: IVisit | undefined) => void
 }
 
 export const VisitMedia = ({ projectId }: Pick<PropType, 'projectId'>) => {
 
-    const { selectedVisit, loadingProject } = useProject(projectId)
+    const { selectedVisit, loadingProject, setSelectedVisit } = useProject(projectId)
     const { settings } = useSettings();
+    const [selectedMediaSource, setSelectedMediaSource] = useState<IMediaSource>()
 
     useEffect(() => {
         if (settings.mediaSources) {
@@ -26,7 +29,6 @@ export const VisitMedia = ({ projectId }: Pick<PropType, 'projectId'>) => {
         }
     }, [settings])
 
-    const [selectedMediaSource, setSelectedMediaSource] = useState<IMediaSource>()
 
     const onSourceChange = (mediaSourceId: string | number) => {
         const found = settings.mediaSources.find(m => m.id === mediaSourceId);
@@ -35,30 +37,40 @@ export const VisitMedia = ({ projectId }: Pick<PropType, 'projectId'>) => {
 
     return <UserControls.Skeleton loading={loadingProject}>
         <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange} segmentValue={selectedMediaSource?.id || ''} />
-        <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId} />
-        <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} />
+        <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId} setSelectedVisit={setSelectedVisit} />
+        <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} />
     </UserControls.Skeleton>
 }
-const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId }: Pick<PropType, 'selectedMediaSource' | 'selectedVisit' | 'projectId'>) => {
+const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId, setSelectedVisit }: Pick<PropType, 'selectedMediaSource' | 'selectedVisit' | 'projectId' | 'setSelectedVisit'>) => {
+
+    const [fileList, setFileList] = useState<Array<UploadFile<IMedia>>>([])
 
     const props: UploadProps = {
         action: `/api/protected/projects/${projectId}/visits/${selectedVisit?.id || ''}/mediasources/${selectedMediaSource?.id || ''}/upload`,
         listType: 'picture',
+        showUploadList: true,
+        fileList,
+        // fileList: [],
+        multiple: false,
+        onChange: (info: UploadChangeParam<UploadFile<IMedia>>) => {
+
+            const { status, response } = info.file;
+            if (status === 'done' || status === 'success') {
+                setFileList([]);
+                if (selectedVisit && response)
+                    setSelectedVisit({ ...selectedVisit, media: [...selectedVisit.media, response] })
+            } else {
+                setFileList(info.fileList)
+            }
+        },
         previewFile: async (file) => {
             console.log('Your upload file:', file);
             return ''
-            // Your process logic. Here we just mock to the same file
-            // return fetch('https://next.json-generator.com/api/json/get/4ytyBoLK8', {
-            //     method: 'POST',
-            //     body: file,
-            // })
-            //     .then((res) => res.json())
-            //     .then(({ thumbnail }) => thumbnail);
         },
     };
 
     return <UserControls.Col xs={24} className={classnames.actions} >
-        <UserControls.Upload {...props}>
+        <UserControls.Upload {...props} >
             <UserControls.Button disabled={!selectedVisit || !selectedMediaSource} icon={<AntdIcons.PlusOutlined />}>
                 Upload
             </UserControls.Button>
@@ -71,32 +83,7 @@ const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId }
 
 const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource }: Pick<PropType, 'sources' | 'selectedVisit' | 'selectedMediaSource'>) => {
 
-    // const mocked: Omit<IMedia, 'visit'>[] = [{
-    //     id: '1',
-    //     path: '',
-    //     b64Preview: b64Img,
-    //     b64Thumbnail: b64ImgSmall,
-    //     createdOn: new Date(),
-    //     source: {
-    //         id: '1',
-    //         name: 'TAC',
-    //     },
-    //     meta: '{}',
-    //     type: 'image',
-    // },
-    // {
-    //     id: '2',
-    //     path: '',
-    //     b64Preview: b64Img,
-    //     b64Thumbnail: b64ImgSmall,
-    //     createdOn: new Date(),
-    //     source: {
-    //         id: '1',
-    //         name: 'TAC',
-    //     },
-    //     meta: '{}',
-    //     type: 'image',
-    // }]
+
 
     const media: Omit<IMedia, 'visit'>[] = !selectedVisit ? [] : !selectedMediaSource ? selectedVisit.media : selectedVisit.media.filter(m => m.source.id == selectedMediaSource.id)
     const currIndex = useRef<number>(1)
@@ -134,21 +121,19 @@ const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource }: Pick<Pr
             }
         }}
     >
-        {media.map(m => <UserControls.Image
-
-            key={m.id}
-            width={200}
-            src={`data:image/png;base64,${m.b64Thumbnail}`}
-            preview={{
-                src: `data:image/png;base64,${m.b64Preview}`,
-                // className: 'cravino'
-                // title: 'cravino',
-                // wrapProps: {
-                //     'data-test-id': 'cravino'
-                // }
-            }}
-        // src={m.path}
-        />)}
+        {media.map(m => {
+            const src = m.b64Thumbnail ? `data:image/png;base64,${m.b64Thumbnail}` : m.source.defaultThumbnailB64;
+            const preview: ImageProps['preview'] = {
+                src: m.b64Preview ? `data:image/png;base64,${m.b64Preview}` : m.source.defaultThumbnailB64,
+            };
+            return <UserControls.Image
+                key={m.id}
+                width={200}
+                src={src}
+                preview={preview}
+            />
+        })
+        }
     </UserControls.Image.PreviewGroup>
 }
 

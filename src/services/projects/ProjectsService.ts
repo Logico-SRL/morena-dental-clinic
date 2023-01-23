@@ -21,7 +21,11 @@ export class ProjectsService implements IProjectsService {
                 patient: true,
                 category: true,
                 subCategory: true,
-                visits: { media: true }
+                visits: {
+                    media: {
+                        source: true
+                    }
+                }
             }
         });
         // console.info('ProjectsService find resp', resp);

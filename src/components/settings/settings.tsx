@@ -43,12 +43,15 @@ export const Settings = () => {
 const MediaSourceItem = ({ onClick }: { onClick: (item: IMediaSource) => void }) => (item: IMediaSource) => (
     <UserControls.List.Item className="touchable" key={item.id} onClick={() => onClick(item)}>
         <UserControls.Col xs={24}>
-            <UserControls.Row>
+            <UserControls.Row justify={'center'} align={'middle'}>
                 <UserControls.Col xs={8}>
                     {item.name}
                 </UserControls.Col>
                 <UserControls.Col xs={8}>
                     {item.basePath || ' - '}
+                </UserControls.Col>
+                <UserControls.Col xs={8}>
+                    <UserControls.Image src={item.defaultThumbnailB64 || ''} preview={false} />
                 </UserControls.Col>
             </UserControls.Row>
         </UserControls.Col>
