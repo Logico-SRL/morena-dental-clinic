@@ -24,7 +24,7 @@ export class MediaEntity {
     b64Preview: string;
 
     @Column({ type: 'text', default: '{}' })
-    meta: string;
+    meta?: string;
 
     @Column({ type: 'nvarchar' })
     type: mediaTypes;
@@ -34,5 +34,14 @@ export class MediaEntity {
 
     @ManyToOne(type => MediaSourceEntity)
     source: MediaSourceEntity
+
+    @Column({ type: 'nvarchar' })
+    encoding: string;
+
+    @Column({ type: 'nvarchar' })
+    filename: string;
+
+    @Column({ type: 'nvarchar' })
+    mimeType: string;
 
 }

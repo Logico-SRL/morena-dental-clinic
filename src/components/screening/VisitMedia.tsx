@@ -1,10 +1,9 @@
 import { UploadProps } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useProject } from "../../hooks/useProject";
 import { useSettings } from "../../hooks/useSettings";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
-import { b64Img, b64ImgSmall } from "./b64Img";
 import classnames from './screening.module.scss';
 
 type PropType = {
@@ -43,7 +42,7 @@ export const VisitMedia = ({ projectId }: Pick<PropType, 'projectId'>) => {
 const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId }: Pick<PropType, 'selectedMediaSource' | 'selectedVisit' | 'projectId'>) => {
 
     const props: UploadProps = {
-        action: `/api/protected/media/${projectId}/${selectedVisit?.id || ''}/${selectedMediaSource?.id || ''}`,
+        action: `/api/protected/projects/${projectId}/visits/${selectedVisit?.id || ''}/mediasources/${selectedMediaSource?.id || ''}/upload`,
         listType: 'picture',
         previewFile: async (file) => {
             console.log('Your upload file:', file);
@@ -71,24 +70,83 @@ const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId }
 }
 
 const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource }: Pick<PropType, 'sources' | 'selectedVisit' | 'selectedMediaSource'>) => {
-    const media: IMedia[] = !selectedVisit ? [] : !selectedMediaSource ? selectedVisit.media : selectedVisit.media.filter(m => m.source.id == selectedMediaSource.id)
-    return <UserControls.Image.PreviewGroup>
-        {[{
-            id: '1',
-            path: '',
-            preview: b64Img,
-            b64Thumbnail: b64ImgSmall
-        },
-        {
-            id: '2',
-            path: '',
-            preview: b64Img,
-            b64Thumbnail: b64ImgSmall
-        }].map(m => <UserControls.Image
+
+    // const mocked: Omit<IMedia, 'visit'>[] = [{
+    //     id: '1',
+    //     path: '',
+    //     b64Preview: b64Img,
+    //     b64Thumbnail: b64ImgSmall,
+    //     createdOn: new Date(),
+    //     source: {
+    //         id: '1',
+    //         name: 'TAC',
+    //     },
+    //     meta: '{}',
+    //     type: 'image',
+    // },
+    // {
+    //     id: '2',
+    //     path: '',
+    //     b64Preview: b64Img,
+    //     b64Thumbnail: b64ImgSmall,
+    //     createdOn: new Date(),
+    //     source: {
+    //         id: '1',
+    //         name: 'TAC',
+    //     },
+    //     meta: '{}',
+    //     type: 'image',
+    // }]
+
+    const media: Omit<IMedia, 'visit'>[] = !selectedVisit ? [] : !selectedMediaSource ? selectedVisit.media : selectedVisit.media.filter(m => m.source.id == selectedMediaSource.id)
+    const currIndex = useRef<number>(1)
+
+    return <UserControls.Image.PreviewGroup
+        preview={{
+            countRender(current, total) {
+
+                currIndex.current = current;
+                // console.info('countRender(current, total)', current)
+                return `${current}/${total}`
+            },
+            // modalRender: node => <div style={{ backgroundColor: 'green', padding: 20 }} onClick={() => alert('ok')}>{node}</div>,
+            bodyProps: {
+                className: classnames.previewItemContainer,
+                onClick: async (event: any) => {
+                    const item = media[currIndex.current - 1];
+                    switch (item.type) {
+                        case 'image': {
+                            console.warn('TODO => fetch high res image');
+                            break;
+                        }
+                        case 'video': {
+                            console.warn('TODO => fetch high res video and open player')
+                            break;
+                        }
+                        case 'doc': {
+                            console.warn('TODO => download and show doc')
+                            break;
+                        }
+                    }
+
+                    window.open(`/api/protected/media/${item.id}/download`);
+                }
+            }
+        }}
+    >
+        {media.map(m => <UserControls.Image
+
             key={m.id}
             width={200}
-            src={m.b64Thumbnail}
-            preview={{ src: m.preview }}
+            src={`data:image/png;base64,${m.b64Thumbnail}`}
+            preview={{
+                src: `data:image/png;base64,${m.b64Preview}`,
+                // className: 'cravino'
+                // title: 'cravino',
+                // wrapProps: {
+                //     'data-test-id': 'cravino'
+                // }
+            }}
         // src={m.path}
         />)}
     </UserControls.Image.PreviewGroup>

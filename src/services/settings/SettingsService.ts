@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { MediaSourceEntity } from "../../repository/entities";
 
 @injectable()
 export class SettingsService implements ISettingsService {
@@ -11,6 +12,15 @@ export class SettingsService implements ISettingsService {
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
+    }
+    getMediaSource = async (mediaSourceId: string) => {
+        const repo = (await this.getMediaSourceRepo);
+        const mediaSource = await repo.findOne({
+            where: {
+                id: mediaSourceId
+            }
+        });
+        return mediaSource;
     }
     get = async () => {
         const repo = (await this.getMediaSourceRepo);

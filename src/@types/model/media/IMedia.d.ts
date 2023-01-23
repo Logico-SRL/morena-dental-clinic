@@ -1,4 +1,4 @@
-type MediaEntity = import('../../../repository/entities/index').MediaEntity
+type MediaEntity = import('../../../repository/entities').MediaEntity
 
 type IMedia = Omit<MediaEntity, 'visit'> & {
     visit: IVisit,

@@ -17,7 +17,12 @@ export class ProjectsService implements IProjectsService {
             where: {
                 'id': projectId,
             },
-            relations: ['patient', 'category', 'subCategory', 'visits']
+            relations: {
+                patient: true,
+                category: true,
+                subCategory: true,
+                visits: { media: true }
+            }
         });
         // console.info('ProjectsService find resp', resp);
         return resp ? repoProjToProj(resp) : undefined;
