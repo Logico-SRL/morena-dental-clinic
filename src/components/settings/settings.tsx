@@ -44,13 +44,16 @@ const MediaSourceItem = ({ onClick }: { onClick: (item: IMediaSource) => void })
     <UserControls.List.Item className="touchable" key={item.id} onClick={() => onClick(item)}>
         <UserControls.Col xs={24}>
             <UserControls.Row justify={'center'} align={'middle'}>
-                <UserControls.Col xs={8}>
+                <UserControls.Col xs={6}>
                     {item.name}
                 </UserControls.Col>
-                <UserControls.Col xs={8}>
+                <UserControls.Col xs={6}>
                     {item.basePath || ' - '}
                 </UserControls.Col>
-                <UserControls.Col xs={8}>
+                <UserControls.Col xs={6}>
+                    {item.type}
+                </UserControls.Col>
+                <UserControls.Col xs={6}>
                     <UserControls.Image src={item.defaultThumbnailB64 || ''} preview={false} />
                 </UserControls.Col>
             </UserControls.Row>

@@ -65,7 +65,7 @@ export class FileUploadController extends BaseController {
             source: mediaSource,
             b64Preview: '',
             b64Thumbnail: '',
-            type: 'image',
+            // type: 'image',
             createdOn: new Date(),
             // meta: '{}',
             path: '',
@@ -95,19 +95,19 @@ export class FileUploadController extends BaseController {
                 media.filename = filename;
                 media.mimeType = mimeType;
 
-                if (media.mimeType) {
-                    const p = media.mimeType.split('/')
-                    switch (p[0]) {
-                        case 'image':
-                        case 'video':
-                            media.type = p[0]
-                            break;
+                // if (media.mimeType) {
+                //     const p = media.mimeType.split('/')
+                //     switch (p[0]) {
+                //         case 'image':
+                //         case 'video':
+                //             media.type = p[0]
+                //             break;
 
-                        default:
-                            media.type = 'doc'
-                            break;
-                    }
-                }
+                //         default:
+                //             media.type = 'doc'
+                //             break;
+                //     }
+                // }
 
                 if (filename) {
                     const parts = filename.split('.');
@@ -137,7 +137,7 @@ export class FileUploadController extends BaseController {
                     let b64Thumbnail = '';
                     let b64Preview = '';
 
-                    switch (media.type) {
+                    switch (media.source.type) {
                         case 'image': {
 
                             b64Thumbnail = await sharp(buff)

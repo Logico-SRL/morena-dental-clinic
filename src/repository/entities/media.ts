@@ -26,8 +26,9 @@ export class MediaEntity {
     @Column({ type: 'text', default: '{}' })
     meta?: string;
 
-    @Column({ type: 'nvarchar' })
-    type: mediaTypes;
+    //Moved in source
+    // @Column({ type: 'nvarchar' })
+    // type: mediaTypes;
 
     @ManyToOne(type => VisitEntity, v => v.media)
     visit: VisitEntity;

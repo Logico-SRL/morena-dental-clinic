@@ -19,4 +19,7 @@ export class MediaSourceEntity {
     @Column({ type: 'text', default: noImageB64 })
     defaultThumbnailB64?: string;
 
+    @Column({ type: 'nvarchar', default: 'image' })
+    type: mediaTypes;
+
 }
