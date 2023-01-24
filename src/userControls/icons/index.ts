@@ -1,5 +1,5 @@
 import {
-    AppstoreOutlined, ContainerOutlined, EditOutlined, HomeOutlined, LoginOutlined,
+    AppstoreOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, HomeOutlined, LoginOutlined,
     PlusOutlined, SettingOutlined, TaobaoOutlined, UnorderedListOutlined, UploadOutlined, UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
 
@@ -15,5 +15,6 @@ export const AntdIcons = {
     UnorderedListOutlined,
     PlusOutlined,
     SettingOutlined,
-    UploadOutlined
+    UploadOutlined,
+    DeleteOutlined
 }

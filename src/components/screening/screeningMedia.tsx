@@ -7,7 +7,7 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource }: 
 
 
 
-    const media: Omit<IMedia, 'visit'>[] = !selectedVisit ? [] : !selectedMediaSource ? selectedVisit.media : selectedVisit.media.filter(m => m.source.id == selectedMediaSource.id)
+    const media: IMedia[] = !selectedVisit ? [] : !selectedMediaSource ? (selectedVisit.media || []) : (selectedVisit.media || []).filter(m => m.source.id == selectedMediaSource.id)
     const currIndex = useRef<number>(1)
 
     return <UserControls.Image.PreviewGroup

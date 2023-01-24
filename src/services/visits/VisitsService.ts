@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoVisitToVisit } from "../converters";
@@ -7,7 +8,7 @@ import { repoVisitToVisit } from "../converters";
 export class VisitsService implements IVisitsService {
 
     private readonly dbService: IDbService;
-    private get getRepo() { return this.dbService.visitsRepo() }
+    private get getRepo() { return this.dbService.visitsRepo() as Promise<Repository<VisitEntity>> }
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
@@ -41,6 +42,13 @@ export class VisitsService implements IVisitsService {
         visit.createdOn = new Date();
         repo.insert(visit);
         return visit;
+    }
+    delete = async (visitId: string) => {
+        const repo = await this.getRepo;
+        const result = await repo.delete({
+            'id': visitId
+        });
+        return !!result.affected
     }
 }
 

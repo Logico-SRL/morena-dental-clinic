@@ -75,6 +75,22 @@ export const useProject = (projectId: string) => {
         projectStore.set(curr);
     }
 
+    const removeVisit = (visit: IVisit) => {
+
+        const curr = projectStore.get();
+        if (!curr) {
+            return;
+        }
+        if (curr.visits) {
+            const idx = curr.visits.findIndex(v => v.id === visit.id)
+            if (idx >= 0) {
+                curr.visits.splice(idx, 1)
+            }
+        }
+
+        projectStore.set(curr);
+    }
+
     const saveProject = async (project: IProject) => {
         httpService.put<IProject>(`/api/protected/projects/${projectId}`, project)
             .then(d => {
@@ -91,5 +107,7 @@ export const useProject = (projectId: string) => {
         selectedVisitStore.set(visit);
     }
 
-    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit };
+
+
+    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit };
 }

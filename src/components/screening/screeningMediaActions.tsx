@@ -22,7 +22,7 @@ export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, proj
             if (status === 'done' || status === 'success') {
                 setFileList([]);
                 if (selectedVisit && response)
-                    setSelectedVisit({ ...selectedVisit, media: [...selectedVisit.media, response] })
+                    setSelectedVisit({ ...selectedVisit, media: [...(selectedVisit.media || []), response] })
             } else {
                 setFileList(info.fileList)
             }

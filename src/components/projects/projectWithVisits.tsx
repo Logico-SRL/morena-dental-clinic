@@ -1,5 +1,7 @@
+import { ButtonProps } from "antd";
 import { useRouter } from "next/router";
 import { useProject } from "../../hooks/useProject";
+import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { visitUtils } from "../../utils/visitUtils";
@@ -29,10 +31,12 @@ type VisitButtonPropType = {
     className?: string | undefined,
     onClick: () => void,
     disabled?: boolean;
+    danger?: boolean;
+    type?: ButtonProps['type'];
 }
 
-const VisitButton = ({ text, onClick, className, disabled }: VisitButtonPropType) => {
-    return <UserControls.Button disabled={disabled} className={className} onClick={onClick}>
+const VisitButton = ({ text, ...rest }: VisitButtonPropType) => {
+    return <UserControls.Button {...rest}>
         {text}
     </UserControls.Button>
 }
@@ -44,7 +48,8 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
     const { patient } = project || {};
 
     // const [selectedVisit, setSelectedVisit] = useState<IVisit>()
-    const { selectedVisit, setSelectedVisit } = useProject(project?.id || '')
+    const { selectedVisit, setSelectedVisit, removeVisit } = useProject(project?.id || '')
+    const { deleteVisit } = useVisit(project?.id || '', selectedVisit?.id || '')
 
     const onNewProjectClick = () => {
         push(`/projects/create`)
@@ -65,6 +70,25 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
 
     const onEditVisitClick = () => {
         selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}`)
+    }
+
+    const onDeleteVisitClick = () => {
+
+        if (selectedVisit) {
+            UserControls.Modal.confirm({
+                title: 'Confirmation',
+                content: 'All media related to selected visit will be deleted as well. Do you want to proceed?',
+                type: 'warn',
+                onOk: async () => {
+
+                    await deleteVisit(project?.id || '', selectedVisit.id)
+                    removeVisit(selectedVisit)
+                    setSelectedVisit(undefined);
+
+                }
+            })
+        }
+
     }
 
     return <UserControls.Form layout="vertical">
@@ -96,11 +120,30 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                         </UserControls.Col>
                     ))}
 
+                    <UserControls.Col xs={1} />
                     <UserControls.Col>
-                        <VisitButton disabled={!selectedVisit} text={<UserControls.Space><AntdIcons.EditOutlined />Edit Visit</UserControls.Space>} onClick={onEditVisitClick} />
+                        <VisitButton disabled={!selectedVisit} text={
+                            <UserControls.Space>
+                                <AntdIcons.EditOutlined />
+                                Edit {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
+                            </UserControls.Space>} onClick={onEditVisitClick} />
                     </UserControls.Col>
                     <UserControls.Col>
-                        <VisitButton text={<UserControls.Space><AntdIcons.PlusOutlined />Add Visit</UserControls.Space>} onClick={onAddVisitClick} />
+                        <VisitButton disabled={!selectedVisit} danger text={
+                            <UserControls.Space>
+                                <AntdIcons.DeleteOutlined />
+                                Delete {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
+                            </UserControls.Space>} onClick={onDeleteVisitClick} />
+                    </UserControls.Col>
+                    <UserControls.Col>
+                        <VisitButton
+                            type={'primary'}
+                            text={
+                                <UserControls.Space>
+                                    <AntdIcons.PlusOutlined />
+                                    Add Visit
+                                </UserControls.Space>
+                            } onClick={onAddVisitClick} />
                     </UserControls.Col>
                 </UserControls.Row>
             </UserControls.Col>

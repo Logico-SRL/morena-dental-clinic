@@ -26,4 +26,9 @@ export class VisitController extends BaseController {
         return this.res.status(200).json(result)
     }
 
+    DELETE = async () => {
+        const result = await this.visitsService.delete(this.visitId);
+        return this.res.status(200).json(result)
+    }
+
 }

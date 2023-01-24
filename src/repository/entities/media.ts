@@ -30,7 +30,9 @@ export class MediaEntity {
     // @Column({ type: 'nvarchar' })
     // type: mediaTypes;
 
-    @ManyToOne(type => VisitEntity, v => v.media)
+    @ManyToOne(type => VisitEntity, v => v.media, {
+        onDelete: 'CASCADE'
+    })
     visit: VisitEntity;
 
     @ManyToOne(type => MediaSourceEntity)

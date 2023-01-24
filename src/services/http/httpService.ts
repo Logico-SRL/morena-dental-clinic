@@ -14,6 +14,8 @@ export class HttpService implements IHttpService {
 
 
     constructor() { }
+
+
     get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         return axios.get(url, { ...defaultConfig, ...config }).then(res => {
             const isRedirect = !(res.request.responseURL as string).endsWith(url)
@@ -28,6 +30,9 @@ export class HttpService implements IHttpService {
     // delete<T,  D = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     //     throw new Error("Method not implemented.");
     // }
+    delete<T, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R> {
+        return axios.delete(url, { ...defaultConfig, ...config });
+    }
     post<T, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<R> {
         return axios.post(url, data, { ...defaultConfig, ...config });
     }

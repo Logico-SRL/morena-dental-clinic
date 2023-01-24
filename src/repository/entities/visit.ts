@@ -2,7 +2,8 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { MediaEntity, ProjectEntity } from ".";
 
 @Entity({
-    name: "visits"
+    name: "visits",
+
 })
 export class VisitEntity {
 
@@ -33,6 +34,8 @@ export class VisitEntity {
     @ManyToOne(type => ProjectEntity, pro => pro.visits)
     project: ProjectEntity
 
-    @OneToMany(type => MediaEntity, pro => pro.visit)
+    @OneToMany(type => MediaEntity, pro => pro.visit, {
+        onDelete: 'CASCADE'
+    })
     media: MediaEntity[]
 }

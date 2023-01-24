@@ -51,5 +51,9 @@ export const useVisit = (projectId: string, visitId: string) => {
             })
     }
 
-    return { visit, loadingVisit, saveVisit };
+    const deleteVisit = async (projectId: string, visitId: string) => {
+        return httpService.delete<IVisit>(`/api/protected/projects/${projectId}/visits/${visitId}`)
+    }
+
+    return { visit, loadingVisit, saveVisit, deleteVisit };
 }
