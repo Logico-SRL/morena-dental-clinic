@@ -103,6 +103,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     })
 
     const [uploadProps, setUploadProps] = useState<UploadProps>(defaultUploadProps(getDefaultParams()));
+    const [showSnapshotModal, setShowSnapshotModal] = useState(false);
 
     useEffect(() => {
         switch (selectedMediaSource?.type) {
@@ -117,26 +118,41 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
 
                     if (r.snapshots && r.snapshots.length > 0) {
-                        const snap = await new Promise<string>((res, rej) => {
+                        const snap = await new Promise<string | undefined>((res, rej) => {
 
                             const onImageClick = async (s: string) => {
                                 res(s)
                             }
 
                             UserControls.Modal.info({
+                                open: showSnapshotModal,
+                                width: '80vw',
                                 title: 'Choose video snapshot',
-                                content: <UserControls.Row>
-                                    {r.snapshots?.map((s, i) => <UserControls.Col key={`image_snapshot_${i}`}>
+                                content: <UserControls.Row gutter={10}>
+                                    {r.snapshots?.map((s, i) => <UserControls.Col xs={8} key={`image_snapshot_${i}`}>
                                         <UserControls.Image preview={false} onClick={() => onImageClick(s)} src={`data:image/png;base64,${s}`} />
                                     </UserControls.Col>)}
                                 </UserControls.Row>,
-                                footer: null
+                                closable: true,
+                                maskClosable: true,
+                                onCancel: () => {
+                                    res(undefined)
+                                },
+                                onOk: () => {
+                                    res(undefined);
+                                },
+                                okText: `keep default`
+
                             })
                         })
 
-                        r.b64Thumbnail = snap;
-                        r.b64Preview = snap;
-                        await updateMedia(r);
+                        setShowSnapshotModal(false);
+                        if (snap) {
+
+                            r.b64Thumbnail = snap;
+                            r.b64Preview = '';
+                            await updateMedia(r);
+                        }
                     }
                 }
                 const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });

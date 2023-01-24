@@ -56,7 +56,7 @@ export class FileController extends BaseController {
 
     PUT = async () => {
 
-        console.info('this.req.body', this.req.body)
+        // console.info('this.req.body', this.req.body)
         const media = this.req.body as IMedia;
 
         if (!media) {
@@ -72,6 +72,5 @@ export class FileController extends BaseController {
 
         this.res.status(200).send(media)
     }
-
 
 }
