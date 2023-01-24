@@ -88,7 +88,6 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                 }
             })
         }
-
     }
 
     return <UserControls.Form layout="vertical">

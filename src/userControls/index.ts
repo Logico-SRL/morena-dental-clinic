@@ -2,6 +2,7 @@ import AutoComplete from "./components/autocomplete";
 import Avatar from "./components/avatar";
 import Button from "./components/button";
 import Card from "./components/card";
+import Checkbox from "./components/checkbox";
 import Col from "./components/col";
 import Content from "./components/content";
 import DatePicker from "./components/datePicker";
@@ -55,7 +56,8 @@ const UserControls = {
     AutoComplete,
     Segmented,
     Image,
-    Upload
+    Upload,
+    Checkbox
 }
 
 export default UserControls;

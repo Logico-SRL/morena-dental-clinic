@@ -2,10 +2,12 @@ import UserControls from "../../userControls"
 
 export const ScreeningMediaSources = ({ sources, selectedVisit, onSourceChange, segmentValue }: Pick<VisitPropType, 'sources' | 'selectedVisit' | 'onSourceChange' | 'segmentValue'>) => {
 
-    const segments = sources.map(source => ({
-        value: source.id,
-        label: <div style={{ padding: 5 }}>{source.name}</div>
-    }))
+    const segments = sources
+        .filter(s => s.visible)
+        .map(source => ({
+            value: source.id,
+            label: <div style={{ padding: 5 }}>{source.name}</div>
+        }))
     return <UserControls.Segmented
         disabled={!selectedVisit}
         value={segmentValue}

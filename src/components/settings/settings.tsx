@@ -50,10 +50,13 @@ const MediaSourceItem = ({ onClick }: { onClick: (item: IMediaSource) => void })
                 <UserControls.Col xs={6}>
                     {item.basePath || ' - '}
                 </UserControls.Col>
-                <UserControls.Col xs={6}>
+                <UserControls.Col xs={4}>
                     {item.type}
                 </UserControls.Col>
-                <UserControls.Col xs={6}>
+                <UserControls.Col xs={4}>
+                    <UserControls.Checkbox checked={item.visible} disabled />
+                </UserControls.Col>
+                <UserControls.Col xs={4}>
                     <UserControls.Image src={item.defaultThumbnailB64 || ''} preview={false} />
                 </UserControls.Col>
             </UserControls.Row>

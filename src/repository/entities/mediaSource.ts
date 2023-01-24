@@ -22,4 +22,7 @@ export class MediaSourceEntity {
     @Column({ type: 'nvarchar', default: 'image' })
     type: mediaTypes;
 
+    @Column({ type: 'bit', default: true })
+    visible: boolean;
+
 }

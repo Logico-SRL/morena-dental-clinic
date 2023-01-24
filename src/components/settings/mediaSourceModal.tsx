@@ -59,6 +59,10 @@ export const MediaSourceModal = ({ open, onClose, form }: PropTpe) => {
                 <UserControls.Image style={{ maxWidth: 60, marginLeft: 20 }} />
             </UserControls.Form.Item>
 
+            <UserControls.Form.Item name={'visible'} label={'Visible'} valuePropName="checked">
+                <UserControls.Checkbox />
+            </UserControls.Form.Item>
+
             <UserControls.Form.Item name={'type'} label={'Type'}>
                 <UserControls.Select
                     options={mediaTypesOptions}
