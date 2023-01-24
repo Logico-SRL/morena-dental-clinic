@@ -16,7 +16,7 @@ export class VisitController extends BaseController {
     }
 
     GET = async () => {
-        const result = await this.visitsService.find(this.visitId);
+        const result = await this.visitsService.get(this.visitId);
         return this.res.status(200).json(result)
     }
 

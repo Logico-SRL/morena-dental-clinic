@@ -18,10 +18,23 @@ export class MediaService implements IMediaService {
             }
         })
     }
+    delete = async (mediaId: string) => {
+        const repo: Repository<MediaEntity> = (await this.dbService.mediaRepo())
+        const res = await repo.delete({
+            id: mediaId
+        })
+        return !!res.affected
+    }
 
     create = async (media: IMedia) => {
-        const repo = (await this.dbService.mediaRepo())
+        const repo: Repository<MediaEntity> = (await this.dbService.mediaRepo())
         repo.insert(media);
+        return media;
+    }
+
+    save = async (media: IMedia) => {
+        const repo: Repository<MediaEntity> = (await this.dbService.mediaRepo())
+        repo.save(media);
         return media;
     }
 }

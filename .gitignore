@@ -109,3 +109,6 @@ dist
 
 .DS_Store
 env/.env.db.development
+ffmpeg/ffmpeg.exe
+ffmpeg/ffprobe.exe
+ffmpeg/ffplay.exe

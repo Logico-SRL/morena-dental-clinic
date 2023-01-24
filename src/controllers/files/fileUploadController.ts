@@ -1,11 +1,16 @@
 import Busboy, { FileInfo } from 'busboy';
+import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import { inject, injectable } from "inversify";
+import path from 'path';
 import sharp from 'sharp';
 import { Readable } from 'stream';
 import { ulid } from 'ulid';
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { BaseController } from "../baseController";
+
+
+
 // type FileObjType = {
 //     filename: string,
 //     encoding: string,
@@ -46,7 +51,7 @@ export class FileUploadController extends BaseController {
         console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
 
         const mediaSource = await this.settingsService.getMediaSource(this.mediaSourceId);
-        const visit = await this.visitsServ.find(this.visitId);
+        const visit = await this.visitsServ.get(this.visitId);
 
 
         if (!mediaSource) {
@@ -58,6 +63,8 @@ export class FileUploadController extends BaseController {
         if (!visit) {
             throw new Error(`visit with id ${this.visitId} not found`);
         }
+
+        const snapshots: string[] = []
 
         const media: IMedia = {
             id: ulid(),
@@ -132,8 +139,8 @@ export class FileUploadController extends BaseController {
                 file.on('end', async () => {
                     console.log('File [' + fieldname + '] Finished');
 
-
                     const buff = Buffer.concat(chunks);
+
                     let b64Thumbnail = '';
                     let b64Preview = '';
 
@@ -160,6 +167,46 @@ export class FileUploadController extends BaseController {
                             break;
                         }
                         case 'video': {
+                            ffmpeg.setFfmpegPath(path.resolve('ffmpeg', 'ffmpeg.exe'));
+                            ffmpeg.setFfprobePath(path.resolve('ffmpeg', 'ffprobe.exe'));
+
+                            const done = await new Promise<boolean>(async (res, rej) => {
+
+                                // const wStream = new Transform()
+                                ffmpeg(media.path)
+                                    .on('start', function (cmd) {
+                                        console.log('Started ' + cmd);
+                                    })
+                                    .on('end', function () {
+                                        console.log('Screenshots taken');
+                                        res(true)
+                                    })
+                                    .on('error', function (err) {
+                                        console.error('ffmpeg error', err);
+                                        res(false)
+                                    })
+                                    .screenshots({
+                                        count: 3,
+                                        timemarks: ['0%', '33%', '66%'],
+                                        // timestamps: ['0'],
+                                        filename: `${media.id}.jpg`,
+                                        folder: saveToDir,
+                                    })
+                            });
+
+
+
+                            if (done) {
+
+                                const f1 = await this.fileService.get(`${saveToDir}/${media.id}_1.jpg`).toString('base64')
+                                const f2 = await this.fileService.get(`${saveToDir}/${media.id}_2.jpg`).toString('base64')
+                                const f3 = await this.fileService.get(`${saveToDir}/${media.id}_3.jpg`).toString('base64')
+
+                                snapshots.push(f1)
+                                snapshots.push(f2)
+                                snapshots.push(f3)
+                            }
+
                             break;
                         }
                         case 'doc':
@@ -191,7 +238,8 @@ export class FileUploadController extends BaseController {
 
         await this.mediaServ.create(media);
 
-        this.res.status(200).send(media)
+
+        this.res.status(200).send({ ...media, snapshots })
     }
 
 

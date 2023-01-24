@@ -9,3 +9,14 @@
     cursor: zoom-in;
   }
 }
+
+.image,
+.deleteImage {
+  padding: 5px;
+}
+.deleteImage {
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.01);
+  }
+}

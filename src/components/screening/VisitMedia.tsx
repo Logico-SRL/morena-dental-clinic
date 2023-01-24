@@ -13,6 +13,7 @@ export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
     const { selectedVisit, loadingProject, setSelectedVisit } = useProject(projectId)
     const { settings } = useSettings();
     const [selectedMediaSource, setSelectedMediaSource] = useState<IMediaSource>()
+    const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
     useEffect(() => {
         if (settings.mediaSources) {
@@ -27,9 +28,12 @@ export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
     }
 
     return <UserControls.Skeleton loading={loadingProject}>
-        <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange} segmentValue={selectedMediaSource?.id || ''} />
-        <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId} setSelectedVisit={setSelectedVisit} />
-        <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} />
+        <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange}
+            segmentValue={selectedMediaSource?.id || ''} />
+        <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId}
+            isDeleting={isDeleting} setIsDeleting={setIsDeleting} />
+        <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource}
+            isDeleting={isDeleting} projectId={projectId} />
     </UserControls.Skeleton>
 }
 

@@ -1,3 +1,6 @@
+type Dispatch<T> = import('react').Dispatch<T>;
+type SetStateAction<T> = import('react').SetStateAction<T>;
+
 type VisitPropType = {
     sources: IMediaSource[],
     selectedVisit: IVisit | undefined,
@@ -5,5 +8,8 @@ type VisitPropType = {
     onSourceChange: (mediaSourceId: string | number) => void,
     selectedMediaSource?: IMediaSource,
     projectId: string,
-    setSelectedVisit: (visit: IVisit | undefined) => void
+    // setSelectedVisit: Dispatch<SetStateAction<IVisit>>,
+    setSelectedVisit: (visit: IVisit | undefined) => void,
+    isDeleting: boolean,
+    setIsDeleting: (val: boolean) => void
 }

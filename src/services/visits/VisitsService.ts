@@ -13,7 +13,7 @@ export class VisitsService implements IVisitsService {
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
     }
-    find = async (visitId: string) => {
+    get = async (visitId: string) => {
         const repo = await this.getRepo;
         const resp = await repo.findOne({
             where: {

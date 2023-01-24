@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, unlinkSync } from "fs";
 import { inject, injectable } from "inversify";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 
@@ -11,11 +11,22 @@ export class FilesService implements IFilesService {
         this.dbService = dbService;
     }
 
-    get = (path: string) => {
+    get = (path: string, options?: {
+        encoding?: BufferEncoding | undefined;
+        flag?: string | undefined;
+    } | null) => {
         if (!existsSync(path)) {
             throw new Error(`File ${path} does not exist`);
         }
-        return readFileSync(path)
+        return readFileSync(path, options)
+    }
+
+    delete = (path: string) => {
+        if (!existsSync(path)) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        unlinkSync(path)
+        return true;
     }
 
 }

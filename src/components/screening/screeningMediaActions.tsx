@@ -1,45 +1,28 @@
-import { UploadFile, UploadProps } from "antd";
-import { UploadChangeParam } from "antd/es/upload";
-import { useState } from "react";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import classnames from './screening.module.scss';
+import { useUploadMedia } from "./useUploadMedia";
 
-export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId, setSelectedVisit }: Pick<VisitPropType, 'selectedMediaSource' | 'selectedVisit' | 'projectId' | 'setSelectedVisit'>) => {
+type PropType = Pick<VisitPropType, 'selectedMediaSource' | 'selectedVisit' | 'projectId' | 'isDeleting' | 'setIsDeleting'>
 
-    const [fileList, setFileList] = useState<Array<UploadFile<IMedia>>>([])
+export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId, isDeleting, setIsDeleting }: PropType) => {
 
-    const props: UploadProps = {
-        action: `/api/protected/projects/${projectId}/visits/${selectedVisit?.id || ''}/mediasources/${selectedMediaSource?.id || ''}/upload`,
-        listType: 'picture',
-        showUploadList: true,
-        fileList,
-        // fileList: [],
-        multiple: false,
-        onChange: (info: UploadChangeParam<UploadFile<IMedia>>) => {
 
-            const { status, response } = info.file;
-            if (status === 'done' || status === 'success') {
-                setFileList([]);
-                if (selectedVisit && response)
-                    setSelectedVisit({ ...selectedVisit, media: [...(selectedVisit.media || []), response] })
-            } else {
-                setFileList(info.fileList)
-            }
-        },
-        previewFile: async (file) => {
-            console.log('Your upload file:', file);
-            return ''
-        },
-    };
+    const { uploadProps } = useUploadMedia(projectId, selectedMediaSource)
+    const onDeleteClick = () => {
+        setIsDeleting(!isDeleting);
+    }
 
     return <UserControls.Col xs={24} className={classnames.actions} >
-        <UserControls.Upload {...props} >
-            <UserControls.Button disabled={!selectedVisit || !selectedMediaSource} icon={<AntdIcons.PlusOutlined />}>
+        <UserControls.Upload {...uploadProps} >
+            <UserControls.Button disabled={!selectedVisit || !selectedMediaSource || !selectedMediaSource.basePath || isDeleting} icon={<AntdIcons.PlusOutlined />}>
                 Upload
             </UserControls.Button>
         </UserControls.Upload>
-        <UserControls.Button disabled={!selectedVisit || !selectedMediaSource} icon={<AntdIcons.UploadOutlined />} onClick={() => alert('TODO')}>
+        <UserControls.Button disabled={!selectedVisit || !selectedMediaSource} icon={<AntdIcons.DeleteOutlined />} onClick={onDeleteClick}>
+            {isDeleting ? 'Cancel delete' : 'Delete'}
+        </UserControls.Button>
+        <UserControls.Button disabled={!selectedVisit || !selectedMediaSource || isDeleting} icon={<AntdIcons.UploadOutlined />} onClick={() => alert('TODO')}>
             Export
         </UserControls.Button>
     </UserControls.Col>

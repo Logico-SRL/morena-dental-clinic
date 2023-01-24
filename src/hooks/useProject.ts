@@ -107,7 +107,51 @@ export const useProject = (projectId: string) => {
         selectedVisitStore.set(visit);
     }
 
+    const addMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
+        const p = projectStore.get()
+        if (v) {
+            const found = p.visits?.find(vis => vis.id === v.id)
+            if (found) {
+                found.media = [...(found.media || []), media]
+                projectStore.set({ ...p })
+            }
+        }
+    }
 
+    const removeMediaFromProjectVisit = (v: IVisit | undefined, mediaId: string) => {
+        const p = projectStore.get()
+        if (v) {
+            const found = p.visits?.find(vis => vis.id === v.id)
+            if (found && found.media) {
+                found.media = found.media.filter(m => m.id !== mediaId)
+                projectStore.set({ ...p })
+            }
+        }
+    }
 
-    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit };
+    const addMedia = (media: IMedia) => {
+        const v = selectedVisitStore.get();
+        if (v) {
+            if (!v.media) {
+                v.media = [media]
+            } else {
+                v.media = [...v.media, media]
+            }
+            selectedVisitStore.set({ ...v });
+        }
+
+        addMediaToProjectVisit(selectedVisit, media);
+    }
+
+    const removeMedia = (mediaId: string) => {
+
+        const v = selectedVisitStore.get();
+        if (v) {
+            v.media = v.media?.filter(m => m.id !== mediaId)
+            selectedVisitStore.set({ ...v });
+            removeMediaFromProjectVisit(v, mediaId)
+        }
+    }
+
+    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit, addMedia, removeMedia };
 }
