@@ -13,3 +13,7 @@ type VisitPropType = {
     isDeleting: boolean,
     setIsDeleting: (val: boolean) => void
 }
+
+type UploadMediaResp = IMedia & { snapshots?: SnapShotType[] }
+
+type SnapShotType = Pick<IMedia, 'b64Preview' | 'b64Thumbnail'>

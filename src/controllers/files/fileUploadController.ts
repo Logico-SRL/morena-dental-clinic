@@ -64,7 +64,7 @@ export class FileUploadController extends BaseController {
             throw new Error(`visit with id ${this.visitId} not found`);
         }
 
-        const snapshots: string[] = []
+        const snapshots: SnapShotType[] = []
 
         const media: IMedia = {
             id: ulid(),
@@ -169,6 +169,7 @@ export class FileUploadController extends BaseController {
                         case 'video': {
                             ffmpeg.setFfmpegPath(path.resolve('ffmpeg', 'ffmpeg.exe'));
                             ffmpeg.setFfprobePath(path.resolve('ffmpeg', 'ffprobe.exe'));
+                            const timemarks = ['0%', '33%', '66%'];
 
                             const done = await new Promise<boolean>(async (res, rej) => {
 
@@ -187,8 +188,7 @@ export class FileUploadController extends BaseController {
                                     })
                                     .screenshots({
                                         count: 3,
-                                        timemarks: ['0%', '33%', '66%'],
-                                        // timestamps: ['0'],
+                                        timemarks,
                                         filename: `${media.id}.jpg`,
                                         folder: saveToDir,
                                     })
@@ -197,14 +197,36 @@ export class FileUploadController extends BaseController {
 
 
                             if (done) {
+                                await Promise.all(timemarks.map(async (mark, ind) => {
+                                    const filePreviewPath = `${saveToDir}/${media.id}_${ind + 1}.jpg`
+                                    try {
 
-                                const f1 = await this.fileService.get(`${saveToDir}/${media.id}_1.jpg`).toString('base64')
-                                const f2 = await this.fileService.get(`${saveToDir}/${media.id}_2.jpg`).toString('base64')
-                                const f3 = await this.fileService.get(`${saveToDir}/${media.id}_3.jpg`).toString('base64')
+                                        const file = await this.fileService.get(filePreviewPath)
+                                        console.info(`file ${filePreviewPath} fetched`)
 
-                                snapshots.push(f1)
-                                snapshots.push(f2)
-                                snapshots.push(f3)
+                                        const thumb = await sharp(file)
+                                            .resize(200)
+                                            .toBuffer()
+                                            .then(b => b.toString('base64'))
+                                            .catch(err => {
+                                                reject(err);
+                                            })
+
+                                        const prev = await sharp(file)
+                                            .resize(1024)
+                                            .toBuffer()
+                                            .then(b => b.toString('base64'))
+                                            .catch(err => {
+                                                reject(err);
+                                            })
+                                        snapshots.push({
+                                            b64Preview: prev || '',
+                                            b64Thumbnail: thumb || ''
+                                        })
+                                    } catch (err) {
+                                        console.error(`FileUploadController file ${filePreviewPath}`, err);
+                                    }
+                                }));
                             }
 
                             break;

@@ -7,8 +7,8 @@ type PropType = Pick<VisitPropType, 'selectedMediaSource' | 'selectedVisit' | 'p
 
 export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, projectId, isDeleting, setIsDeleting }: PropType) => {
 
-
     const { uploadProps } = useUploadMedia(projectId, selectedMediaSource)
+
     const onDeleteClick = () => {
         setIsDeleting(!isDeleting);
     }
@@ -25,5 +25,6 @@ export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, proj
         <UserControls.Button disabled={!selectedVisit || !selectedMediaSource || isDeleting} icon={<AntdIcons.UploadOutlined />} onClick={() => alert('TODO')}>
             Export
         </UserControls.Button>
+
     </UserControls.Col>
 }

@@ -118,6 +118,18 @@ export const useProject = (projectId: string) => {
         }
     }
 
+    const updateMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
+        const p = projectStore.get()
+        if (v) {
+            const found = p.visits?.find(vis => vis.id === v.id)
+            if (found && found.media) {
+                const ind = found.media.findIndex(m => m.id === media.id)
+                found.media.splice(ind, 1, media);
+                projectStore.set({ ...p })
+            }
+        }
+    }
+
     const removeMediaFromProjectVisit = (v: IVisit | undefined, mediaId: string) => {
         const p = projectStore.get()
         if (v) {
@@ -129,7 +141,7 @@ export const useProject = (projectId: string) => {
         }
     }
 
-    const addMedia = (media: IMedia) => {
+    const addMediaToVisit = (media: IMedia) => {
         const v = selectedVisitStore.get();
         if (v) {
             if (!v.media) {
@@ -143,7 +155,7 @@ export const useProject = (projectId: string) => {
         addMediaToProjectVisit(selectedVisit, media);
     }
 
-    const removeMedia = (mediaId: string) => {
+    const removeMediaFromVisit = (mediaId: string) => {
 
         const v = selectedVisitStore.get();
         if (v) {
@@ -153,5 +165,15 @@ export const useProject = (projectId: string) => {
         }
     }
 
-    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit, addMedia, removeMedia };
+    const updateMediaToVisit = (media: IMedia) => {
+
+        const v = selectedVisitStore.get();
+        if (v && v.media) {
+            const ind = v.media.findIndex(m => m.id === media.id)
+            v.media.splice(ind, 1, media);
+            updateMediaToProjectVisit(v, media)
+        }
+    }
+
+    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit, addMediaToVisit, removeMediaFromVisit, updateMediaToVisit };
 }

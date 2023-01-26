@@ -23,26 +23,38 @@
 
 .bigModalWrap {
   :global(.ant-modal) {
-    width: 100vw !important;
+    width: 95vw !important;
+    height: 97vh;
     max-width: unset;
-    height: 100vh;
     max-height: unset;
-    top: 0;
+    top: 2vh;
     left: 0;
     overflow-y: hidden;
 
     :global(.ant-modal-content) {
+      :global(.ant-modal-close-icon) {
+        color: #fff;
+      }
+      background-color: transparentize($color: #000000, $amount: 0.5);
+      border-radius: 0;
       padding: 5px;
       height: 100%;
       overflow-y: hidden;
       :global(.ant-modal-body) {
-        height: 100%;
+        height: Calc(100% - 50px);
         max-height: 90vh !important;
         overflow-y: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
       }
+      :global(.ant-modal-footer) {
+        text-align: center;
+      }
     }
   }
+}
+
+.snapshotImg {
+  cursor: pointer;
 }

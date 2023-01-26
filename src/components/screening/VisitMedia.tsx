@@ -5,6 +5,7 @@ import UserControls from "../../userControls";
 import { ScreeningMedia } from "./screeningMedia";
 import { ScreeningMediaActions } from "./screeningMediaActions";
 import { ScreeningMediaSources } from "./screeningMediaSources";
+import { UploadProvider } from "./useUploadMedia";
 
 
 
@@ -28,12 +29,14 @@ export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
     }
 
     return <UserControls.Skeleton loading={loadingProject}>
-        <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange}
-            segmentValue={selectedMediaSource?.id || ''} />
-        <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId}
-            isDeleting={isDeleting} setIsDeleting={setIsDeleting} />
-        <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource}
-            isDeleting={isDeleting} projectId={projectId} />
+        <UploadProvider>
+            <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange}
+                segmentValue={selectedMediaSource?.id || ''} />
+            <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId}
+                isDeleting={isDeleting} setIsDeleting={setIsDeleting} />
+            <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource}
+                isDeleting={isDeleting} projectId={projectId} />
+        </UploadProvider>
     </UserControls.Skeleton>
 }
 

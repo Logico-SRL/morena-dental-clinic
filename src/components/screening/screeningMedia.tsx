@@ -13,7 +13,7 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
     const currIndex = useRef<number>(1)
 
     const { deleteMedia } = useMedia();
-    const { removeMedia } = useProject(projectId);
+    const { removeMediaFromVisit } = useProject(projectId);
     const [selectedMedia, setSelectedMedia] = useState<IMedia>();
     const [previewVisible, setPreviewVisible] = useState(false);
 
@@ -25,7 +25,7 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
                 content: 'Are you sure you want to delete selected media?',
                 onOk: async () => {
                     deleteMedia(media.id)
-                    removeMedia(media.id)
+                    removeMediaFromVisit(media.id)
 
                 }
             })
@@ -49,8 +49,8 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
             ]}
         >
 
-            {selectedMedia && type == 'image' && <UserControls.Image src={src} preview={false} />}
-            {selectedMedia && type == 'video' && <video controls autoPlay={true} src={src}>
+            {selectedMedia && type == 'image' && <UserControls.Image src={src} preview={false} style={{ maxWidth: '100%', maxHeight: '100%' }} />}
+            {selectedMedia && type == 'video' && <video style={{ maxWidth: '100%', maxHeight: '100%' }} controls autoPlay={true} src={src}>
                 <source src={src} type={'video/mp4'} />
             </video>}
             {selectedMedia && type == 'doc' && <embed src={src} width={'100%'} height={'100%'}>
@@ -99,7 +99,11 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
             {media.map(m => {
                 const src = m.b64Thumbnail ? `data:image/png;base64,${m.b64Thumbnail}` : m.source.defaultThumbnailB64;
                 const preview: ImageProps['preview'] = isDeleting ? false : {
-                    src: m.b64Preview ? `data:image/png;base64,${m.b64Preview}` : m.b64Thumbnail ? m.b64Thumbnail : m.source.defaultThumbnailB64,
+                    src: m.b64Preview ?
+                        `data:image/png;base64,${m.b64Preview}` :
+                        m.b64Thumbnail ?
+                            `data:image/png;base64,${m.b64Thumbnail}` :
+                            m.source.defaultThumbnailB64,
                 };
                 return <UserControls.Image
                     className={isDeleting ? classnames.deleteImage : classnames.image}

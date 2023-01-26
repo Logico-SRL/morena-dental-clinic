@@ -1,5 +1,6 @@
 import { Container, interfaces } from "inversify";
 import { FileController } from "../controllers/files/fileController";
+import { FileThumbnailsController } from "../controllers/files/fileThumbnailsController";
 import { FileUploadController } from "../controllers/files/fileUploadController";
 import { PatientController } from "../controllers/patients/patientController";
 import { PatientsController } from "../controllers/patients/patientsController";
@@ -44,6 +45,7 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitController).to(Vis
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SettingsController).to(SettingsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SettingsMediaSourcesController).to(SettingsMediaSourceController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileUploadController).to(FileUploadController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileThumbnailsController).to(FileThumbnailsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileController).to(FileController);
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)

@@ -23,6 +23,7 @@ const IOCControllerTypes = {
     SettingsController: Symbol.for("SettingsController"),
     SettingsMediaSourcesController: Symbol.for("SettingsMediaSourcesController"),
     FileUploadController: Symbol.for("FileUploadController"),
+    FileThumbnailsController: Symbol.for("FileThumbnailsController"),
     FileController: Symbol.for("FileController")
 }
 
