@@ -175,5 +175,10 @@ export const useProject = (projectId: string) => {
         }
     }
 
-    return { project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit, addMediaToVisit, removeMediaFromVisit, updateMediaToVisit };
+
+
+    return {
+        project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit,
+        addMediaToVisit, removeMediaFromVisit, updateMediaToVisit
+    };
 }

@@ -4,6 +4,8 @@ type IFilesService = {
         encoding?: BufferEncoding | undefined;
         flag?: string | undefined;
     } | null) => string | Buffer
-    delete: (path: string) => boolean
+    delete: (path: string) => boolean,
+    scan: (path: string) => Promise<IImportMedia[]>
+    copy: (f: IImportMedia, dirTo: string, filenameTo: string) => Promise<boolean>
 
 }

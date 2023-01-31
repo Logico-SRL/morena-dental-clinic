@@ -1,8 +1,9 @@
 import { UploadFile, UploadProps } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import axios, { AxiosRequestConfig } from "axios";
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMedia } from "../../hooks/useMedia";
+import { useMediaImport } from "../../hooks/useMediaImport";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
@@ -16,11 +17,12 @@ type paramsType = {
     addMedia: (media: IMedia) => void,
     fileList: UploadFile<IMedia>[],
     setFileList: Dispatch<SetStateAction<UploadFile<IMedia>[]>>
-    afterAxiosPost?: (res: UploadMediaResp) => {}
+    afterAxiosPost?: (res: UploadMediaResp) => {},
+    mediaSourceType: string
 }
 
 
-const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost }) => ({
+const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType }) => ({
     listType: 'picture',
     showUploadList: true,
     multiple: false,
@@ -69,7 +71,11 @@ const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, vi
     previewFile: async (file) => {
         console.log('Your upload file:', file);
         return ''
-    }
+    },
+    beforeUpload(file, FileList) {
+        const accepted = file.type.startsWith(mediaSourceType)
+        return accepted;
+    },
 })
 
 const Comp = () => null
@@ -82,8 +88,19 @@ const defaultUploadMediaContext = {
     ModalContent: <Comp />,
     setModalContent: (val: JSX.Element) => { },
 }
+const defaultImportMediaContext = {
+    open: false,
+    setOpen: (val: boolean) => { },
+    modalTitle: '',
+    setModalTitle: (title: string) => { },
+    ModalContent: <Comp />,
+    setModalContent: (val: JSX.Element) => { },
+    modalOkAction: () => { },
+    setModalOkAction: (callback: () => () => void) => { }
+}
 
 const UploadMediaContext = createContext(defaultUploadMediaContext)
+const ImportMediaContext = createContext(defaultImportMediaContext)
 
 export const UploadProvider: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
 
@@ -95,6 +112,19 @@ export const UploadProvider: React.FunctionComponent<PropsWithChildren> = ({ chi
         <UploadModal />
         {children}
     </UploadMediaContext.Provider>
+}
+
+export const ImportMediaProvider: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
+
+    const [open, setOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [ModalContent, setModalContent] = useState<JSX.Element>(<Comp />);
+    const [modalOkAction, setModalOkAction] = useState<() => void>(() => { });
+
+    return <ImportMediaContext.Provider value={{ open, setOpen, ModalContent, setModalContent, modalTitle, setModalTitle, modalOkAction, setModalOkAction }}>
+        <ImportMediaModal />
+        {children}
+    </ImportMediaContext.Provider>
 }
 
 const UploadModal = () => {
@@ -111,21 +141,41 @@ const UploadModal = () => {
         {context.ModalContent}
     </UserControls.Modal>;
 }
+const ImportMediaModal = () => {
+
+    const context = useContext(ImportMediaContext);
+
+    return <UserControls.Modal
+        wrapClassName={classnames.largeModalWrap}
+        open={context.open}
+        onCancel={() => context.setOpen(false)}
+        cancelText={`Cancel import`}
+        okText={`Import selected`}
+        onOk={context.modalOkAction}
+        // okButtonProps={{ style: { display: 'none' } }}
+        title={context.modalTitle}
+    >
+        {context.ModalContent}
+    </UserControls.Modal>;
+}
 
 export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSource | undefined) => {
 
     const [fileList, setFileList] = useState<Array<UploadFile<IMedia>>>([])
     const { addMediaToVisit, selectedVisit, updateMediaToVisit } = useProject(projectId)
-    const { updateMedia } = useMedia()
-    const context = useContext(UploadMediaContext);
+    const { updateMedia, searchNewMedia } = useMedia()
 
-    const getDefaultParams = () => ({
+    const modalUploadContext = useContext(UploadMediaContext);
+    const modalImportContext = useContext(ImportMediaContext);
+
+    const getDefaultParams: () => paramsType = () => ({
         projectId,
         visitId: selectedVisit?.id || '',
         mediaSourceId: selectedMediaSource?.id || '',
+        mediaSourceType: selectedMediaSource?.type || '',
         addMedia: addMediaToVisit,
         fileList,
-        setFileList
+        setFileList,
     })
 
     const [uploadProps, setUploadProps] = useState<UploadProps>(defaultUploadProps(getDefaultParams()));
@@ -134,7 +184,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const onImageClick = async (r: UploadMediaResp, { b64Preview, b64Thumbnail }: SnapShotType) => {
         r.b64Thumbnail = b64Thumbnail;
         r.b64Preview = b64Preview;
-        context.setOpen(false);
+        modalUploadContext.setOpen(false);
         await updateMedia(r);
         updateMediaToVisit(r);
     }
@@ -142,7 +192,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const onDocImageChoosen = async ({ b64Preview, b64Thumbnail }: SnapShotType, media: IMedia) => {
         media.b64Thumbnail = b64Thumbnail;
         media.b64Preview = b64Preview;
-        context.setOpen(false);
+        modalUploadContext.setOpen(false);
         await updateMedia(media);
         updateMediaToVisit(media);
     }
@@ -150,8 +200,8 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const showVideoModal = async (r: UploadMediaResp) => {
 
         if (r.snapshots && r.snapshots.length > 0) {
-            context.setModalTitle('Chose video thumbnail');
-            context.setModalContent(<UserControls.Row gutter={10}>
+            modalUploadContext.setModalTitle('Chose video thumbnail');
+            modalUploadContext.setModalContent(<UserControls.Row gutter={10}>
                 {r.snapshots?.map((s, i) => <UserControls.Col xs={8} key={`image_snapshot_${i}`}>
                     <UserControls.Image className={classnames.snapshotImg}
                         preview={false}
@@ -160,7 +210,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
                 </UserControls.Col>)}
             </UserControls.Row>)
 
-            context.setOpen(true);
+            modalUploadContext.setOpen(true);
 
         }
     }
@@ -185,9 +235,9 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const showDocModal = async (r: UploadMediaResp) => {
 
         curResp.current = r;
-        context.setModalTitle('Chose doc thumbnail');
+        modalUploadContext.setModalTitle('Chose doc thumbnail');
 
-        context.setModalContent(<UserControls.Row gutter={10}>
+        modalUploadContext.setModalContent(<UserControls.Row gutter={10}>
             <UserControls.Col xs={24}>
                 <UserControls.Upload
                     customRequest={async options => {
@@ -235,7 +285,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
             </UserControls.Col>
         </UserControls.Row>)
 
-        context.setOpen(true);
+        modalUploadContext.setOpen(true);
 
     }
 
@@ -270,5 +320,118 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
     }, [selectedMediaSource])
 
-    return { uploadProps }
+    const formatBytes = (bytes: number, decimals = 2) => {
+        if (!+bytes) return '0 Bytes'
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    }
+
+    const MediaChooser = ({ files, visit, mediaSource, projectId }: { files: IImportMedia[], projectId: string, visit: IVisit, mediaSource: IMediaSource }) => {
+
+
+        const context = useContext(ImportMediaContext);
+        const { importFiles } = useMediaImport(projectId);
+
+        const [selected, setSelected] = useState<{ [index: string]: boolean }>({})
+
+        useEffect(() => {
+            console.info('setting context.setModalOkAction(confirmSelectedFiles)')
+            context.setModalOkAction(() => confirmSelectedFiles)
+        }, [files, selected])
+
+        const confirmSelectedFiles = async () => {
+
+            await importFiles(visit, mediaSource, files.filter((f, ind) => selected[ind] === true))
+        }
+        // const [all, setAll] = useState(false)
+        const all = useMemo(() => {
+
+            return files.filter((f, i) => {
+                return selected[i] === true
+            }).length == files.length
+
+
+        }, [selected, files])
+
+        const onAllChange = () => {
+            if (all) {
+                setSelected({})
+                // setAll(false)
+            } else {
+                setSelected(files.reduce((prev, curr, ind) => { return { ...prev, [ind]: true } }, {}))
+                // setAll(true)
+            }
+        }
+
+        // useEffect(()=>{
+        //     Object.
+
+        // }, [selected])
+
+        return <div className={classnames.importFileContainer}>
+            <UserControls.List
+                dataSource={files}
+                header={
+                    <UserControls.Row>
+                        <UserControls.Col xs={2}>
+                            <UserControls.Typography.Text strong>
+                                <UserControls.Checkbox
+                                    checked={all}
+                                    onChange={onAllChange} />
+
+                            </UserControls.Typography.Text>
+                        </UserControls.Col>
+                        <UserControls.Col xs={9}>
+                            <UserControls.Typography.Text strong>Filename</UserControls.Typography.Text>
+                        </UserControls.Col>
+                        <UserControls.Col xs={4}>
+                            <UserControls.Typography.Text strong>Last modified date</UserControls.Typography.Text>
+                        </UserControls.Col>
+                        <UserControls.Col xs={4}>
+                            <UserControls.Typography.Text strong>Size</UserControls.Typography.Text>
+                        </UserControls.Col>
+                    </UserControls.Row>
+                }
+                renderItem={(item, index) => {
+                    const date = new Date(item.latestUpdate).toDateString();
+
+                    const size = formatBytes(item.size);
+
+                    return <UserControls.Row>
+                        <UserControls.Col xs={2}>
+                            <UserControls.Checkbox onChange={t => setSelected(s => ({ ...s, [index]: !s[index] }))} checked={!!selected[index]} />
+                        </UserControls.Col>
+                        <UserControls.Col xs={9}>
+                            <UserControls.Typography.Text>{item.filename}</UserControls.Typography.Text>
+                        </UserControls.Col>
+                        <UserControls.Col xs={4}>
+                            <UserControls.Typography.Text>{date}</UserControls.Typography.Text>
+                        </UserControls.Col>
+                        <UserControls.Col xs={4}>
+                            <UserControls.Typography.Text>{size}</UserControls.Typography.Text>
+                        </UserControls.Col>
+                    </UserControls.Row>
+                }}
+            />
+        </div>
+
+    }
+
+    const importFiles = async () => {
+
+        if (selectedMediaSource && selectedVisit) {
+            modalImportContext.setModalTitle(`Import files for ${selectedMediaSource?.name} media source`)
+            modalImportContext.setOpen(true);
+            const files = await searchNewMedia(selectedMediaSource);
+            modalImportContext.setModalContent(<MediaChooser files={files.data} projectId={projectId} mediaSource={selectedMediaSource} visit={selectedVisit} />);
+
+        }
+    }
+
+    return { uploadProps, importFiles }
 }

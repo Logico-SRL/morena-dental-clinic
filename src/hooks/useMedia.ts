@@ -13,7 +13,9 @@ export const useMedia = () => {
         return httpService.put<IVisit>(`/api/protected/media/${media.id}`, media)
     }
 
+    const searchNewMedia = async (mediasource: IMediaSource) => {
+        return httpService.get<IImportMedia[]>(`/api/protected/mediasources/${mediasource.id}`)
+    }
 
-
-    return { deleteMedia, updateMedia };
+    return { deleteMedia, updateMedia, searchNewMedia };
 }

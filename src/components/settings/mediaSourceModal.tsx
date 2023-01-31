@@ -55,6 +55,12 @@ export const MediaSourceModal = ({ open, onClose, form }: PropTpe) => {
                 <UserControls.Input />
             </UserControls.Form.Item>
 
+            <UserControls.Tooltip title={'Base search path where to find recent files'}>
+                <UserControls.Form.Item name={'baseSearch'} label={'Base search'}>
+                    <UserControls.Input />
+                </UserControls.Form.Item>
+            </UserControls.Tooltip>
+
             <UserControls.Form.Item name={'defaultThumbnailB64'} label={'Default Thumbnail'} valuePropName={'src'}>
                 <UserControls.Image style={{ maxWidth: 60, marginLeft: 20 }} />
             </UserControls.Form.Item>

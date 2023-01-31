@@ -58,3 +58,43 @@
 .snapshotImg {
   cursor: pointer;
 }
+
+.largeModalWrap {
+  :global(.ant-modal) {
+    width: 80vw !important;
+    height: 80vh;
+    max-width: unset;
+    max-height: unset;
+    top: 10vh;
+    left: 0;
+    // overflow-y: hidden;
+
+    :global(.ant-modal-content) {
+      // :global(.ant-modal-close-icon) {
+      //   color: #fff;
+      // }
+
+      border-radius: 0;
+      padding: 5px;
+      height: 100%;
+      overflow-y: hidden;
+      :global(.ant-modal-body) {
+        height: Calc(100% - 80px);
+        width: 100%;
+        // max-height: 90vh !important;
+        overflow-y: hidden;
+        display: flex;
+        // justify-content: center;
+        // align-items: center;
+      }
+      :global(.ant-modal-footer) {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.importFileContainer {
+  width: 100%;
+  padding: 20px;
+}

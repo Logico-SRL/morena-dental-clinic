@@ -24,7 +24,8 @@ const IOCControllerTypes = {
     SettingsMediaSourcesController: Symbol.for("SettingsMediaSourcesController"),
     FileUploadController: Symbol.for("FileUploadController"),
     FileThumbnailsController: Symbol.for("FileThumbnailsController"),
-    FileController: Symbol.for("FileController")
+    FileController: Symbol.for("FileController"),
+    FileImportController: Symbol.for("FileImportController")
 }
 
 export { IOCServiceTypes, IOCControllerTypes };

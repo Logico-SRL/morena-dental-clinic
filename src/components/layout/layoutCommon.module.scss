@@ -4,6 +4,7 @@
   flex-direction: column;
   flex-flow: column;
   flex: 1;
+  overflow: hidden;
   .titleRow {
     flex: 0;
     background-color: $siderBG;
@@ -11,6 +12,7 @@
   .contentRow {
     flex: 1;
     min-height: 100%;
+    overflow: hidden;
   }
 
   .left,
@@ -28,6 +30,11 @@
   .right {
     min-height: 100%;
     // padding: 5px 20px;
+  }
+  .contentRow .left,
+  .contentRow .right {
+    overflow-y: auto;
+    max-height: calc(100vh - 162px); // 60+60+42
   }
   .title {
     min-height: 0;

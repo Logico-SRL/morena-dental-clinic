@@ -1,3 +1,3 @@
 type MediaSourceEntity = import('../../../repository/entities/index').MediaSourceEntity
 
-type IMediaSource = MediaSourceEntity
+type IMediaSource = MediaSourceEntity & {}

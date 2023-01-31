@@ -1,5 +1,6 @@
-import { existsSync, readFileSync, unlinkSync } from "fs";
+import { constants, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync } from "fs";
 import { inject, injectable } from "inversify";
+import { extname } from "path";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 
 @injectable()
@@ -9,6 +10,48 @@ export class FilesService implements IFilesService {
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
+    }
+    copy = async (f: IImportMedia, dirTo: string, fileNameTo: string) => {
+        const fromPath = `${f.path}/${f.filename}`;
+        const toPath = `${dirTo}/${fileNameTo}`;
+
+        if (!existsSync(fromPath)) {
+            throw new Error(`FileService ${fromPath} does not exist`);
+        }
+
+        mkdirSync(dirTo, { recursive: true });
+        console.info(`FileService copying ${fromPath} to ${toPath}`)
+        copyFileSync(fromPath, toPath, constants.COPYFILE_FICLONE)
+        console.info(`FileService file copied`)
+        return true;
+
+    }
+    scan = async (path: string) => {
+        const files: IImportMedia[] = [];
+        const res = readdirSync(path, {
+            withFileTypes: true,
+        });
+
+        // console.info('scan res', res);
+        res.filter(f => f.isFile()).forEach(f => {
+            const st = statSync(`${path}/${f.name}`);
+            const ext = extname(`${path}/${f.name}`);
+
+            // console.info('st', st)
+
+            files.push({
+                filename: f.name,
+                size: st.size,
+                latestUpdate: st.mtime,
+                path,
+                ext
+            })
+
+        })
+
+        console.info('res', files);
+        return files;
+
     }
 
     get = (path: string, options?: {

@@ -25,6 +25,7 @@ import Select from "./components/select";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
 import Space from "./components/space";
+import Tooltip from "./components/tooltip";
 import Typography from "./components/typography";
 import Upload from "./components/upload";
 
@@ -57,7 +58,8 @@ const UserControls = {
     Segmented,
     Image,
     Upload,
-    Checkbox
+    Checkbox,
+    Tooltip
 }
 
 export default UserControls;

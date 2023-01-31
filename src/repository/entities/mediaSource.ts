@@ -16,6 +16,9 @@ export class MediaSourceEntity {
     @Column({ type: 'nvarchar', nullable: true })
     basePath?: string;
 
+    @Column({ type: 'nvarchar', nullable: true })
+    baseSearch?: string;
+
     @Column({ type: 'text', default: noImageB64 })
     defaultThumbnailB64?: string;
 
@@ -26,3 +29,5 @@ export class MediaSourceEntity {
     visible: boolean;
 
 }
+
+
