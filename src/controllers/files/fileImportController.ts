@@ -21,18 +21,21 @@ export class FileImportController extends BaseController {
     private readonly mediaServ: IMediaService
     private readonly settingsServ: ISettingsService
     private readonly visitsServ: IVisitsService;
+    private readonly filePreviewServ: IFilePreviewService;
 
     constructor(
         @inject(IOCServiceTypes.FilesService) fileServ: IFilesService,
         @inject(IOCServiceTypes.MediaService) mediaServ: IMediaService,
         @inject(IOCServiceTypes.SettingsService) settingsServ: ISettingsService,
         @inject(IOCServiceTypes.VisitsService) visitsServ: IVisitsService,
+        @inject(IOCServiceTypes.FilesPreviewService) filePreviewServ: IFilePreviewService,
     ) {
         super();
         this.fileService = fileServ;
         this.mediaServ = mediaServ;
         this.settingsServ = settingsServ;
         this.visitsServ = visitsServ;
+        this.filePreviewServ = filePreviewServ
     }
 
     GET = async () => {
@@ -82,6 +85,19 @@ export class FileImportController extends BaseController {
             }
 
             await this.fileService.copy(f, saveToDir, `${id}${f.ext}`);
+            if (media.source.type == 'image') {
+                const buffer = await this.fileService.get(saveTo) as Buffer
+                const snapshots = await this.filePreviewServ.getPreview({
+                    buffer,
+                    type: 'image',
+
+                })
+                if (snapshots.length > 0) {
+                    media.b64Preview = snapshots[0].b64Preview;
+                    media.b64Thumbnail = snapshots[0].b64Thumbnail;
+                }
+            }
+
             addedMedia.push(await this.mediaServ.create(media));
 
         }));

@@ -10,7 +10,7 @@ import { AntdIcons } from "../../userControls/icons";
 import classnames from './screening.module.scss';
 
 
-type paramsType = {
+type ParamsType = {
     projectId: string,
     visitId: string,
     mediaSourceId: string,
@@ -22,7 +22,9 @@ type paramsType = {
 }
 
 
-const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType }) => ({
+const defaultUploadProps: (params: ParamsType) => UploadProps = ({
+    projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType
+}) => ({
     listType: 'picture',
     showUploadList: true,
     multiple: false,
@@ -35,7 +37,6 @@ const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, vi
         const config: AxiosRequestConfig<IMedia> = {
             headers: { "content-type": "multipart/form-data" },
             onUploadProgress: event => {
-
                 if (onProgress)
                     onProgress({ percent: (event.loaded / (event.total || 1)) * 100 });
             }
@@ -48,13 +49,13 @@ const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, vi
                 config
             );
 
-            onSuccess && onSuccess("Ok");
+            onSuccess && onSuccess(res);
             console.info("file uploaded res", res);
-            setFileList([])
             afterAxiosPost && await afterAxiosPost(res.data)
-
+            setFileList([])
             addMedia(res.data)
         } catch (err) {
+            console.error("file uploaded error", err);
             onError && onError(err as any);
         }
     },
@@ -62,16 +63,18 @@ const defaultUploadProps: (params: paramsType) => UploadProps = ({ projectId, vi
 
         const { status, response } = info.file;
 
+        console.info('onChange', status, info.fileList)
+
         if (status === 'done' || status === 'success') {
             setFileList([]);
         } else {
             setFileList(info.fileList)
         }
     },
-    previewFile: async (file) => {
-        console.log('Your upload file:', file);
-        return ''
-    },
+    // previewFile: async (file) => {
+    //     console.log('Your upload file:', file);
+    //     return ''
+    // },
     beforeUpload(file, FileList) {
         const accepted = file.type.startsWith(mediaSourceType)
         return accepted;
@@ -168,7 +171,11 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const modalUploadContext = useContext(UploadMediaContext);
     const modalImportContext = useContext(ImportMediaContext);
 
-    const getDefaultParams: () => paramsType = () => ({
+    useEffect(() => {
+        console.info('fileList effect', fileList)
+    }, [fileList])
+
+    const getDefaultParams: () => ParamsType = () => ({
         projectId,
         visitId: selectedVisit?.id || '',
         mediaSourceId: selectedMediaSource?.id || '',
@@ -178,7 +185,35 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         setFileList,
     })
 
-    const [uploadProps, setUploadProps] = useState<UploadProps>(defaultUploadProps(getDefaultParams()));
+    const uploadProps = useMemo(() => {
+        switch (selectedMediaSource?.type) {
+            case 'image': {
+                const props = defaultUploadProps(getDefaultParams());
+                props.multiple = true;
+                return props;
+                break;
+            }
+            case 'video': {
+                const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
+                    showVideoModal(r)
+                }
+                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
+
+                break;
+            }
+
+            case 'doc':
+            default: {
+                const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
+                    showDocModal(r)
+                }
+                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
+                break;
+            }
+        }
+    }, [
+        projectId, selectedVisit, selectedMediaSource, addMediaToVisit, fileList, setFileList,
+    ]);
 
 
     const onImageClick = async (r: UploadMediaResp, { b64Preview, b64Thumbnail }: SnapShotType) => {
@@ -290,35 +325,39 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     }
 
     useEffect(() => {
-        switch (selectedMediaSource?.type) {
-            case 'image': {
-                const props = defaultUploadProps(getDefaultParams());
-                props.multiple = true;
-                setUploadProps(props);
-                break;
-            }
-            case 'video': {
-                const afterAxiosPost: paramsType['afterAxiosPost'] = async (r) => {
-                    showVideoModal(r)
-                }
-                const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
+        console.info('uploadProps', uploadProps)
+    }, [uploadProps])
 
-                setUploadProps(props);
-                break;
-            }
+    // useEffect(() => {
+    //     switch (selectedMediaSource?.type) {
+    //         case 'image': {
+    //             const props = defaultUploadProps(getDefaultParams());
+    //             props.multiple = true;
+    //             setUploadProps(props);
+    //             break;
+    //         }
+    //         case 'video': {
+    //             const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
+    //                 showVideoModal(r)
+    //             }
+    //             const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
 
-            case 'doc':
-            default: {
-                const afterAxiosPost: paramsType['afterAxiosPost'] = async (r) => {
-                    showDocModal(r)
-                }
-                const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
-                setUploadProps(props);
-                break;
-            }
-        }
+    //             setUploadProps(props);
+    //             break;
+    //         }
 
-    }, [selectedMediaSource])
+    //         case 'doc':
+    //         default: {
+    //             const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
+    //                 showDocModal(r)
+    //             }
+    //             const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
+    //             setUploadProps(props);
+    //             break;
+    //         }
+    //     }
+
+    // }, [selectedMediaSource])
 
     const formatBytes = (bytes: number, decimals = 2) => {
         if (!+bytes) return '0 Bytes'
@@ -347,6 +386,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         const confirmSelectedFiles = async () => {
 
             await importFiles(visit, mediaSource, files.filter((f, ind) => selected[ind] === true))
+            context.setOpen(false);
         }
         // const [all, setAll] = useState(false)
         const all = useMemo(() => {

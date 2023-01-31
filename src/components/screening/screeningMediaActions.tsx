@@ -14,7 +14,7 @@ export const ScreeningMediaActions = ({ selectedMediaSource, selectedVisit, proj
     }
 
     return <UserControls.Col xs={24} className={classnames.actions} >
-        <UserControls.Upload {...uploadProps} >
+        <UserControls.Upload {...uploadProps}>
             <UserControls.Button disabled={!selectedVisit || !selectedMediaSource || !selectedMediaSource.basePath || isDeleting} icon={<AntdIcons.PlusOutlined />}>
                 Upload
             </UserControls.Button>

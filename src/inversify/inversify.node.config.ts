@@ -15,6 +15,7 @@ import { VisitsController } from "../controllers/visits/visitsController";
 import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
 import { DbService } from "../services/db/DbService";
 import { ExternalPatientsService } from "../services/externalPatients/ExternalPatientsService";
+import { FilePreviewService } from "../services/files/FilePreviewService";
 import { FilesService } from "../services/files/FilesService";
 import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
@@ -35,6 +36,7 @@ NodeIOCContainer.bind<IVisitsService>(IOCServiceTypes.VisitsService).to(VisitsSe
 NodeIOCContainer.bind<IMediaService>(IOCServiceTypes.MediaService).to(MediaService).inSingletonScope();
 NodeIOCContainer.bind<ISettingsService>(IOCServiceTypes.SettingsService).to(SettingsService).inSingletonScope();
 NodeIOCContainer.bind<IFilesService>(IOCServiceTypes.FilesService).to(FilesService).inSingletonScope();
+NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).to(FilePreviewService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);

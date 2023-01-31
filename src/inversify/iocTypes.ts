@@ -9,6 +9,7 @@ const IOCServiceTypes = {
     MediaService: Symbol.for("MediaService"),
     SettingsService: Symbol.for("SettingsService"),
     FilesService: Symbol.for("FilesService"),
+    FilesPreviewService: Symbol.for("FilesPreviewService"),
 
 };
 const IOCControllerTypes = {

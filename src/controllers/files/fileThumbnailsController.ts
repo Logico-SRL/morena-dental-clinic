@@ -1,6 +1,5 @@
 import Busboy, { FileInfo } from 'busboy';
 import { inject, injectable } from "inversify";
-import sharp from 'sharp';
 import { Readable } from 'stream';
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { BaseController } from "../baseController";
@@ -22,13 +21,13 @@ type QueryType = {
 export class FileThumbnailsController extends BaseController {
 
 
-    private readonly fileService: IFilesService;
+    private readonly filePreviewServ: IFilePreviewService;
 
     constructor(
-        @inject(IOCServiceTypes.FilesService) fileServ: IFilesService,
+        @inject(IOCServiceTypes.FilesPreviewService) filePreviewServ: IFilePreviewService,
     ) {
         super();
-        this.fileService = fileServ;
+        this.filePreviewServ = filePreviewServ
     }
 
     POST = async () => {
@@ -55,33 +54,26 @@ export class FileThumbnailsController extends BaseController {
                 file.on('end', async () => {
                     console.log('File [' + fieldname + '] Finished');
 
-                    const buff = Buffer.concat(chunks);
-
-                    let b64Thumbnail = '';
-                    let b64Preview = '';
+                    const buffer = Buffer.concat(chunks);
 
                     if (mimeType.startsWith('image')) {
-                        b64Thumbnail = await sharp(buff)
-                            .resize(200)
-                            .toBuffer()
-                            .then(b => b.toString('base64'))
-                            .catch(err => {
-                                reject(err);
-                                throw err;
+                        const snapshots = await this.filePreviewServ.getPreview({
+                            type: 'image',
+                            buffer
+                        })
 
+                        if (snapshots.length > 0) {
+                            resolve({
+                                b64Preview: snapshots[0].b64Preview,
+                                b64Thumbnail: snapshots[0].b64Thumbnail,
                             })
-                        b64Preview = await sharp(buff)
-                            .resize(1024)
-                            .toBuffer()
-                            .then(b => b.toString('base64'))
-                            .catch(err => {
-                                reject(err);
-                                throw err;
-                            })
+                        }
+                    } else {
+                        resolve({
+                            b64Preview: '',
+                            b64Thumbnail: '',
+                        })
                     }
-
-                    resolve({ b64Thumbnail, b64Preview })
-
                     // resolve(b64File);
                 });
             });

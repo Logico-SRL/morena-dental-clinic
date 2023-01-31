@@ -1,21 +1,13 @@
 import Busboy, { FileInfo } from 'busboy';
-import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
 import { inject, injectable } from "inversify";
-import path from 'path';
-import sharp from 'sharp';
+
 import { Readable } from 'stream';
 import { ulid } from 'ulid';
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { BaseController } from "../baseController";
 
 
-
-// type FileObjType = {
-//     filename: string,
-//     encoding: string,
-//     mimeType: string
-// }
 type QueryType = {
     projectId: string
     visitId: string
@@ -31,20 +23,23 @@ export class FileUploadController extends BaseController {
 
     private readonly fileService: IFilesService;
     private readonly settingsService: ISettingsService;
-    private readonly visitsServ: IVisitsService
-    private readonly mediaServ: IMediaService
+    private readonly visitsServ: IVisitsService;
+    private readonly mediaServ: IMediaService;
+    private readonly filePreviewServ: IFilePreviewService;
 
     constructor(
         @inject(IOCServiceTypes.FilesService) fileServ: IFilesService,
         @inject(IOCServiceTypes.SettingsService) settingServ: ISettingsService,
         @inject(IOCServiceTypes.VisitsService) visitsServ: IVisitsService,
         @inject(IOCServiceTypes.MediaService) mediaServ: IMediaService,
+        @inject(IOCServiceTypes.FilesPreviewService) filePreviewServ: IFilePreviewService,
     ) {
         super();
         this.fileService = fileServ;
         this.settingsService = settingServ;
         this.visitsServ = visitsServ;
         this.mediaServ = mediaServ;
+        this.filePreviewServ = filePreviewServ
     }
 
     POST = async () => {
@@ -64,7 +59,7 @@ export class FileUploadController extends BaseController {
             throw new Error(`visit with id ${this.visitId} not found`);
         }
 
-        const snapshots: SnapShotType[] = []
+        // const snapshots: SnapShotType[] = []
 
         const media: IMedia = {
             id: ulid(),
@@ -83,8 +78,7 @@ export class FileUploadController extends BaseController {
 
         let fileExtension = 'notfound'
 
-
-        const files = await new Promise<{ b64Thumbnail: string, b64Preview: string }>((resolve, reject) => {
+        const snapshots = await new Promise<SnapShotType[]>((resolve, reject) => {
             const busboy = Busboy({ headers: this.req.headers });
 
             const chunks: Array<Uint8Array> = [];
@@ -96,25 +90,11 @@ export class FileUploadController extends BaseController {
 
                 })
 
-                console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
+                // console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
 
                 media.encoding = encoding;
                 media.filename = filename;
                 media.mimeType = mimeType;
-
-                // if (media.mimeType) {
-                //     const p = media.mimeType.split('/')
-                //     switch (p[0]) {
-                //         case 'image':
-                //         case 'video':
-                //             media.type = p[0]
-                //             break;
-
-                //         default:
-                //             media.type = 'doc'
-                //             break;
-                //     }
-                // }
 
                 if (filename) {
                     const parts = filename.split('.');
@@ -139,110 +119,16 @@ export class FileUploadController extends BaseController {
                 file.on('end', async () => {
                     console.log('File [' + fieldname + '] Finished');
 
-                    const buff = Buffer.concat(chunks);
+                    const buffer = Buffer.concat(chunks);
 
-                    let b64Thumbnail = '';
-                    let b64Preview = '';
+                    resolve(await this.filePreviewServ.getPreview({
+                        buffer,
+                        mediaId: media.id,
+                        path: saveTo,
+                        saveToDir: saveToDir,
+                        type: media.source?.type,
+                    }))
 
-                    switch (media.source.type) {
-                        case 'image': {
-
-                            b64Thumbnail = await sharp(buff)
-                                .resize(200)
-                                .toBuffer()
-                                .then(b => b.toString('base64'))
-                                .catch(err => {
-                                    reject(err);
-                                    throw err;
-
-                                })
-                            b64Preview = await sharp(buff)
-                                .resize(1024)
-                                .toBuffer()
-                                .then(b => b.toString('base64'))
-                                .catch(err => {
-                                    reject(err);
-                                    throw err;
-                                })
-                            break;
-                        }
-                        case 'video': {
-                            ffmpeg.setFfmpegPath(path.resolve('ffmpeg', 'ffmpeg.exe'));
-                            ffmpeg.setFfprobePath(path.resolve('ffmpeg', 'ffprobe.exe'));
-                            const timemarks = ['0%', '33%', '66%'];
-
-                            const done = await new Promise<boolean>(async (res, rej) => {
-
-                                // const wStream = new Transform()
-                                ffmpeg(media.path)
-                                    .on('start', function (cmd) {
-                                        console.log('Started ' + cmd);
-                                    })
-                                    .on('end', function () {
-                                        console.log('Screenshots taken');
-                                        res(true)
-                                    })
-                                    .on('error', function (err) {
-                                        console.error('ffmpeg error', err);
-                                        res(false)
-                                    })
-                                    .screenshots({
-                                        count: 3,
-                                        timemarks,
-                                        filename: `${media.id}.jpg`,
-                                        folder: saveToDir,
-                                    })
-                            });
-
-
-
-                            if (done) {
-                                await Promise.all(timemarks.map(async (mark, ind) => {
-                                    const filePreviewPath = `${saveToDir}/${media.id}_${ind + 1}.jpg`
-                                    try {
-
-                                        const file = await this.fileService.get(filePreviewPath)
-                                        console.info(`file ${filePreviewPath} fetched`)
-
-                                        const thumb = await sharp(file)
-                                            .resize(200)
-                                            .toBuffer()
-                                            .then(b => b.toString('base64'))
-                                            .catch(err => {
-                                                reject(err);
-                                            })
-
-                                        const prev = await sharp(file)
-                                            .resize(1024)
-                                            .toBuffer()
-                                            .then(b => b.toString('base64'))
-                                            .catch(err => {
-                                                reject(err);
-                                            })
-                                        snapshots.push({
-                                            b64Preview: prev || '',
-                                            b64Thumbnail: thumb || ''
-                                        })
-                                    } catch (err) {
-                                        console.error(`FileUploadController file ${filePreviewPath}`, err);
-                                    }
-                                }));
-                            }
-
-                            break;
-                        }
-                        case 'doc':
-                        default: {
-
-                            break;
-                        }
-
-                    }
-
-
-                    resolve({ b64Thumbnail, b64Preview })
-
-                    // resolve(b64File);
                 });
             });
             busboy.on('field', function (fieldname, val) {
@@ -255,8 +141,11 @@ export class FileUploadController extends BaseController {
             this.req.pipe(busboy);
         });
 
-        media.b64Preview = files.b64Preview;
-        media.b64Thumbnail = files.b64Thumbnail;
+        if (snapshots.length > 0) {
+
+            media.b64Preview = snapshots[0].b64Preview;
+            media.b64Thumbnail = snapshots[0].b64Thumbnail;
+        }
 
         await this.mediaServ.create(media);
 
