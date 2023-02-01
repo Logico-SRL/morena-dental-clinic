@@ -4,6 +4,7 @@ import { useMedia } from "../../hooks/useMedia";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import classnames from './screening.module.scss';
+import { ScreeningMediaViewer } from "./screeningMediaViewer";
 
 type PropType = Pick<VisitPropType, 'sources' | 'selectedVisit' | 'selectedMediaSource' | 'isDeleting' | 'projectId'>
 
@@ -29,33 +30,17 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
 
                 }
             })
-
         }
     }
 
-
-    const src = selectedMedia ? `${location.origin}/api/protected/media/${selectedMedia.id}` : ''
-    const type = selectedMedia ? selectedMedia.source.type : 'none'
+    const onScreeningMediaViewerCancel = () => {
+        setSelectedMedia(undefined)
+        setPreviewVisible(true);
+    }
 
 
     return <>
-        <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={() => setSelectedMedia(undefined)}
-            footer={[<UserControls.Button type="primary" href={src} download>
-                DOWNLOAD
-            </UserControls.Button>,
-            <UserControls.Button type="primary" onClick={() => setSelectedMedia(undefined)}>
-                CLOSE
-            </UserControls.Button>
-            ]}
-        >
-
-            {selectedMedia && type == 'image' && <UserControls.Image src={src} preview={false} style={{ maxWidth: '100%', maxHeight: '100%' }} />}
-            {selectedMedia && type == 'video' && <video style={{ maxWidth: '100%', maxHeight: '100%' }} controls autoPlay={true} src={src}>
-                <source src={src} type={'video/mp4'} />
-            </video>}
-            {selectedMedia && type == 'doc' && <embed src={src} width={'100%'} height={'100%'}>
-            </embed>}
-        </UserControls.Modal>
+        <ScreeningMediaViewer selectedMedia={selectedMedia} onCancel={onScreeningMediaViewerCancel} />
         <UserControls.Image.PreviewGroup
             preview={{
                 visible: previewVisible,
@@ -74,20 +59,20 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
                     className: classnames.previewItemContainer,
                     onClick: async (event: any) => {
                         const item = media[currIndex.current - 1];
-                        switch (item.source.type) {
-                            case 'image': {
-                                console.warn('TODO => fetch high res image');
-                                break;
-                            }
-                            case 'video': {
-                                console.warn('TODO => fetch high res video and open player')
-                                break;
-                            }
-                            case 'doc': {
-                                console.warn('TODO => download and show doc')
-                                break;
-                            }
-                        }
+                        // switch (item.source.type) {
+                        //     case 'image': {
+                        //         console.warn('TODO => fetch high res image');
+                        //         break;
+                        //     }
+                        //     case 'video': {
+                        //         console.warn('TODO => fetch high res video and open player')
+                        //         break;
+                        //     }
+                        //     case 'doc': {
+                        //         console.warn('TODO => download and show doc')
+                        //         break;
+                        //     }
+                        // }
                         setPreviewVisible(false);
                         setSelectedMedia(item);
                         // setIframSrc(`${location.origin}/api/protected/media/${item.id}`)
@@ -116,7 +101,5 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
             })
             }
         </UserControls.Image.PreviewGroup>
-
-
     </>
 }

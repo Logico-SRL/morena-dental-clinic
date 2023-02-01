@@ -1,16 +1,21 @@
 import { UploadFile, UploadProps } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import axios, { AxiosRequestConfig } from "axios";
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { acceptedFileExtensions } from "../../configurations/acceptedFileExtensions";
 import { useMedia } from "../../hooks/useMedia";
 import { useMediaImport } from "../../hooks/useMediaImport";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
-import { AntdIcons } from "../../userControls/icons";
+import { formatUtils } from "../../utils/formatUtils";
+import { ImportMediaContext } from "./import/importMediaContext";
 import classnames from './screening.module.scss';
+import { UploadMediaContext } from "./upload/uploadMediaContext";
+import { useDocUpload } from "./upload/useDocUpload";
+import { useVideUpload } from "./upload/useVideoUpload";
 
 
-type ParamsType = {
+export type UploadPropsParamsType = {
     projectId: string,
     visitId: string,
     mediaSourceId: string,
@@ -18,18 +23,20 @@ type ParamsType = {
     fileList: UploadFile<IMedia>[],
     setFileList: Dispatch<SetStateAction<UploadFile<IMedia>[]>>
     afterAxiosPost?: (res: UploadMediaResp) => {},
-    mediaSourceType: string
+    mediaSourceType: mediaTypes
 }
 
 
-const defaultUploadProps: (params: ParamsType) => UploadProps = ({
+const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
     projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType
 }) => ({
     listType: 'picture',
     showUploadList: true,
     multiple: false,
     fileList,
+    accept: acceptedFileExtensions[mediaSourceType],
     customRequest: async options => {
+
         const { onSuccess, onError, file, onProgress } = options;
 
         const fmData = new FormData();
@@ -49,9 +56,11 @@ const defaultUploadProps: (params: ParamsType) => UploadProps = ({
                 config
             );
 
-            onSuccess && onSuccess(res);
+            onSuccess && onSuccess(res.data);
             console.info("file uploaded res", res);
-            afterAxiosPost && await afterAxiosPost(res.data)
+            if (afterAxiosPost) {
+                await afterAxiosPost(res.data)
+            }
             setFileList([])
             addMedia(res.data)
         } catch (err) {
@@ -71,96 +80,14 @@ const defaultUploadProps: (params: ParamsType) => UploadProps = ({
             setFileList(info.fileList)
         }
     },
-    // previewFile: async (file) => {
-    //     console.log('Your upload file:', file);
-    //     return ''
-    // },
     beforeUpload(file, FileList) {
-        const accepted = file.type.startsWith(mediaSourceType)
-        return accepted;
+        console.info(`beforeUpload file.type ${file.type}`)
+        // const accepted = file.type.startsWith(mediaSourceType)
+        // return accepted;
+        return true
     },
 })
 
-const Comp = () => null
-
-const defaultUploadMediaContext = {
-    open: false,
-    setOpen: (val: boolean) => { },
-    modalTitle: '',
-    setModalTitle: (title: string) => { },
-    ModalContent: <Comp />,
-    setModalContent: (val: JSX.Element) => { },
-}
-const defaultImportMediaContext = {
-    open: false,
-    setOpen: (val: boolean) => { },
-    modalTitle: '',
-    setModalTitle: (title: string) => { },
-    ModalContent: <Comp />,
-    setModalContent: (val: JSX.Element) => { },
-    modalOkAction: () => { },
-    setModalOkAction: (callback: () => () => void) => { }
-}
-
-const UploadMediaContext = createContext(defaultUploadMediaContext)
-const ImportMediaContext = createContext(defaultImportMediaContext)
-
-export const UploadProvider: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
-
-    const [open, setOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState('');
-    const [ModalContent, setModalContent] = useState<JSX.Element>(<Comp />);
-
-    return <UploadMediaContext.Provider value={{ open, setOpen, ModalContent, setModalContent, modalTitle, setModalTitle }}>
-        <UploadModal />
-        {children}
-    </UploadMediaContext.Provider>
-}
-
-export const ImportMediaProvider: React.FunctionComponent<PropsWithChildren> = ({ children }) => {
-
-    const [open, setOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState('');
-    const [ModalContent, setModalContent] = useState<JSX.Element>(<Comp />);
-    const [modalOkAction, setModalOkAction] = useState<() => void>(() => { });
-
-    return <ImportMediaContext.Provider value={{ open, setOpen, ModalContent, setModalContent, modalTitle, setModalTitle, modalOkAction, setModalOkAction }}>
-        <ImportMediaModal />
-        {children}
-    </ImportMediaContext.Provider>
-}
-
-const UploadModal = () => {
-
-    const context = useContext(UploadMediaContext);
-
-    return <UserControls.Modal
-        open={context.open}
-        onCancel={() => context.setOpen(false)}
-        cancelText={`Keep default image`}
-        okButtonProps={{ style: { display: 'none' } }}
-        title={context.modalTitle}
-    >
-        {context.ModalContent}
-    </UserControls.Modal>;
-}
-const ImportMediaModal = () => {
-
-    const context = useContext(ImportMediaContext);
-
-    return <UserControls.Modal
-        wrapClassName={classnames.largeModalWrap}
-        open={context.open}
-        onCancel={() => context.setOpen(false)}
-        cancelText={`Cancel import`}
-        okText={`Import selected`}
-        onOk={context.modalOkAction}
-        // okButtonProps={{ style: { display: 'none' } }}
-        title={context.modalTitle}
-    >
-        {context.ModalContent}
-    </UserControls.Modal>;
-}
 
 export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSource | undefined) => {
 
@@ -175,15 +102,19 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         console.info('fileList effect', fileList)
     }, [fileList])
 
-    const getDefaultParams: () => ParamsType = () => ({
+    const getDefaultParams: () => UploadPropsParamsType = () => ({
         projectId,
         visitId: selectedVisit?.id || '',
         mediaSourceId: selectedMediaSource?.id || '',
-        mediaSourceType: selectedMediaSource?.type || '',
+        mediaSourceType: selectedMediaSource?.type || 'doc',
         addMedia: addMediaToVisit,
         fileList,
         setFileList,
     })
+
+    const { afterAxiosPostVideo } = useVideUpload(projectId);
+    const { afterAxiosPostDoc } = useDocUpload(projectId);
+
 
     const uploadProps = useMemo(() => {
         switch (selectedMediaSource?.type) {
@@ -191,184 +122,25 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
                 const props = defaultUploadProps(getDefaultParams());
                 props.multiple = true;
                 return props;
-                break;
             }
             case 'video': {
-                const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
-                    showVideoModal(r)
-                }
-                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
-
-                break;
+                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost: afterAxiosPostVideo });
             }
 
             case 'doc':
             default: {
-                const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
-                    showDocModal(r)
-                }
-                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
-                break;
+                return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost: afterAxiosPostDoc });
             }
         }
-    }, [
-        projectId, selectedVisit, selectedMediaSource, addMediaToVisit, fileList, setFileList,
-    ]);
+    }, [projectId, selectedVisit, selectedMediaSource, addMediaToVisit, fileList, setFileList]);
 
 
-    const onImageClick = async (r: UploadMediaResp, { b64Preview, b64Thumbnail }: SnapShotType) => {
-        r.b64Thumbnail = b64Thumbnail;
-        r.b64Preview = b64Preview;
-        modalUploadContext.setOpen(false);
-        await updateMedia(r);
-        updateMediaToVisit(r);
-    }
 
-    const onDocImageChoosen = async ({ b64Preview, b64Thumbnail }: SnapShotType, media: IMedia) => {
-        media.b64Thumbnail = b64Thumbnail;
-        media.b64Preview = b64Preview;
-        modalUploadContext.setOpen(false);
-        await updateMedia(media);
-        updateMediaToVisit(media);
-    }
 
-    const showVideoModal = async (r: UploadMediaResp) => {
 
-        if (r.snapshots && r.snapshots.length > 0) {
-            modalUploadContext.setModalTitle('Chose video thumbnail');
-            modalUploadContext.setModalContent(<UserControls.Row gutter={10}>
-                {r.snapshots?.map((s, i) => <UserControls.Col xs={8} key={`image_snapshot_${i}`}>
-                    <UserControls.Image className={classnames.snapshotImg}
-                        preview={false}
-                        onClick={() => onImageClick(r, s)}
-                        src={`data:image/png;base64,${s.b64Thumbnail}`} />
-                </UserControls.Col>)}
-            </UserControls.Row>)
 
-            modalUploadContext.setOpen(true);
 
-        }
-    }
 
-    const [docFileList, setDocFileList] = useState<any[]>([])
-
-    const onDocUploadChange = useCallback(async (pars: UploadChangeParam<UploadFile<SnapShotType>>, media: UploadMediaResp) => {
-
-        const { status, response } = pars.file
-        console.info('onDocUploadChange', pars);
-
-        if (status == 'done' || status == 'success') {
-            // setDocFileList([])
-        }
-        else {
-            setDocFileList([...pars.fileList])
-        }
-    }, [])
-
-    const curResp = useRef<UploadMediaResp>();
-
-    const showDocModal = async (r: UploadMediaResp) => {
-
-        curResp.current = r;
-        modalUploadContext.setModalTitle('Chose doc thumbnail');
-
-        modalUploadContext.setModalContent(<UserControls.Row gutter={10}>
-            <UserControls.Col xs={24}>
-                <UserControls.Upload
-                    customRequest={async options => {
-                        const { onSuccess, onError, file, onProgress } = options;
-
-                        const fmData = new FormData();
-
-                        const config: AxiosRequestConfig<IMedia> = {
-                            headers: { "content-type": "multipart/form-data" },
-                            onUploadProgress: event => {
-
-                                if (onProgress)
-                                    onProgress({ percent: (event.loaded / (event.total || 1)) * 100 });
-                            }
-                        };
-                        fmData.append("image", file);
-                        try {
-                            const res = await axios.post<SnapShotType>(
-                                `/api/protected/files/thumbnails`,
-                                fmData,
-                                config
-                            );
-
-                            console.info("thumnail axios res", res);
-
-                            onSuccess && onSuccess("Ok");
-                            setDocFileList([])
-                            onDocImageChoosen(res.data || { b64Preview: '', b64Thumbnail: '' }, r)
-
-                        } catch (err) {
-                            onError && onError(err as any);
-                        }
-                    }}
-                    // action={`/api/protected/files/thumbnails`}
-                    onChange={p => onDocUploadChange(p, r)}
-                    multiple={false}
-                    fileList={docFileList}
-                // showUploadList={false}
-
-                >
-                    <UserControls.Button icon={<AntdIcons.PlusOutlined />}>
-                        Upload Thumbnail
-                    </UserControls.Button>
-                </UserControls.Upload>
-            </UserControls.Col>
-        </UserControls.Row>)
-
-        modalUploadContext.setOpen(true);
-
-    }
-
-    useEffect(() => {
-        console.info('uploadProps', uploadProps)
-    }, [uploadProps])
-
-    // useEffect(() => {
-    //     switch (selectedMediaSource?.type) {
-    //         case 'image': {
-    //             const props = defaultUploadProps(getDefaultParams());
-    //             props.multiple = true;
-    //             setUploadProps(props);
-    //             break;
-    //         }
-    //         case 'video': {
-    //             const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
-    //                 showVideoModal(r)
-    //             }
-    //             const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
-
-    //             setUploadProps(props);
-    //             break;
-    //         }
-
-    //         case 'doc':
-    //         default: {
-    //             const afterAxiosPost: ParamsType['afterAxiosPost'] = async (r) => {
-    //                 showDocModal(r)
-    //             }
-    //             const props = defaultUploadProps({ ...getDefaultParams(), afterAxiosPost });
-    //             setUploadProps(props);
-    //             break;
-    //         }
-    //     }
-
-    // }, [selectedMediaSource])
-
-    const formatBytes = (bytes: number, decimals = 2) => {
-        if (!+bytes) return '0 Bytes'
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
-    }
 
     const MediaChooser = ({ files, visit, mediaSource, projectId }: { files: IImportMedia[], projectId: string, visit: IVisit, mediaSource: IMediaSource }) => {
 
@@ -440,7 +212,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
                 renderItem={(item, index) => {
                     const date = new Date(item.latestUpdate).toDateString();
 
-                    const size = formatBytes(item.size);
+                    const size = formatUtils.formatBytes(item.size);
 
                     return <UserControls.Row>
                         <UserControls.Col xs={2}>

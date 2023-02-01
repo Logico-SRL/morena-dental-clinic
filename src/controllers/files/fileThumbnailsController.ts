@@ -81,7 +81,7 @@ export class FileThumbnailsController extends BaseController {
                 // console.log('Field [' + fieldname + ']: value: ' + inspect(val));
             });
             busboy.on('finish', function () {
-                console.log('Done parsing form!');
+                // console.log('Done parsing form!');
                 // resolve(1);
             });
             this.req.pipe(busboy);

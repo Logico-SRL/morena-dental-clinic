@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useProject } from "../../hooks/useProject";
 import { useSettings } from "../../hooks/useSettings";
 import UserControls from "../../userControls";
+import { ImportMediaContextProvider } from "./import/importMediaContextProvider";
 import { ScreeningMedia } from "./screeningMedia";
 import { ScreeningMediaActions } from "./screeningMediaActions";
 import { ScreeningMediaSources } from "./screeningMediaSources";
-import { ImportMediaProvider, UploadProvider } from "./useUploadMedia";
+import { UploadModalContextProvider } from "./upload/uploadModalContextProvider";
 
 
 
@@ -29,16 +30,16 @@ export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
     }
 
     return <UserControls.Skeleton loading={loadingProject}>
-        <UploadProvider>
-            <ImportMediaProvider>
+        <UploadModalContextProvider>
+            <ImportMediaContextProvider>
                 <ScreeningMediaSources sources={settings.mediaSources} selectedVisit={selectedVisit} onSourceChange={onSourceChange}
                     segmentValue={selectedMediaSource?.id || ''} />
                 <ScreeningMediaActions selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource} projectId={projectId}
                     isDeleting={isDeleting} setIsDeleting={setIsDeleting} />
                 <ScreeningMedia sources={settings.mediaSources} selectedVisit={selectedVisit} selectedMediaSource={selectedMediaSource}
                     isDeleting={isDeleting} projectId={projectId} />
-            </ImportMediaProvider>
-        </UploadProvider>
+            </ImportMediaContextProvider>
+        </UploadModalContextProvider>
     </UserControls.Skeleton>
 }
 

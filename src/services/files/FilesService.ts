@@ -1,4 +1,4 @@
-import { constants, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync } from "fs";
+import { constants, copyFileSync, createReadStream, existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync } from "fs";
 import { inject, injectable } from "inversify";
 import { extname } from "path";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
@@ -10,6 +10,9 @@ export class FilesService implements IFilesService {
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
+    }
+    stream = async (path: string, options?: { start: number | undefined, end: number | undefined }) => {
+        return createReadStream(path, options);
     }
     copy = async (f: IImportMedia, dirTo: string, fileNameTo: string) => {
         const fromPath = `${f.path}/${f.filename}`;
