@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { ulid } from "ulid";
+import { acceptedFileExtensions } from "../../configurations/acceptedFileExtensions";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { BaseController } from "../baseController";
 
@@ -47,7 +48,11 @@ export class FileImportController extends BaseController {
             throw new Error(`Media source ${this.mediaSourceId} wihtout baseSearch`);
         }
 
-        const files = await this.fileService.scan(mediaSource.baseSearch)
+        let files = await this.fileService.scan(mediaSource.baseSearch)
+
+        const extensions = acceptedFileExtensions[mediaSource.type];
+        files = files.filter(f => extensions.indexOf(f.ext) >= 0);
+
         this.res.status(200).send(files)
     }
 
@@ -56,6 +61,7 @@ export class FileImportController extends BaseController {
         if (!mediaSource) {
             throw new Error(`Media source ${this.mediaSourceId} not found`);
         }
+
         const visit = await this.visitsServ.get(this.visitId);
 
         if (!visit) {
@@ -81,20 +87,45 @@ export class FileImportController extends BaseController {
                 path: saveTo,
                 encoding: '',
                 filename: f.filename,
-                mimeType: ''
+                mimeType: f.mimeType
             }
 
             await this.fileService.copy(f, saveToDir, `${id}${f.ext}`);
-            if (media.source.type == 'image') {
-                const buffer = await this.fileService.get(saveTo) as Buffer
-                const snapshots = await this.filePreviewServ.getPreview({
-                    buffer,
-                    type: 'image',
 
-                })
-                if (snapshots.length > 0) {
-                    media.b64Preview = snapshots[0].b64Preview;
-                    media.b64Thumbnail = snapshots[0].b64Thumbnail;
+            // console.info('media.source.type', media.source.type)
+
+            switch (media.source.type) {
+
+                case 'image': {
+                    const buffer = await this.fileService.get(saveTo) as Buffer
+                    const snapshots = await this.filePreviewServ.getPreview({
+                        buffer,
+                        type: 'image',
+                    })
+                    if (snapshots.length > 0) {
+                        media.b64Preview = snapshots[0].b64Preview;
+                        media.b64Thumbnail = snapshots[0].b64Thumbnail;
+                    }
+                    break;
+                }
+                case 'video': {
+
+                    const snapshots = await this.filePreviewServ.getPreview({
+                        mediaId: media.id,
+                        path: saveTo,
+                        saveToDir,
+                        type: 'video',
+                    })
+
+                    if (snapshots.length > 0) {
+                        media.b64Preview = snapshots[0].b64Preview;
+                        media.b64Thumbnail = snapshots[0].b64Thumbnail;
+                    }
+                    break;
+                }
+                case 'doc':
+                default: {
+                    break;
                 }
             }
 
