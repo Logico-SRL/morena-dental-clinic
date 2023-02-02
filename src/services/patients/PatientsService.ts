@@ -43,7 +43,10 @@ export class PatientsService implements IPatientsService {
         const repo = (await this.dbService.patientsRepo())
         const found = await repo.findOne({
             where: { 'id': patientId },
-            relations: ['projects']
+            relations: [
+                'projects',
+                'tags'
+            ]
         });
 
         if (found)
@@ -80,6 +83,8 @@ export class PatientsService implements IPatientsService {
                 'gender': Equal(params.gender)
             }
         }
+
+        opts.relations = ['tags']
 
         const patEntities = await repo.find(opts);
 

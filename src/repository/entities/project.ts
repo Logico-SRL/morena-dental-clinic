@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { PatientEntity, ProjectCategoryEntity, VisitEntity } from ".";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { PatientEntity, ProjectCategoryEntity, TagEntity, VisitEntity } from ".";
 
 @Entity({
     name: "projects"
@@ -36,4 +36,7 @@ export class ProjectEntity {
 
     @OneToMany(type => VisitEntity, v => v.project)
     visits?: VisitEntity[]
+
+    @ManyToMany(type => TagEntity, t => t.projects)
+    tags: TagEntity[]
 }

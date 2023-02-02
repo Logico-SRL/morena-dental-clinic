@@ -4,7 +4,8 @@ import { MediaEntity } from "./media";
 import { MediaSourceEntity } from "./mediaSource";
 import { PatientEntity } from "./patient";
 import { ProjectEntity } from "./project";
+import { TagEntity } from "./tag";
 import { VisitEntity } from "./visit";
 
-export { AppUserEntity, ProjectCategoryEntity, PatientEntity, ProjectEntity, VisitEntity, MediaEntity, MediaSourceEntity };
+export { AppUserEntity, ProjectCategoryEntity, PatientEntity, ProjectEntity, VisitEntity, MediaEntity, MediaSourceEntity, TagEntity };
 

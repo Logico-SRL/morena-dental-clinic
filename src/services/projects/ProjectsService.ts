@@ -21,10 +21,13 @@ export class ProjectsService implements IProjectsService {
                 patient: true,
                 category: true,
                 subCategory: true,
+                tags: true,
                 visits: {
                     media: {
                         source: true
-                    }
+                    },
+                    tags: true,
+
                 }
             }
         });
@@ -47,7 +50,7 @@ export class ProjectsService implements IProjectsService {
         const repo = (await this.dbService.projectsRepo())
 
         const projs = await repo.find({
-            relations: ['category', 'subCategory', 'patient'],
+            relations: ['category', 'subCategory', 'patient', 'tags'],
             order: {
                 'createdOn': 'DESC'
             }

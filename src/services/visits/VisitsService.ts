@@ -19,7 +19,7 @@ export class VisitsService implements IVisitsService {
             where: {
                 'id': visitId,
             },
-            relations: ['media']
+            relations: ['media', 'tags']
         });
         return resp ? repoVisitToVisit(resp) : undefined;
     }

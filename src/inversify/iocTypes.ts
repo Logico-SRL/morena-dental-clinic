@@ -10,6 +10,7 @@ const IOCServiceTypes = {
     SettingsService: Symbol.for("SettingsService"),
     FilesService: Symbol.for("FilesService"),
     FilesPreviewService: Symbol.for("FilesPreviewService"),
+    TagsService: Symbol.for("TagsService"),
 
 };
 const IOCControllerTypes = {
@@ -26,7 +27,8 @@ const IOCControllerTypes = {
     FileUploadController: Symbol.for("FileUploadController"),
     FileThumbnailsController: Symbol.for("FileThumbnailsController"),
     FileController: Symbol.for("FileController"),
-    FileImportController: Symbol.for("FileImportController")
+    FileImportController: Symbol.for("FileImportController"),
+    TagsController: Symbol.for("TagsController"),
 }
 
 export { IOCServiceTypes, IOCControllerTypes };

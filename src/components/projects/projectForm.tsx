@@ -200,6 +200,15 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
                 </Form.Item>
             </Form.Item>
 
+            <Form.Item label="Tags" name={'tags'}>
+                {({ getFieldValue }) => {
+                    const tags = getFieldValue('tags')
+                    console.info('tags', tags)
+                    return <UserControls.TagList tags={[]} />
+                }}
+
+            </Form.Item>
+
             <Form.Item name={'medicalHistory'} label={'Medical history'}>
                 <UserControls.Input.TextArea rows={5} />
             </Form.Item>

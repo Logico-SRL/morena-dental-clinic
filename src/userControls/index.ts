@@ -25,6 +25,8 @@ import Select from "./components/select";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
 import Space from "./components/space";
+import Tag from "./components/tag";
+import TagList from "./components/tagList";
 import Tooltip from "./components/tooltip";
 import Typography from "./components/typography";
 import Upload from "./components/upload";
@@ -59,7 +61,9 @@ const UserControls = {
     Image,
     Upload,
     Checkbox,
-    Tooltip
+    Tooltip,
+    Tag,
+    TagList
 }
 
 export default UserControls;

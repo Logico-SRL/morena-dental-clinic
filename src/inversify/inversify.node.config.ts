@@ -10,6 +10,7 @@ import { ProjectController } from "../controllers/projects/projectController";
 import { ProjectsController } from "../controllers/projects/projectsController";
 import { SettingsController } from "../controllers/settings/settingsController";
 import { SettingsMediaSourceController } from "../controllers/settings/settingsMediaSourceController";
+import { TagsController } from "../controllers/tags/tagsController";
 import { VisitController } from "../controllers/visits/visitController";
 import { VisitsController } from "../controllers/visits/visitsController";
 import { ProjectCategoriesService } from "../services/categories/ProjectCategoriesService";
@@ -21,6 +22,7 @@ import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
 import { SettingsService } from "../services/settings/SettingsService";
+import { TagsService } from "../services/tags/TagsService";
 import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
@@ -37,6 +39,7 @@ NodeIOCContainer.bind<IMediaService>(IOCServiceTypes.MediaService).to(MediaServi
 NodeIOCContainer.bind<ISettingsService>(IOCServiceTypes.SettingsService).to(SettingsService).inSingletonScope();
 NodeIOCContainer.bind<IFilesService>(IOCServiceTypes.FilesService).to(FilesService).inSingletonScope();
 NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).to(FilePreviewService).inSingletonScope();
+NodeIOCContainer.bind<ITagsService>(IOCServiceTypes.TagsService).to(TagsService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
@@ -51,6 +54,7 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileUploadController).t
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileThumbnailsController).to(FileThumbnailsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileController).to(FileController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileImportController).to(FileImportController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagsController).to(TagsController);
 
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)

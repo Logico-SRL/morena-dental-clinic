@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { MediaEntity, ProjectEntity } from ".";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { MediaEntity, ProjectEntity, TagEntity } from ".";
 
 @Entity({
     name: "visits",
@@ -38,4 +38,7 @@ export class VisitEntity {
         onDelete: 'CASCADE'
     })
     media: MediaEntity[]
+
+    @ManyToMany(type => TagEntity, t => t.visits)
+    tags: TagEntity[]
 }
