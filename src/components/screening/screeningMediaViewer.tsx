@@ -30,6 +30,8 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
         }
     }
 
+    console.info('rendering src', src)
+
     return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onCancel}
         footer={[<UserControls.Button type="primary" href={src} download>
             DOWNLOAD
@@ -40,11 +42,11 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
         ]}
     >
 
-        {selectedMedia && type == 'image' && <UserControls.Image src={src} preview={false} style={{ maxWidth: '100%', maxHeight: '100%' }} />}
-        {selectedMedia && type == 'video' && <video ref={videoRef} style={{ maxWidth: '100%', maxHeight: '100%' }} controls autoPlay={true} src={src}>
+        {type == 'image' && <UserControls.Image src={src} preview={false} style={{ maxWidth: '100%', maxHeight: '100%' }} />}
+        {type == 'video' && <video ref={videoRef} style={{ maxWidth: '100%', maxHeight: '100%' }} controls autoPlay={true} src={src}>
             <source src={src} type={'video/mp4'} />
         </video>}
-        {selectedMedia && type == 'doc' && <embed ref={embedRef} src={src} width={'100%'} height={'100%'}>
+        {type == 'doc' && <embed ref={embedRef} src={src} width={'100%'} height={'100%'}>
         </embed>}
     </UserControls.Modal>
 }

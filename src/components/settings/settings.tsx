@@ -50,8 +50,9 @@ export const Settings = () => {
                 Add source
             </UserControls.Button>} />
         </UserControls.Col>
-        <UserControls.Col xs={24}>
+        <UserControls.Col xs={24} style={{ overflowX: 'auto' }}>
             <UserControls.List
+                style={{ minWidth: 1200 }}
                 dataSource={settings.mediaSources}
                 header={Header}
                 renderItem={MediaSourceItem({ onClick })}
