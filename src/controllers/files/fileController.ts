@@ -32,6 +32,8 @@ export class FileController extends BaseController {
             throw new Error(`Media with id ${this.mediaId} not found`);
         }
 
+
+        // console.info('media.source.type', media.source.type)
         if (media.mimeType.startsWith('video')) {
             const range = this.req.headers.range;
             console.info('requested range', range);
@@ -39,7 +41,7 @@ export class FileController extends BaseController {
                 return this.res.status(400).send("Requires Range header");
             }
             const videoSize = statSync(media.path).size;
-            const CHUNK_SIZE = 10 ** 6;
+            const CHUNK_SIZE = 10 * (10 ** 6);
             const start = Number(range.replace(/\D/g, ""));
             const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
             const contentLength = end - start + 1;

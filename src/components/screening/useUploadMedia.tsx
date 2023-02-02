@@ -1,6 +1,7 @@
 import { UploadFile, UploadProps } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import axios, { AxiosRequestConfig } from "axios";
+import dayjs from "dayjs";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { acceptedFileExtensions } from "../../configurations/acceptedFileExtensions";
 import { useMedia } from "../../hooks/useMedia";
@@ -142,7 +143,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
 
 
-    const MediaChooser = ({ files, visit, mediaSource, projectId }: { files: IImportMedia[], projectId: string, visit: IVisit, mediaSource: IMediaSource }) => {
+    const MediaChooser = ({ visit, mediaSource, projectId }: { projectId: string, visit: IVisit, mediaSource: IMediaSource }) => {
 
 
         const context = useContext(ImportMediaContext);
@@ -153,29 +154,30 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         useEffect(() => {
             console.info('setting context.setModalOkAction(confirmSelectedFiles)')
             context.setModalOkAction(() => confirmSelectedFiles)
-        }, [files, selected])
+        }, [selected])
 
         const confirmSelectedFiles = async () => {
 
-            await importFiles(visit, mediaSource, files.filter((f, ind) => selected[ind] === true))
+            await importFiles(visit, mediaSource, context.files.filter((f, ind) => selected[ind] === true))
             context.setOpen(false);
+            context.setFiles([])
         }
         // const [all, setAll] = useState(false)
         const all = useMemo(() => {
 
-            return files.filter((f, i) => {
+            return context.files.filter((f, i) => {
                 return selected[i] === true
-            }).length == files.length
+            }).length == context.files.length
 
 
-        }, [selected, files])
+        }, [selected, context.files])
 
         const onAllChange = () => {
             if (all) {
                 setSelected({})
                 // setAll(false)
             } else {
-                setSelected(files.reduce((prev, curr, ind) => { return { ...prev, [ind]: true } }, {}))
+                setSelected(context.files.reduce((prev, curr, ind) => { return { ...prev, [ind]: true } }, {}))
                 // setAll(true)
             }
         }
@@ -187,7 +189,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
         return <div className={classnames.importFileContainer}>
             <UserControls.List
-                dataSource={files}
+                dataSource={context.files}
                 header={
                     <UserControls.Row>
                         <UserControls.Col xs={2}>
@@ -210,7 +212,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
                     </UserControls.Row>
                 }
                 renderItem={(item, index) => {
-                    const date = new Date(item.latestUpdate).toDateString();
+                    const date = dayjs(item.latestUpdate).format('YYYY-MM-DD HH:mm:ss')
 
                     const size = formatUtils.formatBytes(item.size);
 
@@ -234,13 +236,16 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
     }
 
+
+
     const importFiles = async () => {
 
         if (selectedMediaSource && selectedVisit) {
             modalImportContext.setModalTitle(`Import files for ${selectedMediaSource?.name} media source`)
             modalImportContext.setOpen(true);
             const files = await searchNewMedia(selectedMediaSource);
-            modalImportContext.setModalContent(<MediaChooser files={files.data} projectId={projectId} mediaSource={selectedMediaSource} visit={selectedVisit} />);
+            modalImportContext.setFiles(files.data)
+            modalImportContext.setModalContent(<MediaChooser projectId={projectId} mediaSource={selectedMediaSource} visit={selectedVisit} />);
 
         }
     }

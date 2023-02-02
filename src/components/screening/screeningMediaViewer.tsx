@@ -30,7 +30,7 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
         }
     }
 
-    console.info('rendering src', src)
+    // console.info('rendering src', src)
 
     return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onCancel}
         footer={[<UserControls.Button type="primary" href={src} download>

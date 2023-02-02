@@ -10,7 +10,10 @@ export const ImportMediaModal = () => {
     return <UserControls.Modal
         wrapClassName={classnames.largeModalWrap}
         open={context.open}
-        onCancel={() => context.setOpen(false)}
+        onCancel={() => {
+            context.setOpen(false)
+            context.setFiles([])
+        }}
         cancelText={`Cancel import`}
         okText={`Import selected`}
         onOk={context.modalOkAction}

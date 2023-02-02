@@ -7,6 +7,6 @@ type IFilesService = {
     stream: (path: string, options?: { start: number | undefined, end: number | undefined }) => ReadStream,
     delete: (path: string) => boolean,
     scan: (path: string) => Promise<IImportMedia[]>
-    copy: (f: IImportMedia, dirTo: string, filenameTo: string) => Promise<boolean>
+    copy: (f: IImportMedia, dirTo: string, filenameTo: string) => Promise<boolean>,
 
 }

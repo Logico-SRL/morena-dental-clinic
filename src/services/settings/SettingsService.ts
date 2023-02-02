@@ -18,7 +18,7 @@ export class SettingsService implements ISettingsService {
         const mediaSource = await repo.findOne({
             where: {
                 id: mediaSourceId
-            }
+            },
         });
         return mediaSource;
     }

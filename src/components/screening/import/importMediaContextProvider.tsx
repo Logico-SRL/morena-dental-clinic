@@ -11,8 +11,12 @@ export const ImportMediaContextProvider: React.FunctionComponent<PropsWithChildr
     const [modalTitle, setModalTitle] = useState('');
     const [ModalContent, setModalContent] = useState<JSX.Element>(<Comp />);
     const [modalOkAction, setModalOkAction] = useState<() => void>(() => { });
+    const [files, setFiles] = useState<IImportMedia[]>([]);
 
-    return <ImportMediaContext.Provider value={{ open, setOpen, ModalContent, setModalContent, modalTitle, setModalTitle, modalOkAction, setModalOkAction }}>
+    return <ImportMediaContext.Provider value={{
+        open, setOpen, ModalContent, setModalContent, modalTitle, setModalTitle, modalOkAction, setModalOkAction,
+        files, setFiles
+    }}>
         <ImportMediaModal />
         {children}
     </ImportMediaContext.Provider>

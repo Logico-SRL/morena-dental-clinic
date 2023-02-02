@@ -1,5 +1,5 @@
 import { ImageProps } from "antd";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useMedia } from "../../hooks/useMedia";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
@@ -12,8 +12,8 @@ type PropType = Pick<VisitPropType, 'sources' | 'selectedVisit' | 'selectedMedia
 export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, isDeleting, projectId }: PropType) => {
 
     const media: IMedia[] = !selectedVisit ? [] : !selectedMediaSource ? (selectedVisit.media || []) : (selectedVisit.media || []).filter(m => m.source.id == selectedMediaSource.id)
-    const currIndex = useRef<number>(1)
-    const [current, setCurrent] = useState(0)
+    // const currIndex = useRef<number>(1)
+    const [current, setCurrent] = useState(1)
 
     const { deleteMedia } = useMedia();
     const { removeMediaFromVisit } = useProject(projectId);
@@ -51,10 +51,11 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
                     onVisibleChange(value, prevValue) {
                         setPreviewVisible(value);
                     },
-                    countRender(current, total) {
-                        setCurrent(current - 1)
-                        currIndex.current = current;
-                        // console.info('countRender(current, total)', current)
+                    countRender(curr, total) {
+                        // console.info('countRender(curr, total)', curr, total, 'current', current)
+                        if (current != curr - 1)
+                            setCurrent(curr - 1)
+                        // currIndex.current = current;
                         return `${current}/${total}`
                     },
                     // modalRender: node => <div style={{ backgroundColor: 'green', padding: 20 }} onClick={() => alert('ok')}>{node}</div>,
@@ -62,7 +63,7 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
                         header: <div style={{ backgroundColor: 'green' }}></div>,
                         className: classnames.previewItemContainer,
                         onClick: async (event: any) => {
-                            const item = media[currIndex.current - 1];
+                            const item = media[current - 1];
                             // switch (item.source.type) {
                             //     case 'image': {
                             //         console.warn('TODO => fetch high res image');

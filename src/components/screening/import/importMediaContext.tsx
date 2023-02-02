@@ -10,7 +10,9 @@ const defaultImportMediaContext = {
     ModalContent: <Comp />,
     setModalContent: (val: JSX.Element) => { },
     modalOkAction: () => { },
-    setModalOkAction: (callback: () => () => void) => { }
+    setModalOkAction: (callback: () => () => void) => { },
+    files: [] as IImportMedia[],
+    setFiles: (f: IImportMedia[]) => { }
 }
 
 export const ImportMediaContext = createContext(defaultImportMediaContext)

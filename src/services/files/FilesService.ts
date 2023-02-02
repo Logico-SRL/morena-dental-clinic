@@ -1,8 +1,8 @@
 import { constants, copyFileSync, createReadStream, existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync } from "fs";
 import { inject, injectable } from "inversify";
+import mime from 'mime-types';
 import { extname } from "path";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
-
 @injectable()
 export class FilesService implements IFilesService {
 
@@ -40,6 +40,7 @@ export class FilesService implements IFilesService {
             const st = statSync(`${path}/${f.name}`);
             const ext = extname(`${path}/${f.name}`);
 
+            const mimeType = mime.lookup(ext) || '';
             // console.info('st', st)
 
             files.push({
@@ -47,14 +48,14 @@ export class FilesService implements IFilesService {
                 size: st.size,
                 latestUpdate: st.mtime,
                 path,
-                ext
+                ext,
+                mimeType
             })
 
         })
 
-        console.info('res', files);
+        // console.info('res', files);
         return files;
-
     }
 
     get = (path: string, options?: {
