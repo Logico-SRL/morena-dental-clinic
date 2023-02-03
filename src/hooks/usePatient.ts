@@ -9,6 +9,9 @@ import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 const patientStore = atom<IPatient>(defaultPatient());
 const loadingPatientStore = atom<boolean>(false)
 const fetchingId = { current: '' };
+const abortController = {
+    current: new AbortController()
+}
 
 export const usePatient = (patientId: string) => {
     // const [patient, setPatient] = React.useState<IPatient>()
@@ -21,11 +24,17 @@ export const usePatient = (patientId: string) => {
 
         if (fetchingId.current != patientId && patientId && (patient.id != patientId)) {
             fetchingId.current = patientId;
+
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
+
             loadingPatientStore.set(true);
             patientStore.set(defaultPatient());
 
-            const controller = new AbortController()
-            httpService.get<IPatient>(`/api/protected/patients/${patientId}`, { AbortSignal: controller.signal }).then(d => {
+            // const controller = new AbortController()
+            httpService.get<IPatient>(`/api/protected/patients/${patientId}`, { signal: abortController.current.signal }).then(d => {
                 // console.info(`/api/protected/patients/${patientId}`, d)
                 patientStore.set(convertPropsToDayjs(['dateOfBirth'], d.data));
             })
@@ -36,7 +45,7 @@ export const usePatient = (patientId: string) => {
                 })
 
             return () => {
-                controller.abort();
+                // controller.abort();
             }
         }
     }, [patientId, patient])

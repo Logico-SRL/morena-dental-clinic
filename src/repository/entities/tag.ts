@@ -2,7 +2,7 @@ import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm";
 import { ProjectEntity, VisitEntity } from ".";
 
 @Entity({
-    name: "tag"
+    name: "tags"
 })
 
 export class TagEntity {
@@ -10,7 +10,7 @@ export class TagEntity {
     @PrimaryColumn()
     tag: string;
 
-    @Column()
+    @Column({ default: () => "CURRENT_TIMESTAMP" })
     date: Date;
 
     @ManyToMany(type => ProjectEntity, t => t.tags)

@@ -55,7 +55,7 @@ export const usePatients = () => {
             p.toVisitDate = toVisitDate.toISOString()
 
         const pars = new URLSearchParams(p);
-        return httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { AbortSignal: controller?.signal })
+        return httpService.get<IPatient[]>(`/api/protected/patients?${pars.toString()}`, { signal: controller?.signal })
             .then(d => {
                 patientsStore.set(convertPropsToDayjsArr(['dateOfBirth'], d.data));
             })

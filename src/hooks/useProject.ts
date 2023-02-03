@@ -9,12 +9,18 @@ import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 const projectStore = atom<IProject>(defaultProject());
 const selectedVisitStore = atom<IVisit | undefined>(undefined);
 const loadingProjectStore = atom<boolean>(false)
-const fetchingId = { current: '' };
+
+const fetchingId = {
+    current: 'none'
+}
+const abortController = {
+    current: new AbortController()
+}
 
 
 export const useProject = (projectId: string) => {
-    // const [patient, setPatient] = React.useState<IPatient>()
-    // const [loading, setLoading] = React.useState<boolean>(false)
+
+
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const project = useStore(projectStore);
     const selectedVisit = useStore(selectedVisitStore);
@@ -22,38 +28,54 @@ export const useProject = (projectId: string) => {
 
     React.useEffect(() => {
 
-        if (fetchingId.current != projectId && projectId && (project.id != projectId)) {
+        console.info('useProject effect', fetchingId, projectId, project);
 
+        if (projectId && (fetchingId.current != projectId) && (project.id != projectId)) {
+
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
+
+            console.info(`fetchingIdStore.set(${projectId})`);
             fetchingId.current = projectId;
+            console.info(`fetching project ${projectId}`);
+
             // console.info(`loadingProject ${loadingProject}, projectId: ${projectId}, project.id ${project.id}`)
             loadingProjectStore.set(true);
-            projectStore.set(defaultProject());
+            // projectStore.set(defaultProject());
 
-            const controller = new AbortController()
-            httpService.get<IProject>(`/api/protected/projects/${projectId}`, { AbortSignal: controller.signal }).then(d => {
+            // const controller = new AbortController()
+
+            httpService.get<IProject>(`/api/protected/projects/${projectId}`, { signal: abortController.current.signal }).then(d => {
 
                 const proj = d.data;
-                console.info('proj.visits', proj.visits)
+                console.info('proj', proj)
+
                 if (proj.patient) {
                     proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
                 }
 
-                if (selectedVisit && (!proj.visits || !proj.visits.find(v => v.id === selectedVisit?.id))) {
-                    setSelectedVisit(undefined);
-                }
+                // if (selectedVisit && (!proj.visits || !proj.visits.find(v => v.id === selectedVisit?.id))) {
+                //     setSelectedVisit(undefined);
+                // }
                 projectStore.set(proj);
             })
+                .catch(err => {
+                    projectStore.set(defaultProject());
+                })
                 .finally(() => {
                     loadingProjectStore.set(false);
-                    fetchingId.current = '';
+                    // fetchingId.current = '';
                     // setLoading(false);
                 })
 
             return () => {
-                controller.abort();
+                // console.info('calling controller abort')
+                // controller.abort();
             }
         }
-    }, [projectId, project, selectedVisit])
+    }, [projectId, project])
 
     const setVisit = (visit: IVisit) => {
 
@@ -107,78 +129,51 @@ export const useProject = (projectId: string) => {
         selectedVisitStore.set(visit);
     }
 
-    const addMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
-        const p = projectStore.get()
-        if (v) {
-            const found = p.visits?.find(vis => vis.id === v.id)
-            if (found) {
-                found.media = [...(found.media || []), media]
-                projectStore.set({ ...p })
-            }
-        }
-    }
+    // const addMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
+    //     const p = projectStore.get()
+    //     if (v) {
+    //         const found = p.visits?.find(vis => vis.id === v.id)
+    //         if (found) {
+    //             found.media = [...(found.media || []), media]
+    //             projectStore.set({ ...p })
+    //         }
+    //     }
+    // }
 
-    const updateMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
-        const p = projectStore.get()
-        if (v) {
-            const found = p.visits?.find(vis => vis.id === v.id)
-            if (found && found.media) {
-                const ind = found.media.findIndex(m => m.id === media.id)
-                found.media.splice(ind, 1, media);
-                projectStore.set({ ...p })
-            }
-        }
-    }
+    // const updateMediaToProjectVisit = (v: IVisit | undefined, media: IMedia) => {
+    //     const p = projectStore.get()
+    //     if (v) {
+    //         const found = p.visits?.find(vis => vis.id === v.id)
+    //         if (found && found.media) {
+    //             const ind = found.media.findIndex(m => m.id === media.id)
+    //             found.media.splice(ind, 1, media);
+    //             projectStore.set({ ...p })
+    //         }
+    //     }
+    // }
 
-    const removeMediaFromProjectVisit = (v: IVisit | undefined, mediaId: string) => {
-        const p = projectStore.get()
-        if (v) {
-            const found = p.visits?.find(vis => vis.id === v.id)
-            if (found && found.media) {
-                found.media = found.media.filter(m => m.id !== mediaId)
-                projectStore.set({ ...p })
-            }
-        }
-    }
+    // const removeMediaFromProjectVisit = (v: IVisit | undefined, mediaId: string) => {
+    //     const p = projectStore.get()
+    //     if (v) {
+    //         const found = p.visits?.find(vis => vis.id === v.id)
+    //         if (found && found.media) {
+    //             found.media = found.media.filter(m => m.id !== mediaId)
+    //             projectStore.set({ ...p })
+    //         }
+    //     }
+    // }
 
-    const addMediaToVisit = (media: IMedia) => {
-        const v = selectedVisitStore.get();
-        if (v) {
-            if (!v.media) {
-                v.media = [media]
-            } else {
-                v.media = [...v.media, media]
-            }
-            selectedVisitStore.set({ ...v });
-        }
 
-        addMediaToProjectVisit(selectedVisit, media);
-    }
-
-    const removeMediaFromVisit = (mediaId: string) => {
-
-        const v = selectedVisitStore.get();
-        if (v) {
-            v.media = v.media?.filter(m => m.id !== mediaId)
-            selectedVisitStore.set({ ...v });
-            removeMediaFromProjectVisit(v, mediaId)
-        }
-    }
-
-    const updateMediaToVisit = (media: IMedia) => {
-
-        const v = selectedVisitStore.get();
-        if (v && v.media) {
-            const ind = v.media.findIndex(m => m.id === media.id)
-            v.media.splice(ind, 1, media);
-            updateMediaToProjectVisit(v, media)
-        }
-    }
 
 
 
     return {
-        project, loadingProject, saveProject, setVisit, selectedVisit, setSelectedVisit, removeVisit,
-        addMediaToVisit, removeMediaFromVisit, updateMediaToVisit
+        project,
+        loadingProject,
+        saveProject,
+        setVisit,
+        selectedVisit,
+        setSelectedVisit,
+        removeVisit,
     };
 }

@@ -1,7 +1,8 @@
 import { FormInstance } from "antd";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useCategories } from "../../hooks/useCategories";
 import { usePatients } from "../../hooks/usePatients";
+import { useTags } from "../../hooks/useTags";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { NewCategoryModal } from "../categories/newCategoryModal";
@@ -130,6 +131,38 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
 
     }
 
+    const { getTags } = useTags()
+    const [searchTags, setSearchTags] = useState<ITag[]>([])
+    const [searchingTags, setSearchingTags] = useState(false);
+
+    // const onTagAdd = (tag: ITag) => {
+    //     console.info('onTagAdd', tag)
+    //     const tags = form.getFieldValue('tags') as ITag[];
+    //     tags.push(tag);
+    //     form.setFieldValue('tags', tags)
+
+    // }
+    // const onTagRemove = (tag: ITag) => {
+    //     const curr = form.getFieldValue('tags') as ITag[];
+    //     form.setFieldValue('tags', curr.filter(t => t.tag != tag.tag))
+    // }
+
+    const abortController = useRef<AbortController>();
+
+    const onTagSearch = (search: string) => {
+        setSearchingTags(true)
+        abortController.current && abortController.current.abort()
+        getTags(search, abortController.current?.signal)
+            .then(res => {
+                setSearchTags(res.data)
+            }).catch(ex => {
+                console.error('getTags err', ex);
+                setSearchTags([])
+            }).finally(() => {
+                setSearchingTags(false)
+            })
+    }
+
     return <UserControls.Skeleton loading={loading}>
         <Form form={form} labelCol={{ span: 6 }} onValuesChange={onValuesChange}>
             <Form.Item name={'id'} label={'Id'} required>
@@ -200,12 +233,15 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
                 </Form.Item>
             </Form.Item>
 
-            <Form.Item label="Tags" name={'tags'}>
-                {({ getFieldValue }) => {
-                    const tags = getFieldValue('tags')
-                    console.info('tags', tags)
-                    return <UserControls.TagList tags={[]} />
-                }}
+            <Form.Item label="Tags" name="tags" shouldUpdate={true}>
+                <UserControls.TagListSelect
+                    // tags={[]}
+                    // onAdd={onTagAdd}
+                    // onRemove={onTagRemove}
+                    onSearch={onTagSearch}
+                    searchTags={searchTags}
+                    searching={searchingTags}
+                />
 
             </Form.Item>
 

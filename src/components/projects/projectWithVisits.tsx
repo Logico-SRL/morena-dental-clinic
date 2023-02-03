@@ -49,7 +49,7 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
 
     // const [selectedVisit, setSelectedVisit] = useState<IVisit>()
     const { selectedVisit, setSelectedVisit, removeVisit } = useProject(project?.id || '')
-    const { deleteVisit } = useVisit(project?.id || '', selectedVisit?.id || '')
+    const { deleteVisit, visit } = useVisit(project?.id || '', selectedVisit?.id || '')
 
     const onNewProjectClick = () => {
         push(`/projects/create`)
@@ -105,6 +105,10 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
 
             <UserControls.Col xs={24}>
                 <PatientInfo patient={patient} />
+            </UserControls.Col>
+
+            <UserControls.Col xs={24}>
+                <UserControls.TagList value={project?.tags} />
             </UserControls.Col>
 
             <UserControls.Col xs={24}>

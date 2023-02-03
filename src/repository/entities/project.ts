@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { PatientEntity, ProjectCategoryEntity, TagEntity, VisitEntity } from ".";
 
 @Entity({
@@ -37,6 +37,7 @@ export class ProjectEntity {
     @OneToMany(type => VisitEntity, v => v.project)
     visits?: VisitEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.projects)
+    @ManyToMany(type => TagEntity, t => t.projects, { cascade: ['insert', 'update'] })
+    @JoinTable()
     tags: TagEntity[]
 }

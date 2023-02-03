@@ -9,7 +9,13 @@ const settingsStore = atom<ISettings>({
 });
 const loadingSettingsStore = atom<boolean>(false)
 
-const initializing = { current: false };
+const initializing = {
+    current: false
+};
+
+const abortController = {
+    current: new AbortController()
+}
 
 export const useSettings = () => {
 
@@ -23,12 +29,19 @@ export const useSettings = () => {
         if (!initializing.current) {
             initializing.current = true;
 
-            const controller = new AbortController();
-            fetchSettings(controller)
-                .finally(() => { initializing.current = false; })
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
+
+            fetchSettings(abortController.current)
+                .finally(() => {
+                    initializing.current = false;
+                })
+
             return () => {
-                console.info('useProjects dismounting');
-                controller.abort();
+                console.info('useSettings dismounting');
+                // controller.abort();
                 initializing.current = false;
             }
         }
@@ -37,7 +50,7 @@ export const useSettings = () => {
     const fetchSettings = (controller: AbortController) => {
         loadingSettingsStore.set(true);
 
-        return httpService.get<ISettings>(`/api/protected/settings`, { AbortSignal: controller?.signal })
+        return httpService.get<ISettings>(`/api/protected/settings`, { signal: controller?.signal })
             .then(d => {
                 settingsStore.set(d.data);
             })

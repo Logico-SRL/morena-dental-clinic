@@ -23,9 +23,10 @@ export class ProjectsService implements IProjectsService {
                 subCategory: true,
                 tags: true,
                 visits: {
-                    media: {
-                        source: true
-                    },
+                    media: false,
+                    //  {
+                    //     source: true
+                    // },
                     tags: true,
 
                 }

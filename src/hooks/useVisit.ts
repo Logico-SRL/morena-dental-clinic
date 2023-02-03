@@ -9,8 +9,12 @@ import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 const visitStore = atom<IVisit>(defaultVisit());
 const loadingVisitStore = atom<boolean>(false)
 const fetchingId = { current: '' };
+const abortController = {
+    current: new AbortController()
+}
 
 export const useVisit = (projectId: string, visitId: string) => {
+
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const visit = useStore(visitStore);
     const loadingVisit = useStore(loadingVisitStore);
@@ -21,10 +25,13 @@ export const useVisit = (projectId: string, visitId: string) => {
 
             fetchingId.current = visitId;
 
-            const controller = new AbortController()
-            loadingVisitStore.set(true);
-            httpService.get<IVisit>(`/api/protected/projects/${projectId}/visits/${visitId}`, { AbortSignal: controller.signal }).then(d => {
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
 
+            loadingVisitStore.set(true);
+            httpService.get<IVisit>(`/api/protected/projects/${projectId}/visits/${visitId}`, { signal: abortController.current.signal }).then(d => {
 
                 const vis = convertPropsToDayjs(['visitDate'], d.data);
                 visitStore.set(vis);
@@ -37,7 +44,7 @@ export const useVisit = (projectId: string, visitId: string) => {
                 })
 
             return () => {
-                controller.abort();
+                // controller.abort();
             }
         }
     }, [projectId, visitId])
@@ -55,5 +62,40 @@ export const useVisit = (projectId: string, visitId: string) => {
         return httpService.delete<IVisit>(`/api/protected/projects/${projectId}/visits/${visitId}`)
     }
 
-    return { visit, loadingVisit, saveVisit, deleteVisit };
+    const addMediaToVisit = (media: IMedia) => {
+        const v = visitStore.get();
+        if (v) {
+            if (!v.media) {
+                v.media = [media]
+            } else {
+                v.media = [...v.media, media]
+            }
+            visitStore.set({ ...v });
+        }
+
+        // addMediaToProjectVisit(selectedVisit, media);
+    }
+
+    const removeMediaFromVisit = (mediaId: string) => {
+
+        const v = visitStore.get();
+        if (v) {
+            v.media = v.media?.filter(m => m.id !== mediaId)
+            visitStore.set({ ...v });
+            // removeMediaFromProjectVisit(v, mediaId)
+        }
+    }
+
+    const updateMediaToVisit = (media: IMedia) => {
+
+        const v = visitStore.get();
+        if (v && v.media) {
+            const ind = v.media.findIndex(m => m.id === media.id)
+            v.media.splice(ind, 1, media);
+            visitStore.set(v);
+            // updateMediaToProjectVisit(v, media)
+        }
+    }
+
+    return { visit, loadingVisit, saveVisit, deleteVisit, addMediaToVisit, removeMediaFromVisit, updateMediaToVisit };
 }

@@ -41,7 +41,7 @@ export const useCategories = () => {
     const fetchFilteredCategories = (params: {}) => {
         const controller = new AbortController()
 
-        httpService.get<IProjectCategory[]>(`/api/protected/projectscategories`, { AbortSignal: controller.signal })
+        httpService.get<IProjectCategory[]>(`/api/protected/projectscategories`, { signal: controller.signal })
             .then(d => {
                 categoriesStore.set(d.data);
             })

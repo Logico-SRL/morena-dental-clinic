@@ -1,5 +1,21 @@
 .container {
-  border: 1px solid red;
-  border-radius: 2px;
+  // border: 1px solid red;
+  border-radius: 3px;
   padding: 3px;
+  background-color: transparentize($color: #000000, $amount: 0.95);
+
+  .tagsContainer {
+    :global(.ant-tag) {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+}
+
+.tagListContainer {
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid transparentize($color: #000000, $amount: 0.8);
+  margin: 10px auto;
 }

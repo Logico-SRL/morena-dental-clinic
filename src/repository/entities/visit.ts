@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { MediaEntity, ProjectEntity, TagEntity } from ".";
 
 @Entity({
@@ -39,6 +39,7 @@ export class VisitEntity {
     })
     media: MediaEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.visits)
+    @ManyToMany(type => TagEntity, t => t.visits, { cascade: ['insert', 'update'] })
+    @JoinTable()
     tags: TagEntity[]
 }

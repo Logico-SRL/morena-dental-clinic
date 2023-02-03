@@ -11,6 +11,10 @@ const creatingProjectsStore = atom<boolean>(false)
 // const loadingProjectStore = atom<boolean>(false)
 const initializing = { current: false };
 
+const abortController = {
+    current: new AbortController()
+}
+
 export const useProjects = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const projects = useStore(projectsStore);
@@ -26,19 +30,24 @@ export const useProjects = () => {
             initializing.current = true;
 
             // initialized = true;
-            const controller = new AbortController();
-            fetchAllProjects(controller)
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
+
+            fetchAllProjects(abortController.current)
                 .then(() => {
                     // initializing.current = true;
                 })
             return () => {
                 console.info('useProjects dismounting');
-                controller.abort();
+                // controller.abort();
                 initializing.current = false;
             }
         }
 
     }, [])
+
     const fetchAllProjects = (controller: AbortController) => {
         return fetchFilteredProjects({}, controller)
     }
@@ -47,7 +56,7 @@ export const useProjects = () => {
         // const controller = new AbortController()
         loadingProjectsStore.set(true);
 
-        return httpService.get<IProject[]>(`/api/protected/projects`, { AbortSignal: controller?.signal })
+        return httpService.get<IProject[]>(`/api/protected/projects`, { signal: controller?.signal })
             .then(d => {
                 projectsStore.set(d.data);
             })

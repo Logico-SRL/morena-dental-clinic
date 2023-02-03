@@ -4,16 +4,16 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useContext, useRef, useState } from "react";
 import { acceptedFileExtensions } from "../../../configurations/acceptedFileExtensions";
 import { useMedia } from "../../../hooks/useMedia";
-import { useProject } from "../../../hooks/useProject";
+import { useVisit } from "../../../hooks/useVisit";
 import UserControls from "../../../userControls";
 import { AntdIcons } from "../../../userControls/icons";
 import { UploadPropsParamsType } from "../useUploadMedia";
 import { UploadMediaContext } from "./uploadMediaContext";
 
-export const useDocUpload = (projectId: string) => {
+export const useDocUpload = (projectId: string, visitId: string) => {
 
     const modalUploadContext = useContext(UploadMediaContext);
-    const { updateMediaToVisit } = useProject(projectId)
+    const { updateMediaToVisit } = useVisit(projectId, visitId)
     const { updateMedia } = useMedia()
     const curResp = useRef<UploadMediaResp>();
 

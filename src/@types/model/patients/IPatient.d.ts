@@ -3,9 +3,10 @@ type PatientEntity = import('../../../repository/entities/index').PatientEntity
 
 
 type IPatient = Required<
-    Omit<PatientEntity, 'dateOfBirth' | 'gender' | 'projects'> & {
+    Omit<PatientEntity, 'dateOfBirth' | 'gender' | 'projects' | 'tags'> & {
         gender: gendersKeysType,
-        projects: IProject[]
+        projects: IProject[],
+        tags: ITag[]
     }
 > & {
     dateOfBirth?: Dayjs

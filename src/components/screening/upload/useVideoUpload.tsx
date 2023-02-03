@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { useMedia } from "../../../hooks/useMedia";
-import { useProject } from "../../../hooks/useProject";
+import { useVisit } from "../../../hooks/useVisit";
 import UserControls from "../../../userControls";
 import classnames from '../screening.module.scss';
 import { UploadPropsParamsType } from "../useUploadMedia";
 import { UploadMediaContext } from "./uploadMediaContext";
 
-export const useVideUpload = (projectId: string) => {
+export const useVideUpload = (projectId: string, visitId: string) => {
 
     const modalUploadContext = useContext(UploadMediaContext);
-    const { updateMediaToVisit } = useProject(projectId)
+    const { updateMediaToVisit } = useVisit(projectId, visitId)
     const { updateMedia } = useMedia()
 
     const onImageClick = async (r: UploadMediaResp, { b64Preview, b64Thumbnail }: SnapShotType) => {

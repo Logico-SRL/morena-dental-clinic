@@ -1,5 +1,5 @@
 type AxiosResponse<T> = import("axios").AxiosResponse<T, any>
-type AxiosRequestConfig = import("axios").AxiosRequestConfig<any>
+type AxiosRequestConfig<T> = import("axios").AxiosRequestConfig<T>
 
 type IHttpService = {
     get<T>(url: string, config?: AxiosRequestConfig<D>): Promise<AxiosResponse<T>>;

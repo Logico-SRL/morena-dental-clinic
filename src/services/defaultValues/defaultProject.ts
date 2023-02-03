@@ -7,5 +7,6 @@ export const defaultProject = (): IProject => ({
     medicalHistory: '',
     notes: '',
     title: '',
-    patient: defaultPatient()
+    patient: defaultPatient(),
+    tags: []
 })

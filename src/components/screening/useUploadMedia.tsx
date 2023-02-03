@@ -7,6 +7,7 @@ import { acceptedFileExtensions } from "../../configurations/acceptedFileExtensi
 import { useMedia } from "../../hooks/useMedia";
 import { useMediaImport } from "../../hooks/useMediaImport";
 import { useProject } from "../../hooks/useProject";
+import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
 import { formatUtils } from "../../utils/formatUtils";
 import { ImportMediaContext } from "./import/importMediaContext";
@@ -93,7 +94,8 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
 export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSource | undefined) => {
 
     const [fileList, setFileList] = useState<Array<UploadFile<IMedia>>>([])
-    const { addMediaToVisit, selectedVisit, updateMediaToVisit } = useProject(projectId)
+    const { selectedVisit } = useProject(projectId)
+    const { visit, addMediaToVisit } = useVisit(projectId, selectedVisit?.id || '')
     const { updateMedia, searchNewMedia } = useMedia()
 
     const modalUploadContext = useContext(UploadMediaContext);
@@ -113,8 +115,8 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         setFileList,
     })
 
-    const { afterAxiosPostVideo } = useVideUpload(projectId);
-    const { afterAxiosPostDoc } = useDocUpload(projectId);
+    const { afterAxiosPostVideo } = useVideUpload(projectId, selectedVisit?.id || '');
+    const { afterAxiosPostDoc } = useDocUpload(projectId, selectedVisit?.id || '');
 
 
     const uploadProps = useMemo(() => {

@@ -44,7 +44,9 @@ const Comp: PageComponent = () => {
 
     const projectId = query.projectId as string;
 
-    const { project, loadingProject, saveProject } = useProject(projectId)
+    console.info('query project id ', projectId)
+
+    const { project, loadingProject, saveProject } = useProject(projectId || '')
 
     const onList = () => {
         push(`/projects`)

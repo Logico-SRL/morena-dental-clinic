@@ -20,7 +20,7 @@ export class TagsService implements ITagsService {
             where: {
                 'tag': Like(`%${(search || '').toLowerCase()}%`)
             },
-            relations: ['patients', 'projects', 'visits']
+            // relations: ['patients', 'projects', 'visits']
         })
 
         return res.map(r => repoTagToTag(r));
