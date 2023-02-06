@@ -1,5 +1,7 @@
 import { FormInstance } from "antd";
+import { useRef, useState } from "react";
 import { visitTypesArr } from "../../configurations/visitTypes";
+import { useTags } from "../../hooks/useTags";
 import UserControls from "../../userControls";
 
 
@@ -19,6 +21,25 @@ export const VisitForm = ({ form, onSave, loading, submitText }: PropType) => {
     const onFinish = (values: IVisit) => {
         onSave(values);
     };
+
+    const { getTags } = useTags()
+    const [searchTags, setSearchTags] = useState<ITag[]>([])
+    const [searchingTags, setSearchingTags] = useState(false);
+
+    const abortController = useRef<AbortController>();
+
+    const onTagSearch = (search: string, abortController: AbortController) => {
+        setSearchingTags(true)
+        getTags(search, abortController.signal)
+            .then(res => {
+                setSearchTags(res.data)
+            }).catch(ex => {
+                console.error('getTags err', ex);
+                setSearchTags([])
+            }).finally(() => {
+                setSearchingTags(false)
+            })
+    }
 
 
     return <UserControls.Skeleton loading={loading}>
@@ -40,6 +61,13 @@ export const VisitForm = ({ form, onSave, loading, submitText }: PropType) => {
             </Form.Item>
             <Form.Item name={'followUp'} label={'Follow up'}>
                 <UserControls.Input.TextArea rows={5} />
+            </Form.Item>
+            <Form.Item label="Tags" name="tags" shouldUpdate={true}>
+                <UserControls.TagListSelect
+                    onSearch={onTagSearch}
+                    searchTags={searchTags}
+                    searching={searchingTags}
+                />
             </Form.Item>
             <Form.Item name={'type'} label={'Type'} initialValue={'visit'}>
                 <UserControls.Radio.Group>

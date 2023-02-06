@@ -1,5 +1,6 @@
 import { FunctionComponent, useMemo, useRef } from "react";
 import UserControls from "../..";
+import { useDebouncedCallback } from "../../../utils/useDebouncedCallback";
 import { AntdIcons } from "../../icons";
 import classnames from './taglist.module.scss';
 
@@ -9,7 +10,7 @@ type PropType = {
     searchTags: ITag[],
     // onAdd: (t: ITag) => void,
     // onRemove: (t: ITag) => void,
-    onSearch: (s: string) => void,
+    onSearch: (s: string, abortController: AbortController) => void,
     searching: boolean,
 }
 
@@ -63,6 +64,19 @@ const TagListSelect: FunctionComponent<PropType> = ({
         onChange && onChange((value || []).filter(t => t.tag != tag.tag))
     }
 
+    const abortController = useRef<AbortController>(new AbortController());
+
+    const onInternalSearch = useDebouncedCallback((val: string) => {
+
+        if (abortController.current) {
+            abortController.current.abort();
+        }
+
+        abortController.current = new AbortController();
+
+        onSearch(val, abortController.current)
+    }, 200);
+
     return <UserControls.Row className={classnames.container}>
         <UserControls.Col xs={12} className={classnames.tagsContainer}>
             {(value || []).map(tag => <UserControls.Tag
@@ -76,7 +90,7 @@ const TagListSelect: FunctionComponent<PropType> = ({
         </UserControls.Col>
         <UserControls.Col xs={12}>
             <UserControls.AutoComplete
-                onSearch={onSearch}
+                onSearch={onInternalSearch}
                 onSelect={onTagSelect}
                 autoClearSearchValue
                 options={options}

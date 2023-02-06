@@ -1,4 +1,5 @@
 import { SplittedPage } from "../components/layout/splittedPage";
+import UserControls from "../userControls";
 // import { NodeIOCContainer } from "../inversify/inversify.node.config";
 
 const Home: PageComponent = () => {
@@ -6,15 +7,21 @@ const Home: PageComponent = () => {
     // console.info('Home ..rest', rest);
     // const loaded = NodeIOCContainer.id;
     const Comp = () => <>
-        <h1>NextAuth.js Example</h1>
-        <p>
-            This is an example site to demonstrate how to use{" "}
-            <a href="https://next-auth.js.org">NextAuth.js</a> and
-            Sign-In with Ethereum for authentication.
-        </p>
     </>
 
-    return (<SplittedPage Left={<Comp />} Right={<p>Right part of the splitted Page</p>} />)
+    const LeftTitle = <UserControls.Typography.Title level={3} >
+        Upcoming Appointments
+    </UserControls.Typography.Title>
+    const RightTitle = <UserControls.Typography.Title level={3} >
+        Latest Projects
+    </UserControls.Typography.Title>
+
+    return (<SplittedPage
+        Left={<Comp />}
+        Right={<p>Right part of the splitted Page</p>}
+        LeftTitle={LeftTitle}
+        RightTitle={RightTitle}
+    />)
 }
 
 export default Home;

@@ -1,5 +1,7 @@
 import { FormInstance } from "antd";
+import { useState } from "react";
 import { gendersArr, gendersKeysType } from "../../configurations/genders";
+import { useTags } from "../../hooks/useTags";
 import UserControls from "../../userControls";
 
 
@@ -9,6 +11,26 @@ type PropType = {
 export const PatientForm = ({ form }: PropType) => {
 
     const Form = UserControls.Form;
+
+    const { getTags } = useTags()
+    const [searchTags, setSearchTags] = useState<ITag[]>([])
+    const [searchingTags, setSearchingTags] = useState(false);
+
+    // const abortController = useRef<AbortController>();
+
+    const onTagSearch = (search: string, abortController: AbortController) => {
+        setSearchingTags(true)
+
+        getTags(search, abortController.signal)
+            .then(res => {
+                setSearchTags(res.data)
+            }).catch(ex => {
+                console.error('getTags err', ex);
+                setSearchTags([])
+            }).finally(() => {
+                setSearchingTags(false)
+            })
+    }
 
     return <Form form={form} labelCol={{ span: 6 }}>
         <Form.Item name={'id'} label={'Id'} >
@@ -40,6 +62,14 @@ export const PatientForm = ({ form }: PropType) => {
 
         <Form.Item name={'emergencyPhone'} label={'Emergency phone'}>
             <UserControls.Input placeholder="+39 " />
+        </Form.Item>
+
+        <Form.Item label="Tags" name="tags" shouldUpdate={true}>
+            <UserControls.TagListSelect
+                onSearch={onTagSearch}
+                searchTags={searchTags}
+                searching={searchingTags}
+            />
         </Form.Item>
 
         <Form.Item name={'notes'} label={'Notes'}>

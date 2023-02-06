@@ -135,24 +135,12 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
     const [searchTags, setSearchTags] = useState<ITag[]>([])
     const [searchingTags, setSearchingTags] = useState(false);
 
-    // const onTagAdd = (tag: ITag) => {
-    //     console.info('onTagAdd', tag)
-    //     const tags = form.getFieldValue('tags') as ITag[];
-    //     tags.push(tag);
-    //     form.setFieldValue('tags', tags)
-
-    // }
-    // const onTagRemove = (tag: ITag) => {
-    //     const curr = form.getFieldValue('tags') as ITag[];
-    //     form.setFieldValue('tags', curr.filter(t => t.tag != tag.tag))
-    // }
-
     const abortController = useRef<AbortController>();
 
-    const onTagSearch = (search: string) => {
+    const onTagSearch = (search: string, abortController: AbortController) => {
         setSearchingTags(true)
-        abortController.current && abortController.current.abort()
-        getTags(search, abortController.current?.signal)
+
+        getTags(search, abortController.signal)
             .then(res => {
                 setSearchTags(res.data)
             }).catch(ex => {
@@ -235,9 +223,6 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
 
             <Form.Item label="Tags" name="tags" shouldUpdate={true}>
                 <UserControls.TagListSelect
-                    // tags={[]}
-                    // onAdd={onTagAdd}
-                    // onRemove={onTagRemove}
                     onSearch={onTagSearch}
                     searchTags={searchTags}
                     searching={searchingTags}

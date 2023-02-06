@@ -45,9 +45,16 @@ export const PatientInfo = ({ patient }: { patient: IPatient | undefined }) => {
                 </UserControls.Col>
             </UserControls.Row>
             <UserControls.Row>
-                <UserControls.Form.Item label={'Notes'}>
-                    {patient?.notes}
-                </UserControls.Form.Item>
+                <UserControls.Col xs={24}>
+                    <UserControls.Form.Item label={'Notes'}>
+                        {patient?.notes}
+                    </UserControls.Form.Item>
+                </UserControls.Col>
+                <UserControls.Col xs={24}>
+                    <UserControls.Form.Item label={'Tags'}>
+                        <UserControls.TagList value={patient?.tags} />
+                    </UserControls.Form.Item>
+                </UserControls.Col>
             </UserControls.Row>
         </UserControls.Col>
     </UserControls.Row>
