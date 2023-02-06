@@ -122,3 +122,11 @@ $imgSize: 30%;
     }
   }
 }
+
+.importListItem {
+  cursor: pointer;
+  padding: 3px 0;
+  &:hover {
+    background-color: transparentize($color: #000000, $amount: 0.95);
+  }
+}

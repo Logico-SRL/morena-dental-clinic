@@ -189,6 +189,10 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
         // }, [selected])
 
+        const toggleItem = (index: number) => {
+            setSelected(s => ({ ...s, [index]: !s[index] }))
+        }
+
         return <div className={classnames.importFileContainer}>
             <UserControls.List
                 dataSource={context.files}
@@ -218,9 +222,9 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
 
                     const size = formatUtils.formatBytes(item.size);
 
-                    return <UserControls.Row>
+                    return <UserControls.Row className={classnames.importListItem} onClick={e => { e.stopPropagation(); e.preventDefault(); toggleItem(index) }}>
                         <UserControls.Col xs={2}>
-                            <UserControls.Checkbox onChange={t => setSelected(s => ({ ...s, [index]: !s[index] }))} checked={!!selected[index]} />
+                            <UserControls.Checkbox onChange={() => toggleItem(index)} checked={!!selected[index]} />
                         </UserControls.Col>
                         <UserControls.Col xs={9}>
                             <UserControls.Typography.Text>{item.filename}</UserControls.Typography.Text>
