@@ -71,6 +71,13 @@ export const usePatients = () => {
 
     const createPatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
+        if (p.tags) {
+            p.tags.forEach(t => {
+                t.patients = undefined;
+                t.projects = undefined;
+                t.visits = undefined;
+            })
+        }
         httpService.post<IPatient>(`/api/protected/patients`, p).then(d => {
             const curr = patientsStore.get();
             patientsStore.set([...curr, convertPropsToDayjs(['dateOfBirth'], d.data)]);
@@ -81,6 +88,15 @@ export const usePatients = () => {
 
     const savePatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
+
+        if (p.tags) {
+            p.tags.forEach(t => {
+                t.patients = undefined;
+                t.projects = undefined;
+                t.visits = undefined;
+            })
+        }
+
         httpService.put<IPatient>(`/api/protected/patients/${p.id}`, p).then(d => {
             const curr = [...patientsStore.get()];
             const ind = curr.findIndex(c => c.id === p.id);

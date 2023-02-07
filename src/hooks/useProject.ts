@@ -115,8 +115,16 @@ export const useProject = (projectId: string) => {
         projectStore.set(curr);
     }
 
-    const saveProject = async (project: IProject) => {
-        httpService.put<IProject>(`/api/protected/projects/${projectId}`, project)
+    const saveProject = async (p: IProject) => {
+        if (p.tags) {
+            p.tags.forEach(t => {
+                t.patients = undefined;
+                t.projects = undefined;
+                t.visits = undefined;
+            })
+        }
+
+        httpService.put<IProject>(`/api/protected/projects/${projectId}`, p)
             .then(d => {
                 const proj = d.data;
                 if (proj.patient) {

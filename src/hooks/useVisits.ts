@@ -42,6 +42,13 @@ export const useVisits = () => {
 
     const createVisit = async (projectId: string, visit: IVisit) => {
         savingVisitStore.set(true);
+        if (visit.tags) {
+            visit.tags.forEach(t => {
+                t.patients = undefined;
+                t.projects = undefined;
+                t.visits = undefined;
+            })
+        }
         return httpService.post<IVisit>(`/api/protected/projects/${projectId}/visits`, visit)
             .then(d => {
                 const vis = convertPropsToDayjs(['visitDate'], d.data);

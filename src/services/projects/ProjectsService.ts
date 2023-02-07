@@ -37,7 +37,9 @@ export class ProjectsService implements IProjectsService {
                 'id': projectId,
             },
             relations: {
-                patient: true,
+                patient: {
+                    tags: true
+                },
                 category: true,
                 subCategory: true,
                 tags: true,
