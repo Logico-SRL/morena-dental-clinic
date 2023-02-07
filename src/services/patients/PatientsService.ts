@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Between, Equal, FindManyOptions, MoreThanOrEqual } from "typeorm";
+import { Between, Equal, FindManyOptions, Like, MoreThanOrEqual, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
@@ -10,6 +10,7 @@ export class PatientsService implements IPatientsService {
 
     private readonly dbService: IDbService;
     private readonly externalPatientsService: IExternalPatientsService;
+    private get getRepo() { return this.dbService.patientsRepo() as Promise<Repository<PatientEntity>> }
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService,
         @inject(IOCServiceTypes.ExternalPatientsService) externalPatientsService: IExternalPatientsService) {
@@ -39,7 +40,23 @@ export class PatientsService implements IPatientsService {
         return patient
     }
 
-    public find = async (patientId: string) => {
+    find = async (search: string) => {
+        const repo = await this.getRepo;
+        const resp = await repo.find({
+            where: {
+                'firstName': Like(`%${(search || '').toLowerCase()}%`)
+            },
+            // relations: {
+            //     media: {
+            //         source: true
+            //     },
+            //     tags: true
+            // }
+        });
+        return resp ? resp.map(r => ({ ...repoPatientToPatient(r), type: 'patient' as 'patient' })) : [];
+    }
+
+    public get = async (patientId: string) => {
         const repo = (await this.dbService.patientsRepo())
         const found = await repo.findOne({
             where: { 'id': patientId },

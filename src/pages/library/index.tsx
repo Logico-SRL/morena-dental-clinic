@@ -1,12 +1,22 @@
 import { SplittedPage } from "../../components/layout/splittedPage";
+import { Library } from "../../components/library/library";
+import UserControls from "../../userControls";
 
 
 const LibraryPage: PageComponent = () => {
 
-    const Comp = () => (<>
-        <h1>Library</h1>
-    </>)
-    return (<SplittedPage Left={<Comp />} />)
+    const LeftTitle = <UserControls.Typography.Title level={3}>
+        Library
+    </UserControls.Typography.Title>
+
+    const RightTitle = <UserControls.Typography.Title level={4}>
+        Search Online
+    </UserControls.Typography.Title>
+
+    return (<SplittedPage
+        LeftTitle={LeftTitle}
+        RightTitle={RightTitle}
+        Left={<Library />} />)
 
 }
 

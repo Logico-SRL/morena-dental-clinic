@@ -4,15 +4,15 @@ import { BaseController } from "../baseController";
 
 
 type QueryType = {
-    search: string
+    tagId: string
 }
 
 @injectable()
-export class TagsController extends BaseController {
+export class TagController extends BaseController {
 
     private tagsService: ITagsService;
 
-    private get search() { return (this.req.query as QueryType).search }
+    private get tagId() { return (this.req.query as QueryType).tagId }
 
 
 
@@ -22,8 +22,8 @@ export class TagsController extends BaseController {
     }
 
     GET = async () => {
-        // console.info('TagsController')
-        const data = await this.tagsService.find(this.search)
+        // console.info('TagController')
+        const data = await this.tagsService.get(this.tagId)
         return this.res.status(200).json(data);
     }
 

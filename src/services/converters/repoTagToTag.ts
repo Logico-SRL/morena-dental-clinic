@@ -2,6 +2,7 @@ import { repoPatientToPatient, repoProjToProj, repoVisitToVisit } from ".";
 
 export const repoTagToTag = (r: TagEntity, skipRelations = false): ITag => {
     const { tag, date, patients, projects, visits } = r;
+    // console.info('repoTagToTag', r);
     return {
         tag,
         date,

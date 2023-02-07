@@ -39,7 +39,7 @@ export class VisitEntity {
     })
     media: MediaEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.visits, { cascade: ['insert', 'update'] })
+    @ManyToMany(type => TagEntity, t => t.visits, { cascade: true })
     @JoinTable()
     tags: TagEntity[]
 }

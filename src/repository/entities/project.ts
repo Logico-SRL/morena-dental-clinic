@@ -37,7 +37,7 @@ export class ProjectEntity {
     @OneToMany(type => VisitEntity, v => v.project)
     visits?: VisitEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.projects, { cascade: ['insert', 'update'] })
+    @ManyToMany(type => TagEntity, t => t.projects, { cascade: true })
     @JoinTable()
     tags: TagEntity[]
 }

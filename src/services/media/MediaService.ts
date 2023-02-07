@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { repoMediaToMedia } from "../converters";
 
 @injectable()
 export class MediaService implements IMediaService {
@@ -12,11 +13,12 @@ export class MediaService implements IMediaService {
     }
     get = async (mediaId: string) => {
         const repo: Repository<MediaEntity> = (await this.dbService.mediaRepo())
-        return await repo.findOne({
+        const media = await repo.findOne({
             where: {
                 id: mediaId
             }
         })
+        return media ? repoMediaToMedia(media) : null
     }
     delete = async (mediaId: string) => {
         const repo: Repository<MediaEntity> = (await this.dbService.mediaRepo())

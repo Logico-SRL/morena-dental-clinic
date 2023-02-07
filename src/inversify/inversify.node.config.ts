@@ -3,6 +3,7 @@ import { FileController } from "../controllers/files/fileController";
 import { FileImportController } from "../controllers/files/fileImportController";
 import { FileThumbnailsController } from "../controllers/files/fileThumbnailsController";
 import { FileUploadController } from "../controllers/files/fileUploadController";
+import { LibraryController } from "../controllers/library/libraryController";
 import { PatientController } from "../controllers/patients/patientController";
 import { PatientsController } from "../controllers/patients/patientsController";
 import { ProjectsCategoriesController } from "../controllers/projectCategories/projectsCategoriesController";
@@ -10,6 +11,7 @@ import { ProjectController } from "../controllers/projects/projectController";
 import { ProjectsController } from "../controllers/projects/projectsController";
 import { SettingsController } from "../controllers/settings/settingsController";
 import { SettingsMediaSourceController } from "../controllers/settings/settingsMediaSourceController";
+import { TagController } from "../controllers/tags/tagController";
 import { TagsController } from "../controllers/tags/tagsController";
 import { VisitController } from "../controllers/visits/visitController";
 import { VisitsController } from "../controllers/visits/visitsController";
@@ -18,6 +20,7 @@ import { DbService } from "../services/db/DbService";
 import { ExternalPatientsService } from "../services/externalPatients/ExternalPatientsService";
 import { FilePreviewService } from "../services/files/FilePreviewService";
 import { FilesService } from "../services/files/FilesService";
+import { LibraryService } from "../services/library/LibraryService";
 import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
@@ -40,6 +43,7 @@ NodeIOCContainer.bind<ISettingsService>(IOCServiceTypes.SettingsService).to(Sett
 NodeIOCContainer.bind<IFilesService>(IOCServiceTypes.FilesService).to(FilesService).inSingletonScope();
 NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).to(FilePreviewService).inSingletonScope();
 NodeIOCContainer.bind<ITagsService>(IOCServiceTypes.TagsService).to(TagsService).inSingletonScope();
+NodeIOCContainer.bind<ILibraryService>(IOCServiceTypes.LibraryService).to(LibraryService).inSingletonScope();
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
@@ -55,6 +59,8 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileThumbnailsControlle
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileController).to(FileController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileImportController).to(FileImportController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagsController).to(TagsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagController).to(TagController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.LibraryController).to(LibraryController);
 
 
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)

@@ -12,8 +12,8 @@ export const PatientForm = ({ form }: PropType) => {
 
     const Form = UserControls.Form;
 
-    const { getTags } = useTags()
-    const [searchTags, setSearchTags] = useState<ITag[]>([])
+    const { searchTags } = useTags()
+    const [searchTagsResults, setSearchTagsResults] = useState<ITag[]>([])
     const [searchingTags, setSearchingTags] = useState(false);
 
     // const abortController = useRef<AbortController>();
@@ -21,12 +21,12 @@ export const PatientForm = ({ form }: PropType) => {
     const onTagSearch = (search: string, abortController: AbortController) => {
         setSearchingTags(true)
 
-        getTags(search, abortController.signal)
+        searchTags(search, abortController.signal)
             .then(res => {
-                setSearchTags(res.data)
+                setSearchTagsResults(res.data)
             }).catch(ex => {
                 console.error('getTags err', ex);
-                setSearchTags([])
+                setSearchTagsResults([])
             }).finally(() => {
                 setSearchingTags(false)
             })
@@ -67,7 +67,7 @@ export const PatientForm = ({ form }: PropType) => {
         <Form.Item label="Tags" name="tags" shouldUpdate={true}>
             <UserControls.TagListSelect
                 onSearch={onTagSearch}
-                searchTags={searchTags}
+                searchTags={searchTagsResults}
                 searching={searchingTags}
             />
         </Form.Item>

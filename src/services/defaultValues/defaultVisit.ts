@@ -8,4 +8,6 @@ export const defaultVisit = (): IVisit => ({
     diagnosis: '',
     followUp: '',
     treatment: '',
+    projectId: '',
+    tags: [],
 })

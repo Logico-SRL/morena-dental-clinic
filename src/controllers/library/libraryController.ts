@@ -8,22 +8,21 @@ type QueryType = {
 }
 
 @injectable()
-export class TagsController extends BaseController {
+export class LibraryController extends BaseController {
 
-    private tagsService: ITagsService;
+    private libraryService: ILibraryService;
 
     private get search() { return (this.req.query as QueryType).search }
 
 
 
-    constructor(@inject(IOCServiceTypes.TagsService) serv: ITagsService) {
+    constructor(@inject(IOCServiceTypes.LibraryService) serv: ILibraryService) {
         super();
-        this.tagsService = serv;
+        this.libraryService = serv;
     }
 
     GET = async () => {
-        // console.info('TagsController')
-        const data = await this.tagsService.find(this.search)
+        const data = await this.libraryService.find(this.search)
         return this.res.status(200).json(data);
     }
 

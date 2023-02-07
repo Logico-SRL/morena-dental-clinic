@@ -32,6 +32,8 @@ export const useProject = (projectId: string) => {
 
         if (projectId && (fetchingId.current != projectId) && (project.id != projectId)) {
 
+            selectedVisitStore.set(undefined)
+
             if (abortController.current) {
                 abortController.current.abort();
                 abortController.current = new AbortController();

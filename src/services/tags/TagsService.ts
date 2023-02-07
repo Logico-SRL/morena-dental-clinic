@@ -26,5 +26,21 @@ export class TagsService implements ITagsService {
         return res.map(r => repoTagToTag(r));
     }
 
+    get = async (tag: string) => {
+        const repo = await this.getRepo;
+        const res = await repo.findOne({
+            where: {
+                'tag': tag
+            },
+            relations: [
+                'patients',
+                'projects',
+                'visits'
+            ]
+        })
+
+        return res ? repoTagToTag(res) : undefined;
+    }
+
 }
 

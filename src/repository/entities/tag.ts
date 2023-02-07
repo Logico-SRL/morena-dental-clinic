@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm";
-import { ProjectEntity, VisitEntity } from ".";
+import { PatientEntity, ProjectEntity, VisitEntity } from ".";
 
 @Entity({
     name: "tags"
@@ -16,10 +16,10 @@ export class TagEntity {
     @ManyToMany(type => ProjectEntity, t => t.tags)
     projects: ProjectEntity[]
 
-    @ManyToMany(type => ProjectEntity, t => t.tags)
+    @ManyToMany(type => VisitEntity, t => t.tags)
     visits: VisitEntity[]
 
-    @ManyToMany(type => ProjectEntity, t => t.tags)
+    @ManyToMany(type => PatientEntity, t => t.tags)
     patients: PatientEntity[]
 
 }

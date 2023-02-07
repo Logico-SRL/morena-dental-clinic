@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { Like, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoProjToProj } from "../converters";
@@ -7,11 +8,29 @@ import { repoProjToProj } from "../converters";
 export class ProjectsService implements IProjectsService {
 
     private readonly dbService: IDbService;
+    private get getRepo() { return this.dbService.projectsRepo() as Promise<Repository<ProjectEntity>> }
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
     }
-    find = async (projectId: string) => {
+
+    find = async (search: string) => {
+        const repo = await this.getRepo;
+        const resp = await repo.find({
+            where: {
+                'title': Like(`%${(search || '').toLowerCase()}%`)
+            },
+            // relations: {
+            //     media: {
+            //         source: true
+            //     },
+            //     tags: true
+            // }
+        });
+        return resp ? resp.map(r => ({ ...repoProjToProj(r), type: 'project' as 'project' })) : [];
+    }
+
+    get = async (projectId: string) => {
         const repo = (await this.dbService.projectsRepo())
         const resp = await repo.findOne({
             where: {

@@ -14,7 +14,7 @@ export class PatientController extends BaseController {
     }
 
     GET = async () => {
-        let result = await this.patientsService.find(this.patientId);
+        let result = await this.patientsService.get(this.patientId);
         return this.res.status(200).json(result)
     }
 

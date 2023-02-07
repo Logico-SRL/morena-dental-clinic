@@ -68,6 +68,11 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
         push(`/projects/${project?.id}/visits/create`)
     }
 
+
+    // const onShowVisitClick = () => {
+    //     selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}/show`)
+    // }
+
     const onEditVisitClick = () => {
         selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}`)
     }
@@ -84,7 +89,6 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                     await deleteVisit(project?.id || '', selectedVisit.id)
                     removeVisit(selectedVisit)
                     setSelectedVisit(undefined);
-
                 }
             })
         }
@@ -124,6 +128,13 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                     ))}
 
                     <UserControls.Col xs={1} />
+                    {/* <UserControls.Col>
+                        <VisitButton disabled={!selectedVisit} text={
+                            <UserControls.Space>
+                                <AntdIcons.EditOutlined />
+                                Show {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
+                            </UserControls.Space>} onClick={onShowVisitClick} />
+                    </UserControls.Col> */}
                     <UserControls.Col>
                         <VisitButton disabled={!selectedVisit} text={
                             <UserControls.Space>

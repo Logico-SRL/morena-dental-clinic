@@ -16,7 +16,7 @@ export class ProjectController extends BaseController {
 
 
     GET = async () => {
-        const result = await this.projectsService.find(this.projectId);
+        const result = await this.projectsService.get(this.projectId);
         return this.res.status(200).json(result)
     }
 

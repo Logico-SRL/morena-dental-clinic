@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoVisitToVisit } from "../converters";
@@ -23,10 +23,27 @@ export class VisitsService implements IVisitsService {
                 media: {
                     source: true
                 },
-                tags: true
+                tags: true,
+                project: true
             }
         });
         return resp ? repoVisitToVisit(resp) : undefined;
+    }
+    find = async (search: string) => {
+        const repo = await this.getRepo;
+        const resp = await repo.find({
+            where: {
+                'title': Like(`%${(search || '').toLowerCase()}%`)
+            },
+            relations: {
+                //     media: {
+                //         source: true
+                //     },
+                //     tags: true
+                project: true
+            }
+        });
+        return resp ? resp.map(r => ({ ...repoVisitToVisit(r), type: 'visit' as 'visit' })) : [];
     }
     save = async (projectId: string, visit: IVisit) => {
         const repo = await this.getRepo;
