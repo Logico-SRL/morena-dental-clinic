@@ -10,5 +10,6 @@ export const defaultPatient = (): IPatient => ({
     bloodGroup: '',
     emergencyPhone: '',
     notes: '',
-    projects: []
+    projects: [],
+    tags: []
 })

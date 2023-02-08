@@ -75,7 +75,9 @@ export class VisitsService implements IVisitsService {
         visit.id = ulid();
         visit.createdOn = new Date();
         stripNestedTags(visit);
-        repo.insert(visit);
+        const toSave = repo.create(visit);
+        await repo.save(toSave);
+
         return visit;
     }
     delete = async (visitId: string) => {

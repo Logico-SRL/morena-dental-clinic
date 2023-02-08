@@ -16,6 +16,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
     const router = useRouter();
 
+
     const itemRenderer = (item: ISearchResult, index: number) => {
         return searchResulRenderer[item.type](item as any, { router })
     }
@@ -70,7 +71,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
             abortController.current.abort()
         }
 
-        if (!val || val.length < minFullTextSearchLength) {
+        if (!val || val.length < minTagTextSearchLength) {
             return setSearchResults([])
         }
 
@@ -108,8 +109,12 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
     return <UserControls.Row gutter={20}>
         <UserControls.Col xs={12}>
-            <UserControls.Form.Item label='Full text search'>
-                <UserControls.Input placeholder={`min length ${minFullTextSearchLength} chars`} onChange={onFullTextInputChange} value={inputValue} />
+            <UserControls.Form.Item
+                label='Full text search' >
+                <UserControls.Input placeholder={`min length ${minFullTextSearchLength} chars`}
+                    onChange={onFullTextInputChange}
+                    value={inputValue}
+                />
             </UserControls.Form.Item>
 
         </UserControls.Col>

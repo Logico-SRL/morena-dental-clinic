@@ -17,11 +17,16 @@ export class ProjectsService implements IProjectsService {
 
     find = async (search: string) => {
         const repo = await this.getRepo;
+        const mode = 'IN BOOLEAN MODE';
+        // const mode = 'IN NATURAL LANGUAGE MODE';
+        // const mode = 'IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION';
         const resp = await repo.createQueryBuilder().select()
-            .where(`MATCH(title) AGAINST ('${search}*' IN BOOLEAN MODE)`)
-            .orWhere(`MATCH(medicalHistory) AGAINST ('${search}*' IN BOOLEAN MODE)`)
-            .orWhere(`MATCH(notes) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .where(`MATCH(title) AGAINST ('${search}*' ${mode})`)
+            .orWhere(`MATCH(medicalHistory) AGAINST ('${search}*' ${mode})`)
+            .orWhere(`MATCH(notes) AGAINST ('${search}*' ${mode})`)
             .getMany()
+
+        console.info('resp', resp)
 
         return resp ? resp.map(r => ({ ...repoProjToProj(r), type: 'project' as 'project' })) : [];
     }
@@ -63,7 +68,8 @@ export class ProjectsService implements IProjectsService {
         project.id = ulid();
         project.createdOn = new Date();
         stripNestedTags(project);
-        repo.insert(project);
+        const toSave = repo.create(project);
+        await repo.save(toSave);
         return project;
     }
     list = async () => {

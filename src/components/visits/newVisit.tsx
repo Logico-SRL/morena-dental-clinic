@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useProject } from "../../hooks/useProject";
 import { useVisits } from "../../hooks/useVisits";
+import { defaultVisit } from "../../services/defaultValues";
 import UserControls from "../../userControls";
 import { VisitForm } from "./visitForm";
 
@@ -18,6 +20,9 @@ export const NewVisit = ({ projectId }: PropType) => {
     const [notif] = UserControls.notification.useNotification();
     const { replace } = useRouter();
 
+    useEffect(() => {
+        form.setFieldsValue(defaultVisit());
+    }, [projectId])
 
     const onSave = async (visit: IVisit) => {
 

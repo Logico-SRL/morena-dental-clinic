@@ -9,7 +9,7 @@ export const ScreeningMediaSources = ({ sources, selectedVisit, onSourceChange, 
             label: <div style={{ padding: 5 }}>{source.name}</div>
         }))
     return <UserControls.Segmented
-        disabled={!selectedVisit}
+        disabled={!selectedVisit.id}
         value={segmentValue}
         style={{ flexWrap: 'wrap', display: 'flex' }}
         onChange={onSourceChange}

@@ -14,7 +14,7 @@ import { UploadModalContextProvider } from "./upload/uploadModalContextProvider"
 export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
 
     const { selectedVisit, loadingProject, setSelectedVisit } = useProject(projectId)
-    const { visit, loadingVisit } = useVisit(projectId, selectedVisit?.id || '')
+    const { visit, loadingVisit } = useVisit(projectId, selectedVisit?.id || undefined)
     const { settings } = useSettings();
     const [selectedMediaSource, setSelectedMediaSource] = useState<IMediaSource>()
     const [isDeleting, setIsDeleting] = useState<boolean>(false)

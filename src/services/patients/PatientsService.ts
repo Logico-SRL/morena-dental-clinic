@@ -39,7 +39,8 @@ export class PatientsService implements IPatientsService {
         const repo = (await this.dbService.patientsRepo())
         patient.id = ulid()
         stripNestedTags(patient);
-        await repo.insert(patient);
+        const toSave = repo.create(patient);
+        await repo.save(toSave);
         return patient
     }
 

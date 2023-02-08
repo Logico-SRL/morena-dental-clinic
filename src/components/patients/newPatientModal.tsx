@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { usePatients } from "../../hooks/usePatients";
+import { defaultPatient } from "../../services/defaultValues";
 import UserControls from "../../userControls";
 import { PatientForm } from "./patientForm";
 
@@ -14,6 +16,12 @@ export const NewPatientModal = ({ open, onCancel }: PropType) => {
 
     const [form] = Form.useForm<IPatient>();
     const [notif] = UserControls.notification.useNotification();
+
+    useEffect(() => {
+        if (open) {
+            form.setFieldsValue(defaultPatient())
+        }
+    }, [open])
 
     const onOk = () => {
         form.validateFields().

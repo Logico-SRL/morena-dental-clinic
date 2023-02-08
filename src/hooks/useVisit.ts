@@ -13,7 +13,7 @@ const abortController = {
     current: new AbortController()
 }
 
-export const useVisit = (projectId: string, visitId: string) => {
+export const useVisit = (projectId: string, visitId: string | undefined) => {
 
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const visit = useStore(visitStore);
@@ -21,7 +21,10 @@ export const useVisit = (projectId: string, visitId: string) => {
 
     React.useEffect(() => {
 
-        if (fetchingId.current != visitId && projectId && visitId && (visit.id != visitId)) {
+        if (!visitId) {
+            visitStore.set(defaultVisit())
+        }
+        else if (fetchingId.current != visitId && projectId && visitId && (visit.id != visitId)) {
 
             fetchingId.current = visitId;
 
