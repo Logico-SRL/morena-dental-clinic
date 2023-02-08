@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import UserControls from "../../userControls";
 import { ProjectForm } from "./projectForm";
 import { ProjectWithVisits } from "./projectWithVisits";
@@ -10,20 +10,21 @@ type PropType = {
     // onCancel: () => void,
     project: IProject | undefined,
     saveProject: (proj: IProject) => void,
-    loadingProject: boolean
+    loadingProject: boolean,
+    inEdit: boolean,
+    setInEdit: Dispatch<SetStateAction<boolean>>
 }
 
-export const EditProject = ({ project, saveProject, loadingProject }: PropType) => {
+export const EditProject = ({ project, saveProject, loadingProject, inEdit, setInEdit }: PropType) => {
 
     const Form = UserControls.Form;
     const [form] = Form.useForm<IProject>();
     const [notif] = UserControls.notification.useNotification();
     const { push } = useRouter();
-    const [inEdit, setInEdit] = useState(false);
 
-    const onEdit = () => {
-        setInEdit(true)
-    }
+    // const onEdit = () => {
+    //     setInEdit(true)
+    // }
 
     useEffect(() => {
         project && form.setFieldsValue(project);
@@ -43,5 +44,5 @@ export const EditProject = ({ project, saveProject, loadingProject }: PropType) 
 
     return inEdit ?
         <ProjectForm form={form} onSave={onSave} loading={loadingProject} submitText={'Save'} onBack={() => setInEdit(false)} /> :
-        <ProjectWithVisits project={project} onEdit={onEdit} />
+        <ProjectWithVisits project={project} />
 }

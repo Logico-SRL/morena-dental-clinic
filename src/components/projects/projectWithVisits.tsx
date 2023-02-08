@@ -7,24 +7,25 @@ import { AntdIcons } from "../../userControls/icons";
 import { visitUtils } from "../../utils/visitUtils";
 import { PatientInfo } from "../patients/patientInfo";
 import { SectionHeader } from "../userControls/sectionHeader";
+import { VisitInfo } from "../visits/visitInfo";
 import classnames from './projects.module.scss';
 
 type PropType = {
     project: IProject | undefined,
-    onEdit: () => void
+    // onEdit: () => void
 }
 
-const Links = ({ onClick, onEditClick }: { onClick: () => void, onEditClick: () => void }) => {
-    return <UserControls.Space>
-        <UserControls.Button icon={<AntdIcons.EditOutlined />} onClick={onEditClick} >
-            Edit
-        </UserControls.Button>
+// const Links = ({ onClick, onEditClick }: { onClick: () => void, onEditClick: () => void }) => {
+//     return <UserControls.Space>
+//         <UserControls.Button icon={<AntdIcons.EditOutlined />} onClick={onEditClick} >
+//             Edit
+//         </UserControls.Button>
 
-        <UserControls.Button icon={<AntdIcons.UnorderedListOutlined />} onClick={onClick} >
-            All projects
-        </UserControls.Button>
-    </UserControls.Space>
-}
+//         <UserControls.Button icon={<AntdIcons.UnorderedListOutlined />} onClick={onClick} >
+//             All projects
+//         </UserControls.Button>
+//     </UserControls.Space>
+// }
 
 type VisitButtonPropType = {
     text: string | React.ReactNode,
@@ -41,7 +42,7 @@ const VisitButton = ({ text, ...rest }: VisitButtonPropType) => {
     </UserControls.Button>
 }
 
-export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
+export const ProjectWithVisits = ({ project }: PropType) => {
 
     const { push } = useRouter();
 
@@ -49,7 +50,7 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
 
     // const [selectedVisit, setSelectedVisit] = useState<IVisit>()
     const { selectedVisit, setSelectedVisit, removeVisit } = useProject(project?.id || '')
-    const { deleteVisit, visit } = useVisit(project?.id || '', selectedVisit?.id || '')
+    const { deleteVisit, visit, loadingVisit } = useVisit(project?.id || '', selectedVisit?.id || '')
 
     const onNewProjectClick = () => {
         push(`/projects/create`)
@@ -94,7 +95,34 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
         }
     }
 
-    return <UserControls.Form layout="vertical">
+    const VisitLinks = <UserControls.Row gutter={10}>
+        <UserControls.Col>
+            <VisitButton disabled={!selectedVisit} text={
+                <UserControls.Space>
+                    <AntdIcons.EditOutlined />
+                    Edit {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
+                </UserControls.Space>} onClick={onEditVisitClick} />
+        </UserControls.Col>
+        <UserControls.Col>
+            <VisitButton disabled={!selectedVisit} danger text={
+                <UserControls.Space>
+                    <AntdIcons.DeleteOutlined />
+                    Delete {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
+                </UserControls.Space>} onClick={onDeleteVisitClick} />
+        </UserControls.Col>
+        <UserControls.Col>
+            <VisitButton
+                type={'primary'}
+                text={
+                    <UserControls.Space>
+                        <AntdIcons.PlusOutlined />
+                        Add Visit
+                    </UserControls.Space>
+                } onClick={onAddVisitClick} />
+        </UserControls.Col>
+    </UserControls.Row>
+
+    return <>
         <UserControls.Row>
             <UserControls.Col xs={24} style={{ textAlign: 'right' }}>
                 <UserControls.Space>
@@ -116,7 +144,8 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
             </UserControls.Col>
 
             <UserControls.Col xs={24}>
-                <SectionHeader title={project?.title || ''} links={<Links onClick={onAllProjectsClick} onEditClick={onEdit} />} />
+                {/* <SectionHeader title={`Project: ${project?.title || ''}`} links={<Links onClick={onAllProjectsClick} onEditClick={onEdit} />} /> */}
+                <SectionHeader title={'Visits'} links={VisitLinks} />
             </UserControls.Col>
             <UserControls.Col xs={24} style={{ paddingTop: 20 }}>
                 <UserControls.Row gutter={[10, 10]}>
@@ -127,7 +156,7 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                         </UserControls.Col>
                     ))}
 
-                    <UserControls.Col xs={1} />
+                    {/* <UserControls.Col xs={1} /> */}
                     {/* <UserControls.Col>
                         <VisitButton disabled={!selectedVisit} text={
                             <UserControls.Space>
@@ -135,7 +164,7 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                                 Show {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
                             </UserControls.Space>} onClick={onShowVisitClick} />
                     </UserControls.Col> */}
-                    <UserControls.Col>
+                    {/* <UserControls.Col>
                         <VisitButton disabled={!selectedVisit} text={
                             <UserControls.Space>
                                 <AntdIcons.EditOutlined />
@@ -158,9 +187,15 @@ export const ProjectWithVisits = ({ project, onEdit }: PropType) => {
                                     Add Visit
                                 </UserControls.Space>
                             } onClick={onAddVisitClick} />
-                    </UserControls.Col>
+                    </UserControls.Col> */}
                 </UserControls.Row>
             </UserControls.Col>
+
         </UserControls.Row>
-    </UserControls.Form>
+        <UserControls.Row>
+            <UserControls.Col xs={24} style={{ paddingTop: 30 }}>
+                <VisitInfo visit={visit} loading={loadingVisit} />
+            </UserControls.Col>
+        </UserControls.Row>
+    </>
 }
