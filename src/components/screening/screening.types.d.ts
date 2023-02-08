@@ -3,7 +3,7 @@ type SetStateAction<T> = import('react').SetStateAction<T>;
 
 type VisitPropType = {
     sources: IMediaSource[],
-    selectedVisit: IVisit | undefined,
+    selectedVisit: IVisit,
     segmentValue: string | number,
     onSourceChange: (mediaSourceId: string | number) => void,
     selectedMediaSource?: IMediaSource,
