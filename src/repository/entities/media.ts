@@ -20,10 +20,10 @@ export class MediaEntity {
     @Column({ type: 'text' })
     b64Thumbnail: string;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'longtext' })
     b64Preview: string;
 
-    @Column({ type: 'text', default: '{}' })
+    @Column({ type: 'text', nullable: true })
     meta?: string;
 
     //Moved in source

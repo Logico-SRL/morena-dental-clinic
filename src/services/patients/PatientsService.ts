@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Between, Equal, FindManyOptions, Like, MoreThanOrEqual, Repository } from "typeorm";
+import { Between, Equal, FindManyOptions, MoreThanOrEqual, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
@@ -45,17 +45,22 @@ export class PatientsService implements IPatientsService {
 
     find = async (search: string) => {
         const repo = await this.getRepo;
-        const resp = await repo.find({
-            where: {
-                'firstName': Like(`%${(search || '').toLowerCase()}%`)
-            },
-            // relations: {
-            //     media: {
-            //         source: true
-            //     },
-            //     tags: true
-            // }
-        });
+        const resp = await repo.createQueryBuilder().select()
+            .where(`MATCH(firstName) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(familyName) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(notes) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .getMany()
+        // const resp = await repo.find({
+        //     where: {
+        //         'firstName': Like(`%${(search || '').toLowerCase()}%`)
+        //     },
+        //     // relations: {
+        //     //     media: {
+        //     //         source: true
+        //     //     },
+        //     //     tags: true
+        //     // }
+        // });
         return resp ? resp.map(r => ({ ...repoPatientToPatient(r), type: 'patient' as 'patient' })) : [];
     }
 

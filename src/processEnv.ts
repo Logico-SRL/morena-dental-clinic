@@ -17,8 +17,13 @@ export const processEnv = () => {
             database: process.env.DB_DATABASE,
             port: +(process.env.DB_PORT || 0),
 
+        },
+        previews: {
+            quality: +(process.env.DEFAULT_QUALITY || '50'),
+            previewSize: +(process.env.PREVIEW_SIZE || '800'),
+            thumbnailSize: +(process.env.THUMBNAIL_SIZE || '200')
         }
     }
-    // console.info('processEnv', ret);
+
     return ret;
 }

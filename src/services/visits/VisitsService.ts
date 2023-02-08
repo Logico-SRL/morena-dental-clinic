@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
-import { Like, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { VisitEntity } from "../../repository/entities";
 import { repoVisitToVisit } from "../converters";
 import { stripNestedTags } from "../utils/stripNestedTags";
 
@@ -32,18 +33,27 @@ export class VisitsService implements IVisitsService {
     }
     find = async (search: string) => {
         const repo = await this.getRepo;
-        const resp = await repo.find({
-            where: {
-                'title': Like(`%${(search || '').toLowerCase()}%`)
-            },
-            relations: {
-                //     media: {
-                //         source: true
-                //     },
-                //     tags: true
-                project: true
-            }
-        });
+
+        const resp = await repo.createQueryBuilder('visit').select()
+            .leftJoinAndSelect('visit.project', 'project')
+            .where(`MATCH(visit.title) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(visit.diagnosis) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(visit.treatment) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(visit.followup) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .getMany()
+
+        // const resp = await repo.find({
+        //     where: {
+        //         'title': Like(`%${(search || '').toLowerCase()}%`)
+        //     },
+        //     relations: {
+        //         //     media: {
+        //         //         source: true
+        //         //     },
+        //         //     tags: true
+        //         project: true
+        //     }
+        // });
         return resp ? resp.map(r => ({ ...repoVisitToVisit(r), type: 'visit' as 'visit' })) : [];
     }
     save = async (projectId: string, visit: IVisit) => {

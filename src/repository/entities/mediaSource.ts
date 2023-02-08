@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
-import { noImageB64 } from "../defaults/noImage";
 
 @Entity({
     name: "mediaSources"
@@ -19,7 +18,7 @@ export class MediaSourceEntity {
     @Column({ type: 'nvarchar', nullable: true })
     baseSearch?: string;
 
-    @Column({ type: 'text', default: noImageB64 })
+    @Column({ type: 'text', nullable: true })
     defaultThumbnailB64?: string;
 
     @Column({ type: 'nvarchar', default: 'image' })

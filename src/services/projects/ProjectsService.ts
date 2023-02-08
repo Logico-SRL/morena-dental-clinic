@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Like, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoProjToProj } from "../converters";
@@ -17,17 +17,12 @@ export class ProjectsService implements IProjectsService {
 
     find = async (search: string) => {
         const repo = await this.getRepo;
-        const resp = await repo.find({
-            where: {
-                'title': Like(`%${(search || '').toLowerCase()}%`)
-            },
-            // relations: {
-            //     media: {
-            //         source: true
-            //     },
-            //     tags: true
-            // }
-        });
+        const resp = await repo.createQueryBuilder().select()
+            .where(`MATCH(title) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(medicalHistory) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .orWhere(`MATCH(notes) AGAINST ('${search}*' IN BOOLEAN MODE)`)
+            .getMany()
+
         return resp ? resp.map(r => ({ ...repoProjToProj(r), type: 'project' as 'project' })) : [];
     }
 

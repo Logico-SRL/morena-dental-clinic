@@ -95,7 +95,15 @@ const TagListSelect: FunctionComponent<PropType> = ({
                 autoClearSearchValue
                 options={options}
             >
-                <UserControls.Input.Search onChange={e => autoCompleteVal.current = e.target.value} enterButton={<UserControls.Button onClick={onAddClick} type="primary" disabled={searching || searchTags.length > 0} loading={searching} size="small" icon={<AntdIcons.TagOutlined />}>Add</UserControls.Button>} />
+                <UserControls.Input.Search
+                    onChange={e => autoCompleteVal.current = e.target.value}
+                    enterButton={<UserControls.Button
+                        onClick={onAddClick}
+                        type="primary"
+                        disabled={searching}
+                        loading={searching}
+                        size="small"
+                        icon={<AntdIcons.TagOutlined />}>Add</UserControls.Button>} />
             </UserControls.AutoComplete>
         </UserControls.Col>
 

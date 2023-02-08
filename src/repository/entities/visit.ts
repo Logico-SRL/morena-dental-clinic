@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { MediaEntity, ProjectEntity, TagEntity } from ".";
 
 @Entity({
@@ -11,6 +11,7 @@ export class VisitEntity {
     id: string;
 
     @Column({ type: 'nvarchar' })
+    @Index({ fulltext: true })
     title: string;
 
     @Column({ type: 'datetime' })
@@ -20,12 +21,15 @@ export class VisitEntity {
     visitDate?: Date;
 
     @Column({ type: 'text', nullable: true })
+    @Index({ fulltext: true })
     diagnosis?: string;
 
     @Column({ type: 'text', nullable: true })
+    @Index({ fulltext: true })
     treatment?: string;
 
     @Column({ type: 'text', nullable: true })
+    @Index({ fulltext: true })
     followUp?: string;
 
     @Column({ type: 'nvarchar' })

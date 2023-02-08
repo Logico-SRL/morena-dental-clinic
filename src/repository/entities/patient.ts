@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 import { ProjectEntity, TagEntity } from ".";
 
 @Entity({
@@ -10,9 +10,11 @@ export class PatientEntity {
     id: string;
 
     @Column({ nullable: true })
+    @Index({ fulltext: true })
     firstName?: string
 
     @Column({ nullable: true })
+    @Index({ fulltext: true })
     familyName?: string
 
     @Column({ nullable: true })
@@ -37,13 +39,14 @@ export class PatientEntity {
     bloodGroup?: string
 
     @Column({ nullable: true, type: 'text' })
+    @Index({ fulltext: true })
     notes?: string
 
     // @Column()
     @OneToMany(type => ProjectEntity, pro => pro.patient)
     projects: ProjectEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.patients, { cascade: ['insert'] })
+    @ManyToMany(type => TagEntity, t => t.patients, { cascade: ['insert', 'update'] })
     @JoinTable()
     tags: TagEntity[]
 

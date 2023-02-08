@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import path from "path";
 import sharp from 'sharp';
 import { IOCServiceTypes } from '../../inversify/iocTypes';
+import { processEnv } from '../../processEnv';
 
 @injectable()
 export class FilePreviewService implements IFilePreviewService {
@@ -24,7 +25,8 @@ export class FilePreviewService implements IFilePreviewService {
             case 'image': {
 
                 const b64Thumbnail = await sharp(params.buffer)
-                    .resize(200)
+                    .resize(processEnv().previews.thumbnailSize)
+                    .png({ quality: processEnv().previews.quality })
                     .toBuffer()
                     .then(b => b.toString('base64'))
                     .catch(err => {
@@ -34,7 +36,8 @@ export class FilePreviewService implements IFilePreviewService {
                     })
 
                 const b64Preview = await sharp(params.buffer)
-                    .resize(1024)
+                    .resize(processEnv().previews.previewSize)
+                    .png({ quality: processEnv().previews.quality })
                     .toBuffer()
                     .then(b => b.toString('base64'))
                     .catch(err => {
@@ -111,7 +114,8 @@ export class FilePreviewService implements IFilePreviewService {
                             console.info(`file ${filePreviewPath} fetched`)
 
                             const b64Thumbnail = await sharp(file)
-                                .resize(200)
+                                .resize(processEnv().previews.thumbnailSize)
+                                .png({ quality: processEnv().previews.quality })
                                 .toBuffer()
                                 .then(b => b.toString('base64'))
                                 .catch(err => {
@@ -120,7 +124,8 @@ export class FilePreviewService implements IFilePreviewService {
                                 })
 
                             const b64Preview = await sharp(file)
-                                .resize(1024)
+                                .resize(processEnv().previews.previewSize)
+                                .png({ quality: processEnv().previews.quality })
                                 .toBuffer()
                                 .then(b => b.toString('base64'))
                                 .catch(err => {

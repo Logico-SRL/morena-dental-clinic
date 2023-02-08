@@ -1,70 +1,15 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { useRouter } from "next/navigation";
-import { ChangeEventHandler, FunctionComponent, PropsWithChildren, useMemo, useRef, useState } from "react";
+import { ChangeEventHandler, useMemo, useRef, useState } from "react";
 import { useLibrary } from "../../hooks/useLibrary";
 import { useTags } from "../../hooks/useTags";
 import UserControls from "../../userControls";
-import classnames from './library.module.scss';
+import { useDebouncedCallback } from "../../utils/useDebouncedCallback";
+import { searchResulRenderer } from "./renderers/searchResultRenderer";
 
 type PropType = {}
 
-
-
-type RendererOptions = {
-    router: AppRouterInstance
-}
-
-const TouchableRow: FunctionComponent<PropsWithChildren<{ onClick: () => void }>> = ({ children, onClick }) => {
-    return <UserControls.Row className={classnames.touchableRow} onClick={onClick}>
-        {children}
-    </UserControls.Row>
-}
-
-const patientRenderer = (item: IPatientSearchResult, { router }: RendererOptions) => {
-    return <TouchableRow onClick={() => router.push(`/patients/${item.id}`)}>
-        <UserControls.Col xs={6}>
-            {item.id}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.type}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.firstName}
-        </UserControls.Col>
-    </TouchableRow>
-}
-const projectRenderer = (item: IProjectSearchResult, { router }: RendererOptions) => {
-    return <TouchableRow onClick={() => router.push(`/projects/${item.id}`)}>
-        <UserControls.Col xs={6}>
-            {item.id}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.type}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.title}
-        </UserControls.Col>
-    </TouchableRow>
-}
-const visitRenderer = (item: IVisitSearchResult, { router }: RendererOptions) => {
-    return <TouchableRow onClick={() => router.push(`/projects/${item.projectId}/visits/${item.id}`)}>
-        <UserControls.Col xs={6}>
-            {item.id}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.type}
-        </UserControls.Col>
-        <UserControls.Col xs={6}>
-            {item.title}
-        </UserControls.Col>
-    </TouchableRow>
-}
-
-const searchResulRenderer = {
-    patient: patientRenderer,
-    project: projectRenderer,
-    visit: visitRenderer
-}
+const minFullTextSearchLength = 4;
+const minTagTextSearchLength = 2;
 
 export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
@@ -90,7 +35,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
     const abortController = useRef<AbortController>()
 
-    const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const onFullTextInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
 
         const val = e.target.value;
         setInputValue(val);
@@ -100,16 +45,20 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
             abortController.current.abort()
         }
 
-        if (!val || val.length < 4) {
+        if (!val || val.length < minFullTextSearchLength) {
             return setSearchResults([])
         }
 
+        searchFullTextDebounced(val)
+
+    }
+
+    const searchFullTextDebounced = useDebouncedCallback((val: string) => {
         abortController.current = new AbortController();
         searchEntities(val, abortController.current.signal).then(res => {
             setSearchResults(res.data)
         })
-
-    }
+    }, 200)
 
     const onTagInputChange = (val: string) => {
 
@@ -121,7 +70,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
             abortController.current.abort()
         }
 
-        if (!val || val.length < 3) {
+        if (!val || val.length < minFullTextSearchLength) {
             return setSearchResults([])
         }
 
@@ -144,6 +93,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
         abortController.current = new AbortController();
         getTag(value, abortController.current.signal).then(res => {
+
             const patsRes: IPatientSearchResult[] = res.data?.patients?.map(p => ({ ...p, type: 'patient' })) || []
             const projsRes: IProjectSearchResult[] = res.data?.projects?.map(p => ({ ...p, type: 'project' })) || []
             const visitsRes: IVisitSearchResult[] = res.data?.visits?.map(p => ({ ...p, type: 'visit' })) || []
@@ -159,14 +109,14 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
     return <UserControls.Row gutter={20}>
         <UserControls.Col xs={12}>
             <UserControls.Form.Item label='Full text search'>
-                <UserControls.Input onChange={onInputChange} value={inputValue} />
+                <UserControls.Input placeholder={`min length ${minFullTextSearchLength} chars`} onChange={onFullTextInputChange} value={inputValue} />
             </UserControls.Form.Item>
 
         </UserControls.Col>
         <UserControls.Col xs={12}>
             <UserControls.Form.Item label='Tag search'>
                 <UserControls.AutoComplete
-
+                    placeholder={`min length ${minTagTextSearchLength} chars`}
                     dataSource={tagDataSource}
                     onSearch={onTagInputChange}
                     onChange={onTagSelected}

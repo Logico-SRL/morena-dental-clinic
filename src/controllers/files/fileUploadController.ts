@@ -142,6 +142,8 @@ export class FileUploadController extends BaseController {
         });
 
         if (snapshots.length > 0) {
+            console.info('snapshots[0].b64Preview.length', snapshots[0].b64Preview.length)
+            console.info('snapshots[0].b64Thumbnail.length', snapshots[0].b64Thumbnail.length)
 
             media.b64Preview = snapshots[0].b64Preview;
             media.b64Thumbnail = snapshots[0].b64Thumbnail;

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { PatientEntity, ProjectCategoryEntity, TagEntity, VisitEntity } from ".";
 
 @Entity({
@@ -10,6 +10,7 @@ export class ProjectEntity {
     id: string;
 
     @Column()
+    @Index({ fulltext: true })
     title: string
 
     // @Column()
@@ -23,9 +24,11 @@ export class ProjectEntity {
     subCategory: ProjectCategoryEntity
 
     @Column({ type: 'text' })
+    @Index({ fulltext: true })
     medicalHistory: string
 
     @Column({ type: 'text' })
+    @Index({ fulltext: true })
     notes: string
 
     @ManyToOne(type => PatientEntity, pat => pat.projects)
