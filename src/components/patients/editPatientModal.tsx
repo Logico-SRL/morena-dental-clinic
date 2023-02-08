@@ -9,6 +9,7 @@ type PropType = {
     onCancel: () => void,
     patient: IPatient | undefined
 }
+
 export const EditPatientModal = ({ open, onCancel, patient }: PropType) => {
 
     const Form = UserControls.Form;

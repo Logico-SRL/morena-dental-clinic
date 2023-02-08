@@ -100,7 +100,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
             abortController.current.abort()
         }
 
-        if (!val || val.length < 3) {
+        if (!val || val.length < 4) {
             return setSearchResults([])
         }
 
@@ -144,9 +144,9 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
 
         abortController.current = new AbortController();
         getTag(value, abortController.current.signal).then(res => {
-            const patsRes: IPatientSearchResult[] = res.data.patients.map(p => ({ ...p, type: 'patient' }))
-            const projsRes: IProjectSearchResult[] = res.data.projects.map(p => ({ ...p, type: 'project' }))
-            const visitsRes: IVisitSearchResult[] = res.data.visits.map(p => ({ ...p, type: 'visit' }))
+            const patsRes: IPatientSearchResult[] = res.data?.patients?.map(p => ({ ...p, type: 'patient' })) || []
+            const projsRes: IProjectSearchResult[] = res.data?.projects?.map(p => ({ ...p, type: 'project' })) || []
+            const visitsRes: IVisitSearchResult[] = res.data?.visits?.map(p => ({ ...p, type: 'visit' })) || []
 
             const arr: ISearchResult[] = [];
             patsRes.forEach(el => arr.push(el));

@@ -10,6 +10,7 @@ const PatientsPage: PageComponent = ({ }) => {
 
     const { query } = useRouter()
     const { patientId } = query as { patientId: string }
+
     const { patient, loadingPatient } = usePatient(patientId);
 
     const LeftTitle = () => {

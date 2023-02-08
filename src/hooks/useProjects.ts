@@ -73,13 +73,13 @@ export const useProjects = () => {
 
 
     const createProject = async (p: IProject) => {
-        if (p.tags) {
-            p.tags.forEach(t => {
-                t.patients = undefined;
-                t.projects = undefined;
-                t.visits = undefined;
-            })
-        }
+        // if (p.tags) {
+        //     p.tags.forEach(t => {
+        //         t.patients = undefined;
+        //         t.projects = undefined;
+        //         t.visits = undefined;
+        //     })
+        // }
         creatingProjectsStore.set(true);
         httpService.post<IProject>(`/api/protected/projects`, p)
             .then(d => {

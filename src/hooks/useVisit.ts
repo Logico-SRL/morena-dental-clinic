@@ -50,13 +50,13 @@ export const useVisit = (projectId: string, visitId: string) => {
     }, [projectId, visitId])
 
     const saveVisit = async (projectId: string, visit: IVisit) => {
-        if (visit.tags) {
-            visit.tags.forEach(t => {
-                t.patients = undefined;
-                t.projects = undefined;
-                t.visits = undefined;
-            })
-        }
+        // if (visit.tags) {
+        //     visit.tags.forEach(t => {
+        //         t.patients = undefined;
+        //         t.projects = undefined;
+        //         t.visits = undefined;
+        //     })
+        // }
 
         return httpService.put<IVisit>(`/api/protected/projects/${projectId}/visits/${visit.id}`, visit)
             .then(d => {

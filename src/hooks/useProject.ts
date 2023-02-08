@@ -116,13 +116,13 @@ export const useProject = (projectId: string) => {
     }
 
     const saveProject = async (p: IProject) => {
-        if (p.tags) {
-            p.tags.forEach(t => {
-                t.patients = undefined;
-                t.projects = undefined;
-                t.visits = undefined;
-            })
-        }
+        // if (p.tags) {
+        //     p.tags.forEach(t => {
+        //         t.patients = undefined;
+        //         t.projects = undefined;
+        //         t.visits = undefined;
+        //     })
+        // }
 
         httpService.put<IProject>(`/api/protected/projects/${projectId}`, p)
             .then(d => {

@@ -3,6 +3,7 @@ import { Like, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoProjToProj } from "../converters";
+import { stripNestedTags } from "../utils/stripNestedTags";
 
 @injectable()
 export class ProjectsService implements IProjectsService {
@@ -58,6 +59,7 @@ export class ProjectsService implements IProjectsService {
     }
     save = async (project: IProject) => {
         const repo = (await this.dbService.projectsRepo())
+        stripNestedTags(project);
         repo.save(project);
         return project;
     }
@@ -65,6 +67,7 @@ export class ProjectsService implements IProjectsService {
         const repo = (await this.dbService.projectsRepo())
         project.id = ulid();
         project.createdOn = new Date();
+        stripNestedTags(project);
         repo.insert(project);
         return project;
     }

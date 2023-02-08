@@ -7,11 +7,11 @@ export const useTags = () => {
 
     const searchTags = async (search: string, signal?: AbortSignal) => {
         const pars = new URLSearchParams([['search', search]])
-        return httpService.get<ITag[]>(`/api/protected/tags?${pars.toString()}`, { signal })
+        return httpService.get<ITag[]>(`/api/protected/tags?${pars.toString()}`, { signal }).catch(err => ({ data: [] as ITag[] }))
     }
 
     const getTag = async (tag: string, signal?: AbortSignal) => {
-        return httpService.get<ITag>(`/api/protected/tags/${encodeURIComponent(tag)}`, { signal })
+        return httpService.get<ITag>(`/api/protected/tags/${encodeURIComponent(tag)}`, { signal }).catch(err => ({ data: undefined }))
     }
 
     return { searchTags, getTag };

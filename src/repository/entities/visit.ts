@@ -35,6 +35,7 @@ export class VisitEntity {
     project: ProjectEntity
 
     @OneToMany(type => MediaEntity, pro => pro.visit, {
+        cascade: ['remove'],
         onDelete: 'CASCADE'
     })
     media: MediaEntity[]

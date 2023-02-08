@@ -3,6 +3,7 @@ import { Like, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoVisitToVisit } from "../converters";
+import { stripNestedTags } from "../utils/stripNestedTags";
 
 @injectable()
 export class VisitsService implements IVisitsService {
@@ -51,6 +52,7 @@ export class VisitsService implements IVisitsService {
         v.project = {
             id: projectId
         }
+        stripNestedTags(v);
         repo.save(visit);
         return visit;
     }
@@ -62,6 +64,7 @@ export class VisitsService implements IVisitsService {
         }
         visit.id = ulid();
         visit.createdOn = new Date();
+        stripNestedTags(visit);
         repo.insert(visit);
         return visit;
     }

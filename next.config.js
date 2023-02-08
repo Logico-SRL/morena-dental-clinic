@@ -1,7 +1,7 @@
 // const withLess = require('next-with-less');
 
 const nextConfig = {
-    reactStrictMode: true,
+    reactStrictMode: false,
     experimental: { appDir: false },
     webpack(config) {
         config.resolve.fallback = {

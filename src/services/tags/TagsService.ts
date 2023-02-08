@@ -32,11 +32,13 @@ export class TagsService implements ITagsService {
             where: {
                 'tag': tag
             },
-            relations: [
-                'patients',
-                'projects',
-                'visits'
-            ]
+            relations: {
+                patients: true,
+                projects: true,
+                visits: {
+                    project: true
+                }
+            }
         })
 
         return res ? repoTagToTag(res) : undefined;

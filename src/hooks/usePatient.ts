@@ -16,9 +16,16 @@ const abortController = {
 export const usePatient = (patientId: string) => {
     // const [patient, setPatient] = React.useState<IPatient>()
     // const [loading, setLoading] = React.useState<boolean>(false)
+
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const patient = useStore(patientStore);
     const loadingPatient = useStore(loadingPatientStore);
+
+    React.useEffect(() => {
+        return () => {
+            patientStore.set(defaultPatient())
+        }
+    }, [])
 
     React.useEffect(() => {
 

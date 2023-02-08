@@ -4,6 +4,7 @@ import { ulid } from "ulid";
 import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 import { repoPatientToPatient } from "../converters";
+import { stripNestedTags } from "../utils/stripNestedTags";
 
 @injectable()
 export class PatientsService implements IPatientsService {
@@ -30,12 +31,14 @@ export class PatientsService implements IPatientsService {
 
     public save = async (patient: IPatient) => {
         const repo = (await this.dbService.patientsRepo())
+        stripNestedTags(patient);
         return await repo.save(patient);
     }
 
     public create = async (patient: IPatient) => {
         const repo = (await this.dbService.patientsRepo())
         patient.id = ulid()
+        stripNestedTags(patient);
         await repo.insert(patient);
         return patient
     }

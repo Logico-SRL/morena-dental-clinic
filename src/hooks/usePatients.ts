@@ -89,13 +89,13 @@ export const usePatients = () => {
     const savePatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
 
-        if (p.tags) {
-            p.tags.forEach(t => {
-                t.patients = undefined;
-                t.projects = undefined;
-                t.visits = undefined;
-            })
-        }
+        // if (p.tags) {
+        //     p.tags.forEach(t => {
+        //         t.patients = undefined;
+        //         t.projects = undefined;
+        //         t.visits = undefined;
+        //     })
+        // }
 
         httpService.put<IPatient>(`/api/protected/patients/${p.id}`, p).then(d => {
             const curr = [...patientsStore.get()];
