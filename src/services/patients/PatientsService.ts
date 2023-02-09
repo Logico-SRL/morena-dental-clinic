@@ -103,8 +103,6 @@ export class PatientsService implements IPatientsService {
                 .andWhere([{ 'firstName': Like(`%${params.nameSurname}%`) }, { 'familyName': Like(`%${params.nameSurname}%`) }])
         }
 
-        console.info('builder.getQuery()', builder.getQuery());
-
         const patEntities = await builder.getMany();
 
         const patients = patEntities.map<IPatient>(repoPatientToPatient)
