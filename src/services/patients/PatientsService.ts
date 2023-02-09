@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Between, Equal, FindManyOptions, MoreThanOrEqual, Repository } from "typeorm";
+import { Between, Equal, Like, MoreThanOrEqual, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { ages } from "../../configurations/ages";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
@@ -11,7 +11,7 @@ export class PatientsService implements IPatientsService {
 
     private readonly dbService: IDbService;
     private readonly externalPatientsService: IExternalPatientsService;
-    private get getRepo() { return this.dbService.patientsRepo() as Promise<Repository<PatientEntity>> }
+    private get repo() { return this.dbService.patientsRepo() as Promise<Repository<PatientEntity>> }
 
     constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService,
         @inject(IOCServiceTypes.ExternalPatientsService) externalPatientsService: IExternalPatientsService) {
@@ -45,7 +45,7 @@ export class PatientsService implements IPatientsService {
     }
 
     find = async (search: string) => {
-        const repo = await this.getRepo;
+        const repo = await this.repo;
         const resp = await repo.createQueryBuilder().select()
             .where(`MATCH(firstName) AGAINST ('${search}*' IN BOOLEAN MODE)`)
             .orWhere(`MATCH(familyName) AGAINST ('${search}*' IN BOOLEAN MODE)`)
@@ -84,35 +84,28 @@ export class PatientsService implements IPatientsService {
 
     public list = async (params: IPatientSearchParams) => {
 
-        const repo = (await this.dbService.patientsRepo())
+        const repo = await this.repo
 
-        let opts: FindManyOptions<PatientEntity> = {
-            where: {
-
-            }
-
-        }
+        const builder = repo.createQueryBuilder('patient')
+            .leftJoinAndSelect('patient.tags', 'tags');
 
         if (params.age) {
             const age = ages[params.age];
-
-            opts.where = {
-                ...opts.where,
-                'age': age.query.to ? Between(age.query.from, age.query.to) : MoreThanOrEqual(age.query.from)
-            }
+            builder.andWhere({ 'age': age.query.to ? Between(age.query.from, age.query.to) : MoreThanOrEqual(age.query.from) })
         }
 
         if (params.gender) {
-
-            opts.where = {
-                ...opts.where,
-                'gender': Equal(params.gender)
-            }
+            builder.andWhere({ 'gender': Equal(params.gender) })
         }
 
-        opts.relations = ['tags']
+        if (params.nameSurname) {
+            builder
+                .andWhere([{ 'firstName': Like(`%${params.nameSurname}%`) }, { 'familyName': Like(`%${params.nameSurname}%`) }])
+        }
 
-        const patEntities = await repo.find(opts);
+        console.info('builder.getQuery()', builder.getQuery());
+
+        const patEntities = await builder.getMany();
 
         const patients = patEntities.map<IPatient>(repoPatientToPatient)
 

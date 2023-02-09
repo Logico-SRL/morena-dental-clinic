@@ -1,7 +1,6 @@
 // 'use client'
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
-import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
@@ -17,30 +16,30 @@ export const usePatients = () => {
     const patients = useStore(patientsStore);
     const loadingPatients = useStore(loadingPatientsStore);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        // console.info('usePatients patients', patients);
+    //     // console.info('usePatients patients', patients);
 
-        if (!initializing.current) {
-            initializing.current = true;
-            // initialized = true;
-            const controller = new AbortController();
-            fetchAllPatients(controller)
-                .then(() => {
-                    // initializing.current = true;
-                })
-            return () => {
-                controller.abort();
-                initializing.current = false;
-            }
-        }
+    //     if (!initializing.current) {
+    //         initializing.current = true;
+    //         // initialized = true;
+    //         const controller = new AbortController();
+    //         fetchAllPatients(controller)
+    //             .then(() => {
+    //                 // initializing.current = true;
+    //             })
+    //         return () => {
+    //             controller.abort();
+    //             initializing.current = false;
+    //         }
+    //     }
 
-    }, [])
+    // }, [])
 
-    const fetchAllPatients = (controller?: AbortController) => {
-        return fetchFilteredPatients({}, controller)
+    // const fetchAllPatients = (controller?: AbortController) => {
+    //     return fetchFilteredPatients({}, controller)
 
-    }
+    // }
 
 
     const fetchFilteredPatients = (params: IPatientSearchParams, controller?: AbortController) => {

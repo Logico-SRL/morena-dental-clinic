@@ -4,7 +4,7 @@ type gendersKeysType = import('../../../configurations/genders').gendersKeysType
 type IPatientSearchParams = {
     age?: agesKeysType,
     gender?: gendersKeysType,
-    fullText?: string,
+    nameSurname?: string,
     fromVisitDate?: Date,
     toVisitDate?: Date,
 }

@@ -1,19 +1,19 @@
 // 'use client'
 import { DatePickerProps, RadioChangeEvent } from "antd";
 import { Dayjs } from 'dayjs';
-import React from "react";
+import React, { SetStateAction } from "react";
 import { agesArr } from "../../configurations/ages";
 import { gendersArr } from "../../configurations/genders";
 import UserControls from "../../userControls";
 
 
 type PropType = {
-    submitSearch: (searchParams: IPatientSearchParams) => void;
+    reset: () => void;
+    filters: IPatientSearchParams,
+    setFilters: Dispatch<SetStateAction<IPatientSearchParams>>
 }
 
-export const PatientsFilter: React.FunctionComponent<PropType> = ({ submitSearch }) => {
-
-    const [filters, setFilters] = React.useState<IPatientSearchParams>({})
+export const PatientsFilter: React.FunctionComponent<PropType> = ({ reset, filters, setFilters }) => {
 
     const onAgeRadioChange = (e: RadioChangeEvent) => {
         setFilters(f => ({ ...f, age: e.target.value }));
@@ -31,10 +31,10 @@ export const PatientsFilter: React.FunctionComponent<PropType> = ({ submitSearch
 
         setFilters(f => ({ ...f, toVisitDate: d?.toDate() || undefined }));
     }
-    const resetFilters = () => {
-        setFilters({})
-        submitSearch({});
-    }
+    // const resetFilters = () => {
+    //     setFilters({})
+    //     submitSearch({});
+    // }
 
     return <UserControls.Row gutter={[20, 20]}>
         <UserControls.Col xs={24}>
@@ -92,16 +92,16 @@ export const PatientsFilter: React.FunctionComponent<PropType> = ({ submitSearch
 
         <UserControls.Col xs={24} style={{ textAlign: 'center' }}>
             <UserControls.Space >
-                <UserControls.Button size="large" onClick={resetFilters} >
+                <UserControls.Button size="large" onClick={reset} >
                     <UserControls.Typography.Text strong >
                         Reset
                     </UserControls.Typography.Text>
                 </UserControls.Button>
-                <UserControls.Button size="large" onClick={e => submitSearch(filters)}>
+                {/* <UserControls.Button size="large" onClick={e => submitSearch(filters)}>
                     <UserControls.Typography.Text strong >
                         Search
                     </UserControls.Typography.Text>
-                </UserControls.Button>
+                </UserControls.Button> */}
             </UserControls.Space>
         </UserControls.Col>
     </UserControls.Row>

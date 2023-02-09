@@ -1,6 +1,7 @@
 // 'use client'
 
 import { useRouter } from "next/navigation";
+import { ChangeEventHandler, FunctionComponent } from "react";
 import UserControls from "../../userControls";
 import { PatientListItem } from "./patientListItem";
 
@@ -8,10 +9,12 @@ import { PatientListItem } from "./patientListItem";
 type PropType = {
     patients: IPatient[],
     loading: boolean,
-    onPatientEdit: (p: IPatient) => void
+    onPatientEdit: (p: IPatient) => void,
+    onSearchChange: ChangeEventHandler<HTMLInputElement>,
+    searchInputValue: string
 }
 
-export const Patients: React.FunctionComponent<PropType> = ({ patients, loading, onPatientEdit }) => {
+export const Patients: FunctionComponent<PropType> = ({ patients, loading, onPatientEdit, onSearchChange, searchInputValue }) => {
 
 
     const router = useRouter();
@@ -43,12 +46,20 @@ export const Patients: React.FunctionComponent<PropType> = ({ patients, loading,
 
     </UserControls.Row>
 
-    return <UserControls.List
-        loading={loading}
-        dataSource={patients}
-        header={<Header />}
-        renderItem={PatientListItem({ onClick, onEdit })}
+    return <UserControls.Row>
+        <UserControls.Col xs={24}>
+            <UserControls.Form.Item label="Search" >
+                <UserControls.Input placeholder="Lastname, Firstname *min 3 charachters" onChange={onSearchChange} value={searchInputValue} />
+            </UserControls.Form.Item>
 
-    />
-    // >{patients.map(p => <div>{`${p.id} - ${p.name}`}</div>)}</>
+        </UserControls.Col>
+        <UserControls.Col xs={24}>
+            <UserControls.List
+                loading={loading}
+                dataSource={patients}
+                header={<Header />}
+                renderItem={PatientListItem({ onClick, onEdit })}
+            />
+        </UserControls.Col>
+    </UserControls.Row>
 }
