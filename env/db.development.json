@@ -1,0 +1,8 @@
+{
+    "DB_TYPE": "mysql",
+    "DB_HOST": "127.0.0.1",
+    "DB_PORT": "3306",
+    "DB_USERNAME": "morena",
+    "DB_PASSWORD": "ABCD!234",
+    "DB_DATABASE": "morena_dental_care"
+}

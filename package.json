@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "env-cmd -f env/.env.development env-cmd -f env/.env.db.development next dev",
-    "build": "env-cmd -f env/.env.development env-cmd -f env/.env.db.development next build",
-    "start": "env-cmd -f env/.env.development env-cmd -f env/.env.db.development next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "jest --watch"
   },
   "dependencies": {

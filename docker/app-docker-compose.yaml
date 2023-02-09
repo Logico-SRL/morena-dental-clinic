@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  morena-dental-clinic:
+    build:
+      context: ../
+      dockerfile: docker/AppDockerfile
+    image: morena-dental-clinic
+    ports:
+      - '3000:3000'
+    networks:
+      - morena-network
+networks:
+  morena-network:
+    name: docker_morena-network
+    driver: bridge
+    external: true

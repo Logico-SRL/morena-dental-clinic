@@ -112,3 +112,4 @@ env/.env.db.development
 ffmpeg/ffmpeg.exe
 ffmpeg/ffprobe.exe
 ffmpeg/ffplay.exe
+env/.env.db.production

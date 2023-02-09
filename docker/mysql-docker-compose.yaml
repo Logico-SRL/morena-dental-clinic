@@ -16,9 +16,18 @@ services:
       MYSQL_PASSWORD: ABCD!234
     ports:
       - 3306:3306
+    networks:
+      - morena-network
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - morena-network
+
+networks:
+  morena-network:
+    name: docker_morena-network
+    driver: bridge
