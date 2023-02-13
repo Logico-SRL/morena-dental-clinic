@@ -26,7 +26,7 @@ export const VisitInfo = ({ visit, loading }: PropType) => {
             </Col>
             <Col xs={12}>
                 <Form.Item label={'visit date'}>
-                    {visit.visitDate?.toLocaleDateString()}
+                    {new Date(visit.visitDate || new Date()).toLocaleDateString()}
                 </Form.Item>
             </Col>
             <Col xs={12}>
