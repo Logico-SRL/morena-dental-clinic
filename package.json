@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:aseo": "set IS_ASEO=1 && next dev",
     "build": "next build",
     "start": "next start",
     "test": "jest --watch"

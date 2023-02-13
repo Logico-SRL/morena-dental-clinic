@@ -11,15 +11,17 @@ const getEnv = (phase) => {
     return new Promise((res, rej) => {
 
         const isDev = phase === PHASE_DEVELOPMENT_SERVER
-        const isProd = phase === PHASE_PRODUCTION_BUILD
+        const isAseo = process.env.IS_ASEO == 1;
+        // const isProd = phase === PHASE_PRODUCTION_BUILD
 
+        console.info('isAseo', isAseo);
 
         try {
 
             const fixedEnv = {}
             const envName = isDev ? 'development' : 'production';
             const appConfPath = `env/app.${envName}.json`;
-            const dbConfPath = `env/db.${envName}.json`;
+            const dbConfPath = isAseo ? `env/db.development.aseo.json` : `env/db.${envName}.json`;
             const appFile = JSON.parse(fs.readFileSync(path.resolve(appConfPath), { encoding: 'utf-8' }))
             const dbFile = JSON.parse(fs.readFileSync(path.resolve(dbConfPath), { encoding: 'utf-8' }))
 
