@@ -1,3 +1,5 @@
-import { UnoAnagraficaEntity } from "./unoAnagrafica";
-
-export { UnoAnagraficaEntity };
+import { UnoAnagraficaEntity as OLD } from "./unoAnagrafica";
+import { AAnagrafica as UnoAnagraficaEntity } from './entities/AAnagrafica';
+export {
+    UnoAnagraficaEntity
+};

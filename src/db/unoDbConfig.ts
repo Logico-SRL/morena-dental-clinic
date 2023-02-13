@@ -1,5 +1,6 @@
 import { processEnv } from "../processEnv";
-import { UnoAnagraficaEntity } from "../repository/unoEntities";
+import { UnoAnagraficaEntity, UnoAAnagraficaFamigliaEntity } from "../repository/unoEntities";
+
 
 export const unoDbConfig = {
     type: processEnv().unoDb.type as 'mssql',
@@ -11,7 +12,8 @@ export const unoDbConfig = {
     synchronize: false,
     logging: false,
     entities: [
-        UnoAnagraficaEntity
+        UnoAnagraficaEntity,
+        UnoAAnagraficaFamigliaEntity
     ],
     options: {
         encrypt: false

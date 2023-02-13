@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import 'reflect-metadata';
 import { DataSource } from "typeorm";
 import { unoDbConfig } from "../../db/unoDbConfig";
-import { UnoAnagraficaEntity } from "../../repository/unoEntities";
+import { UnoAnagraficaEntity, UnoAAnagraficaFamigliaEntity } from "../../repository/unoEntities";
 
 @injectable()
 export class UnoDbService implements IUnoDbService {
