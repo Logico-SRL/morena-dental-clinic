@@ -10,13 +10,18 @@ export const processEnv = () => {
         db: {
             type: process.env.DB_TYPE,
             host: process.env.DB_HOST,
-            // connStr: process.env.DB_CONN_STRING,
-            //port:+process.env.DB_PORT,
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
             port: +(process.env.DB_PORT || 0),
-
+        },
+        unoDb: {
+            type: process.env.UNO_DB_TYPE,
+            host: process.env.UNO_DB_HOST,
+            username: process.env.UNO_DB_USERNAME,
+            password: process.env.UNO_DB_PASSWORD,
+            database: process.env.UNO_DB_DATABASE,
+            port: +(process.env.UNO_DB_PORT || 0),
         },
         previews: {
             quality: +(process.env.DEFAULT_QUALITY || '50'),
