@@ -1,0 +1,1 @@
+type Repository<T> = import('typeorm').Repository<T>

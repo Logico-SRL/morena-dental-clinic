@@ -26,6 +26,7 @@ import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
 import { SettingsService } from "../services/settings/SettingsService";
 import { TagsService } from "../services/tags/TagsService";
+import { UnoDbService } from "../services/unoDb/UnoDbService";
 import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
@@ -44,6 +45,9 @@ NodeIOCContainer.bind<IFilesService>(IOCServiceTypes.FilesService).to(FilesServi
 NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).to(FilePreviewService).inSingletonScope();
 NodeIOCContainer.bind<ITagsService>(IOCServiceTypes.TagsService).to(TagsService).inSingletonScope();
 NodeIOCContainer.bind<ILibraryService>(IOCServiceTypes.LibraryService).to(LibraryService).inSingletonScope();
+NodeIOCContainer.bind<IUnoDbService>(IOCServiceTypes.UnoDbService).to(UnoDbService).inSingletonScope();
+
+
 
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);

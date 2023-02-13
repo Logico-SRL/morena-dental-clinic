@@ -5,7 +5,7 @@
     "DB_USERNAME": "morena",
     "DB_PASSWORD": "ABCD!234",
     "DB_DATABASE": "morena_dental_care",
-    "UNO_DB_TYPE": "sql",
+    "UNO_DB_TYPE": "mssql",
     "UNO_DB_HOST": "192.168.2.217",
     "UNO_DB_PORT": "1433",
     "UNO_DB_USERNAME": "sa",

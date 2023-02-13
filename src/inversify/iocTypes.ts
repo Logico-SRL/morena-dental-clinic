@@ -12,6 +12,7 @@ const IOCServiceTypes = {
     FilesPreviewService: Symbol.for("FilesPreviewService"),
     TagsService: Symbol.for("TagsService"),
     LibraryService: Symbol.for("LibraryService"),
+    UnoDbService: Symbol.for("UnoDbService"),
 
 };
 const IOCControllerTypes = {

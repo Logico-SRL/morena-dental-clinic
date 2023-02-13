@@ -3,7 +3,7 @@ import { AppUserEntity, MediaEntity, MediaSourceEntity, PatientEntity, ProjectCa
 
 
 export const dbConfig = {
-    type: processEnv().db.type as 'mssql',
+    type: processEnv().db.type as 'mysql',
     host: processEnv().db.host,
     username: processEnv().db.username,
     password: processEnv().db.password,
