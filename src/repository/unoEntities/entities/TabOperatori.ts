@@ -64,11 +64,10 @@ export class TabOperatori {
 
     // mPerioTestatas: MPerioTestata[];
 
-    // // @OneToOne(()=>AAnagrafica,aAnagrafica=>aAnagrafica.tabOperatori)
-    // // @JoinColumn([{ name: "ID", referencedColumnName: "id" },
-    // // ])
-
-    // // :AAnagrafica;
+    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>AAnagrafica,aAnagrafica=>aAnagrafica.tabOperatori)
+    // QUI PROBLEMA typeorm-model-generator // @JoinColumn([{ name: "ID", referencedColumnName: "id" },
+    // QUI PROBLEMA typeorm-model-generator // ])
+    // QUI PROBLEMA typeorm-model-generator // :AAnagrafica;
 
     // @OneToMany(() => TabOperatoriPerc, tabOperatoriPerc => tabOperatoriPerc.idOperatore2)
 

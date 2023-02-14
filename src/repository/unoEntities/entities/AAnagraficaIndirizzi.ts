@@ -6,8 +6,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
-import { TabComuni } from "./TabComuni";
+// import { AAnagrafica } from "./AAnagrafica";
+// import { TabComuni } from "./TabComuni";
+import { UnoAnagraficaEntity } from "..";
+import { UnoTabComuniEntity } from '..'
 
 @Index("IX_A-ANAGRAFICA-INDIRIZZI", ["idAnagrafica"], {})
 @Index("PK_A-ANAGRAFICA-INDIRIZZI", ["id"], { unique: true })
@@ -31,17 +33,17 @@ export class AAnagraficaIndirizzi {
   @Column("nvarchar", { name: "Provincia", nullable: true, length: 2 })
   provincia: string | null;
 
-  // @ManyToOne(
-  //   () => AAnagrafica,
-  //   (aAnagrafica) => aAnagrafica.aAnagraficaIndirizzis
-  // )
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(
+    () => UnoAnagraficaEntity,
+    (aAnagrafica) => aAnagrafica.aAnagraficaIndirizzis
+  )
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: UnoAnagraficaEntity;
 
-  // @ManyToOne(() => TabComuni, (tabComuni) => tabComuni.aAnagraficaIndirizzis, {
-  //   onDelete: "SET NULL",
-  //   onUpdate: "CASCADE",
-  // })
-  // @JoinColumn([{ name: "IDComune", referencedColumnName: "id" }])
-  // idComune: TabComuni;
+  @ManyToOne(() => UnoTabComuniEntity, (tabComuni) => tabComuni.aAnagraficaIndirizzis, {
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  })
+  @JoinColumn([{ name: "IDComune", referencedColumnName: "id" }])
+  idComune: UnoTabComuniEntity;
 }

@@ -1,4 +1,7 @@
 import { Container, interfaces } from "inversify";
+import { AnagraficasController } from "src/controllers/uno/anagrafica/anagraficasController";
+import { AnagraficasService } from "src/services/uno/anagrafica/AnagraficasService";
+import { IAnagraficasService } from "src/services/uno/anagrafica/IAnagraficasService";
 import { FileController } from "../controllers/files/fileController";
 import { FileImportController } from "../controllers/files/fileImportController";
 import { FileThumbnailsController } from "../controllers/files/fileThumbnailsController";
@@ -46,9 +49,9 @@ NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).
 NodeIOCContainer.bind<ITagsService>(IOCServiceTypes.TagsService).to(TagsService).inSingletonScope();
 NodeIOCContainer.bind<ILibraryService>(IOCServiceTypes.LibraryService).to(LibraryService).inSingletonScope();
 NodeIOCContainer.bind<IUnoDbService>(IOCServiceTypes.UnoDbService).to(UnoDbService).inSingletonScope();
-
-
-
+NodeIOCContainer.bind<IAnagraficasService>(IOCServiceTypes.AnagraficasService).to(AnagraficasService).inSingletonScope();
+//
+//
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);
@@ -65,8 +68,8 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileImportController).t
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagsController).to(TagsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagController).to(TagController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.LibraryController).to(LibraryController);
-
-
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.AnagraficasController).to(AnagraficasController);
+//
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)
     .toFactory<IApiController, [symbol, NextApiRequest, NextApiResponse]>(context => {
         return (key: symbol, req: NextApiRequest, res: NextApiResponse) => {

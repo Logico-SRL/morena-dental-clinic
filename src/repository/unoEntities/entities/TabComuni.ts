@@ -43,9 +43,9 @@ export class TabComuni {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(1)" })
   statoRecord: boolean | null;
 
-  // @OneToMany(
-  //   () => AAnagraficaIndirizzi,
-  //   (aAnagraficaIndirizzi) => aAnagraficaIndirizzi.idComune
-  // )
-  // aAnagraficaIndirizzis: AAnagraficaIndirizzi[];
+  @OneToMany(
+    () => AAnagraficaIndirizzi,
+    (aAnagraficaIndirizzi) => aAnagraficaIndirizzi.idComune
+  )
+  aAnagraficaIndirizzis: AAnagraficaIndirizzi[];
 }

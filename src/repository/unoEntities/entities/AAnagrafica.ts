@@ -123,154 +123,94 @@ export class AAnagrafica {
     @Column("int", { name: "IDReferente", nullable: true })
     idReferente: number | null;
 
-    // @OneToMany(() => AAnagraficaFamiglia, aAnagraficaFamiglia => aAnagraficaFamiglia.id3)
+    @OneToMany(() => AAnagraficaFamiglia, aAnagraficaFamiglia => aAnagraficaFamiglia.id3)
+    aAnagraficaFamiglias: AAnagraficaFamiglia[];
 
+    @OneToMany(() => AAnagraficaFamiglia, aAnagraficaFamiglia => aAnagraficaFamiglia.id4)
+    aAnagraficaFamiglias2: AAnagraficaFamiglia[];
 
-    // aAnagraficaFamiglias: AAnagraficaFamiglia[];
-
-    // @OneToMany(() => AAnagraficaFamiglia, aAnagraficaFamiglia => aAnagraficaFamiglia.id4)
-
-
-    // aAnagraficaFamiglias2: AAnagraficaFamiglia[];
-
-    // @OneToMany(() => AAnagraficaIndirizzi, aAnagraficaIndirizzi => aAnagraficaIndirizzi.idAnagrafica2)
-
-
-    // aAnagraficaIndirizzis: AAnagraficaIndirizzi[];
+    @OneToMany(() => AAnagraficaIndirizzi, aAnagraficaIndirizzi => aAnagraficaIndirizzi.idAnagrafica2)
+    aAnagraficaIndirizzis: AAnagraficaIndirizzi[];
 
     // @OneToMany(() => AAnagraficaRecapiti, aAnagraficaRecapiti => aAnagraficaRecapiti.idAnagrafica2)
-
-
     // aAnagraficaRecapitis: AAnagraficaRecapiti[];
 
     // @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idAnagrafica2)
-
-
     // aAnagraficaTutoris: AAnagraficaTutori[];
 
     // @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idTutore2)
-
-
     // aAnagraficaTutoris2: AAnagraficaTutori[];
 
     // @OneToMany(() => AgImpegni, agImpegni => agImpegni.idAnagrafica2)
-
-
     // agImpegnis: AgImpegni[];
 
-    // // @OneToOne(()=>APazienti,aPazienti=>aPazienti.)
-
-
-    // // aPazienti:APazienti;
+    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>APazienti,aPazienti=>aPazienti.)
+    // QUI PROBLEMA typeorm-model-generator // aPazienti:APazienti;
 
     // @OneToMany(() => APazientiAnamnesi, aPazientiAnamnesi => aPazientiAnamnesi.idAnagrafica)
-
-
     // aPazientiAnamnesis: APazientiAnamnesi[];
 
     // @OneToMany(() => APazientiMedici, aPazientiMedici => aPazientiMedici.idMedico2)
-
-
     // aPazientiMedicis: APazientiMedici[];
 
     // @OneToMany(() => APostit, aPostit => aPostit.idAnagrafica2)
-
-
     // aPostits: APostit[];
 
     // @OneToMany(() => CIncassiOperatori, cIncassiOperatori => cIncassiOperatori.idOperatore2)
-
-
     // cIncassiOperatoris: CIncassiOperatori[];
 
     // @OneToMany(() => CRate, cRate => cRate.idAnagrafica)
-
-
     // cRates: CRate[];
 
     // @OneToMany(() => CSituazionecontabile, cSituazionecontabile => cSituazionecontabile.idAnagrafica2)
-
-
     // cSituazionecontabiles: CSituazionecontabile[];
 
     // @OneToMany(() => IEga, iEga => iEga.idPaziente2)
-
-
     // iEgas: IEga[];
 
     // @OneToMany(() => IEgaimgInforx, iEgaimgInforx => iEgaimgInforx.idPaziente2)
-
-
     // iEgaimgInforxes: IEgaimgInforx[];
 
     // @OneToMany(() => MagAnagraficaAltrifor, magAnagraficaAltrifor => magAnagraficaAltrifor.idFornitore2)
-
-
     // magAnagraficaAltrifors: MagAnagraficaAltrifor[];
 
     // @OneToMany(() => MagOrdini, magOrdini => magOrdini.idFornitore2)
-
-
     // magOrdinis: MagOrdini[];
 
     // @OneToMany(() => MCureTestata, mCureTestata => mCureTestata.idAnagrafica2)
-
-
     // mCureTestatas: MCureTestata[];
 
     // @OneToMany(() => MDiarioAnnotazioni, mDiarioAnnotazioni => mDiarioAnnotazioni.idAnagrafica2)
-
-
     // mDiarioAnnotazionis: MDiarioAnnotazioni[];
 
     // @OneToMany(() => MDocumentiT, mDocumentiT => mDocumentiT.idAnagrafica2)
-
-
     // mDocumentiTs: MDocumentiT[];
 
     // @OneToMany(() => MIgieneTestata, mIgieneTestata => mIgieneTestata.idAnagrafica2)
-
-
     // mIgieneTestatas: MIgieneTestata[];
 
     // @OneToMany(() => MImpiantiTestata, mImpiantiTestata => mImpiantiTestata.idAnagrafica2)
-
-
     // mImpiantiTestatas: MImpiantiTestata[];
 
     // @OneToMany(() => MOrtoTestata, mOrtoTestata => mOrtoTestata.idAnagrafica2)
-
-
     // mOrtoTestatas: MOrtoTestata[];
 
     // @OneToMany(() => MPerioTestata, mPerioTestata => mPerioTestata.idAnagrafica2)
-
-
     // mPerioTestatas: MPerioTestata[];
 
     // @OneToMany(() => MRichiami, mRichiami => mRichiami.idAnagrafica)
-
-
     // mRichiamis: MRichiami[];
 
     // @OneToMany(() => MSituazioneDente, mSituazioneDente => mSituazioneDente.idAnagrafica2)
-
-
     // mSituazioneDentes: MSituazioneDente[];
 
-    // // @OneToOne(()=>TabOperatori,tabOperatori=>tabOperatori.)
-
-
-    // // tabOperatori:TabOperatori;
+    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>TabOperatori,tabOperatori=>tabOperatori.)
+    // QUI PROBLEMA typeorm-model-generator // tabOperatori:TabOperatori;
 
     // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeOperativa)
-
-
     // tabSocietas: TabSocieta[];
 
     // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeLegale)
-
-
     // tabSocietas2: TabSocieta[];
 
 }

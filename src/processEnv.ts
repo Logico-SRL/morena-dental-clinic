@@ -21,7 +21,7 @@ export const processEnv = () => {
             username: process.env.UNO_DB_USERNAME,
             password: process.env.UNO_DB_PASSWORD,
             database: process.env.UNO_DB_DATABASE,
-            port: +(process.env.UNO_DB_PORT || 0),
+            port: +(process.env.UNO_DB_PORT || 0)
         },
         previews: {
             quality: +(process.env.DEFAULT_QUALITY || '50'),

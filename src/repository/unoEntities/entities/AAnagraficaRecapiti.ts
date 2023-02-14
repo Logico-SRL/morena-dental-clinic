@@ -6,7 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
+// import { AAnagrafica } from "./AAnagrafica";
+import { UnoAnagraficaEntity } from "..";
 
 @Index("IX_A-INDIRIZZIA-INDIRIZZI-RECAPITI", ["idAnagrafica"], {})
 @Index("PK_A-INDIRIZZI-RECAPITI", ["id"], { unique: true })
@@ -31,9 +32,9 @@ export class AAnagraficaRecapiti {
   scipTag: string | null;
 
   // @ManyToOne(
-  //   () => AAnagrafica,
+  //   () => UnoAnagraficaEntity,
   //   (aAnagrafica) => aAnagrafica.aAnagraficaRecapitis
   // )
   // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  // idAnagrafica2: UnoAnagraficaEntity;
 }
