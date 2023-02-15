@@ -13,7 +13,8 @@ const IOCServiceTypes = {
     TagsService: Symbol.for("TagsService"),
     LibraryService: Symbol.for("LibraryService"),
     UnoDbService: Symbol.for("UnoDbService"),
-    AnagraficasService: Symbol.for("AnagraficasService")
+    AnagraficasService: Symbol.for("AnagraficasService"),
+    AnagraficaImportService: Symbol.for("AnagraficaImportService")
 
 };
 const IOCControllerTypes = {
@@ -35,6 +36,7 @@ const IOCControllerTypes = {
     TagController: Symbol.for("TagController"),
     LibraryController: Symbol.for("LibraryController"),
     AnagraficasController: Symbol.for("AnagraficasController"),
+    AnagraficaImportController: Symbol.for("AnagraficaImportController"),
 }
 
 export { IOCServiceTypes, IOCControllerTypes };
