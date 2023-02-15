@@ -5,11 +5,11 @@ import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 
 const projectsStore = atom<IProject[]>([]);
-// const projectStore = atom<IProject | undefined>(undefined);
+const filteredProjectsStore = atom<IProject[]>([]);
 const loadingProjectsStore = atom<boolean>(false)
-const creatingProjectsStore = atom<boolean>(false)
-// const loadingProjectStore = atom<boolean>(false)
-const initializing = { current: false };
+const loadingFilteredProjectsStore = atom<boolean>(false)
+const creatingProjectStore = atom<boolean>(false)
+const initialized = { current: false };
 
 const abortController = {
     current: new AbortController()
@@ -17,17 +17,18 @@ const abortController = {
 
 export const useProjects = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
-    const projects = useStore(projectsStore);
-    // const project = useStore(projectsStore);
+    const allProjects = useStore(projectsStore);
+    const filteredProjects = useStore(filteredProjectsStore);
     const loadingProjects = useStore(loadingProjectsStore);
-    const creatingProjects = useStore(creatingProjectsStore);
+    const loadingFilteredProjects = useStore(loadingFilteredProjectsStore);
+    const creatingProjects = useStore(creatingProjectStore);
 
     useEffect(() => {
 
 
-        if (!initializing.current) {
-            console.info('useProjects', initializing.current);
-            initializing.current = true;
+        if (!initialized.current) {
+            initialized.current = true;
+            console.info('useProjects', initialized.current);
 
             // initialized = true;
             if (abortController.current) {
@@ -36,63 +37,62 @@ export const useProjects = () => {
             }
 
             fetchAllProjects(abortController.current)
-                .then(() => {
-                    // initializing.current = true;
-                })
+                ;
+
             return () => {
-                console.info('useProjects dismounting');
+                // console.info('useProjects dismounting');
                 // controller.abort();
-                initializing.current = false;
+                // initialized.current = false;
             }
         }
 
     }, [])
 
     const fetchAllProjects = (controller: AbortController) => {
+        loadingProjectsStore.set(true)
         return fetchFilteredProjects({}, controller)
+            .then(all => {
+                projectsStore.set(all);
+            }).finally(() => {
+                loadingProjectsStore.set(false)
+            })
     }
 
-    const fetchFilteredProjects = (params: IProjectSearchParams, controller?: AbortController) => {
-        // const controller = new AbortController()
-        loadingProjectsStore.set(true);
+    const fetchFilteredProjects = (params: IProjectSearchParams, controller?: AbortController): Promise<IProject[]> => {
+
+        loadingFilteredProjectsStore.set(true);
 
         return httpService.get<IProject[]>(`/api/protected/projects`, { signal: controller?.signal })
             .then(d => {
-                projectsStore.set(d.data);
+                filteredProjectsStore.set(d.data);
+                return d.data;
             })
             .catch(() => {
-                projectsStore.set([]);
-
+                filteredProjectsStore.set([]);
+                return [];
             })
             .finally(() => {
-                loadingProjectsStore.set(false);
+                loadingFilteredProjectsStore.set(false);
             })
-        // return controller;
     }
 
 
 
     const createProject = async (p: IProject) => {
-        // if (p.tags) {
-        //     p.tags.forEach(t => {
-        //         t.patients = undefined;
-        //         t.projects = undefined;
-        //         t.visits = undefined;
-        //     })
-        // }
-        creatingProjectsStore.set(true);
+
+        creatingProjectStore.set(true);
         httpService.post<IProject>(`/api/protected/projects`, p)
             .then(d => {
-                projectsStore.set([...projects, d.data]);
+                projectsStore.set([...allProjects, d.data]);
             })
             .catch(() => {
                 projectsStore.set([]);
 
             })
             .finally(() => {
-                creatingProjectsStore.set(false);
+                creatingProjectStore.set(false);
             })
     }
 
-    return { projects, loadingProjects, fetchFilteredProjects, createProject, creatingProjects };
+    return { allProjects, loadingProjects, filteredProjects, loadingFilteredProjects, fetchFilteredProjects, createProject, creatingProjects };
 }

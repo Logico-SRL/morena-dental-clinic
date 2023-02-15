@@ -17,7 +17,7 @@ const LeftTitle = ({ onAddClick }: { onAddClick: () => void }) => {
 
 const Comp: PageComponent = () => {
 
-    const { projects, loadingProjects } = useProjects()
+    const { filteredProjects, loadingFilteredProjects } = useProjects()
     // const [showNewProjectModal, setShowNewProjectModal] = useState(false);
     // const [showEditProjectModal, setShowEditProjectModal] = useState(false);
     // const [editingProject, setEditingProject] = useState<IProject>();
@@ -54,7 +54,9 @@ const Comp: PageComponent = () => {
     return (<><SplittedPage
         LeftTitle={<LeftTitle onAddClick={onAddClick} />}
         RightTitle={<RightTitle />}
-        Left={<Projects projects={projects} loading={loadingProjects} />}
+        Left={<Projects
+            projects={filteredProjects}
+            loading={loadingFilteredProjects} />}
     />
         {/* <NewProjectModal open={showNewProjectModal} onCancel={onModalCancel} />
         <EditProjectModal open={showEditProjectModal} onCancel={onModalCancel} project={editingProject} /> */}

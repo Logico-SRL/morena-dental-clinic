@@ -18,11 +18,11 @@ export const ProjectListItem = ({ onClick }: PropType) => (project: IProject) =>
     return <UserControls.List.Item className="touchable" onClick={onItemClick}>
         <UserControls.Row style={{ flex: 1 }}>
 
-            <UserControls.Col xs={8}>
+            <UserControls.Col xs={10}>
                 {project.id}
             </UserControls.Col>
 
-            <UserControls.Col xs={5}>
+            <UserControls.Col xs={14}>
                 {project.title}
             </UserControls.Col>
 

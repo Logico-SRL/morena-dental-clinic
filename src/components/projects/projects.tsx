@@ -20,27 +20,14 @@ export const Projects: React.FunctionComponent<PropType> = ({ projects, loading 
         router.push(`/projects/${project.id}`)
     }
 
-    // const onEdit = (patient: IPatient) => {
-    //     onPatientEdit(patient)
-    // }
-
     const Header = () => <UserControls.Row style={{ fontWeight: 'bold' }}>
-        <UserControls.Col xs={7} offset={1}>
+        <UserControls.Col xs={10} offset={1}>
             id
         </UserControls.Col>
 
-        <UserControls.Col xs={5}>
+        <UserControls.Col xs={13}>
             Title
         </UserControls.Col>
-
-        {/* <UserControls.Col xs={5}>
-            Family Name
-        </UserControls.Col>
-
-        <UserControls.Col xs={5}>
-            Fiscal Code
-        </UserControls.Col>
-        <UserControls.Col xs={1} /> */}
 
     </UserControls.Row>
 
