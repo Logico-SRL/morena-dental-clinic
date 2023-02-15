@@ -106,5 +106,15 @@ export const usePatients = () => {
         })
     }
 
-    return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient };
+    const searchExternalAnagrafica = async (search: IUnoAnagraficaSearchParams) => {
+        const pars = new URLSearchParams(search)
+        return httpService.get<UnoAnagraficaEntity[]>(`/api/protected/uno/anagrafica?${pars.toString()}`)
+            .then(res => res.data)
+            .catch(err => {
+                console.error('searchExternalAnagrafica err', err);
+                return []
+            })
+    }
+
+    return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient, searchExternalAnagrafica };
 }

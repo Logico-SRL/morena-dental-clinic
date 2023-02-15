@@ -1,31 +1,6 @@
-import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { AAnagraficaFamiglia } from './AAnagraficaFamiglia'
-import { AAnagraficaIndirizzi } from './AAnagraficaIndirizzi'
-import { AAnagraficaRecapiti } from './AAnagraficaRecapiti'
-import { AAnagraficaTutori } from './AAnagraficaTutori'
-import { AgImpegni } from './AgImpegni'
-import { APazienti } from './APazienti'
-import { APazientiAnamnesi } from './APazientiAnamnesi'
-import { APazientiMedici } from './APazientiMedici'
-import { APostit } from './APostit'
-import { CIncassiOperatori } from './CIncassiOperatori'
-import { CRate } from './CRate'
-import { CSituazionecontabile } from './CSituazionecontabile'
-import { IEga } from './IEga'
-import { IEgaimgInforx } from './IEgaimgInforx'
-import { MagAnagraficaAltrifor } from './MagAnagraficaAltrifor'
-import { MagOrdini } from './MagOrdini'
-import { MCureTestata } from './MCureTestata'
-import { MDiarioAnnotazioni } from './MDiarioAnnotazioni'
-import { MDocumentiT } from './MDocumentiT'
-import { MIgieneTestata } from './MIgieneTestata'
-import { MImpiantiTestata } from './MImpiantiTestata'
-import { MOrtoTestata } from './MOrtoTestata'
-import { MPerioTestata } from './MPerioTestata'
-import { MRichiami } from './MRichiami'
-import { MSituazioneDente } from './MSituazioneDente'
-import { TabOperatori } from './TabOperatori'
-import { TabSocieta } from './TabSocieta'
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AAnagraficaFamiglia } from './AAnagraficaFamiglia';
+import { AAnagraficaIndirizzi } from './AAnagraficaIndirizzi';
 
 
 @Index("A-INDIRIZZI_PK", ["id",], { unique: true })

@@ -1,6 +1,7 @@
 import { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditPatientModal } from "../../components/patients/editPatientModal";
+import { ImportPatientsModal } from "../../components/patients/importPatientsModal";
 import { NewPatientModal } from "../../components/patients/newPatientModal";
 import { Patients } from "../../components/patients/patients";
 import { PatientsFilter } from "../../components/patients/patientsFilter";
@@ -10,7 +11,7 @@ import { AntdIcons } from "../../userControls/icons";
 import { useDebouncedCallback } from "../../utils/useDebouncedCallback";
 
 
-const Title = ({ onAddClick }: { onAddClick: () => void }) => {
+const Title = ({ onAddClick, onImportClick }: { onAddClick: () => void, onImportClick: () => void }) => {
     return <>
         <UserControls.Space align="center">
             <AntdIcons.UserOutlined style={{ fontSize: 30 }} />
@@ -18,9 +19,14 @@ const Title = ({ onAddClick }: { onAddClick: () => void }) => {
                 PATIENTS
             </UserControls.Typography.Title>
         </UserControls.Space>
-        <UserControls.Button onClick={onAddClick} size="large" style={{ marginLeft: 'auto' }} icon={<AntdIcons.UserAddOutlined />} >
-            Add
-        </UserControls.Button>
+        <UserControls.Space align="center" style={{ marginLeft: 'auto' }}>
+            <UserControls.Button onClick={onAddClick} size="large" icon={<AntdIcons.UserAddOutlined />} >
+                Add
+            </UserControls.Button>
+            <UserControls.Button onClick={onImportClick} size="large" icon={<AntdIcons.UserAddOutlined />} >
+                Import
+            </UserControls.Button>
+        </UserControls.Space>
     </>
 }
 
@@ -36,6 +42,7 @@ const PatientsPage: PageComponent = () => {
 
     const [filters, setFilters] = useState<IPatientSearchParams>({})
     const [searchInputValue, setSearchInputValue] = useState<string>('')
+    const [showImportModal, setShowImportModal] = useState(false)
 
     const { patients, loadingPatients, fetchFilteredPatients } = usePatients();
 
@@ -94,17 +101,21 @@ const PatientsPage: PageComponent = () => {
         setSearchInputValue('')
     }
 
+    const onImportClick = () => {
+        setShowImportModal(s => !s)
+    }
 
 
     return (<>
         <SplittedPage
-            LeftTitle={<Title onAddClick={onAddClick} />}
+            LeftTitle={<Title onAddClick={onAddClick} onImportClick={onImportClick} />}
             RightTitle={<FilterTitle />}
             Left={<Patients patients={patients} loading={loadingPatients} onPatientEdit={onPatientEdit} onSearchChange={onSearchChange} searchInputValue={searchInputValue} />}
             Right={<PatientsFilter reset={resetFilters} filters={filters} setFilters={setFilters} />}
         />
         <NewPatientModal open={showNewPatientModal} onCancel={onModalCancel} />
         <EditPatientModal open={showEditPatientModal} onCancel={onModalCancel} patient={editingPatient} />
+        <ImportPatientsModal open={showImportModal} onCancel={onImportClick} />
     </>)
 }
 
