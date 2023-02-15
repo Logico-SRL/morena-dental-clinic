@@ -28,10 +28,7 @@ export class AnagraficasController extends BaseController {
             cognome: this.cognome,
             codiceFiscale: this.codiceFiscale
         }
-        console.log('------------------------------------------');
-        console.log(params);
         const data = await this.anagraficasService.find(params)
-        console.log('------------------------------------------');
         return this.res.status(200).json(data);
     }
 }
