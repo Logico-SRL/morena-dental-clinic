@@ -45,7 +45,7 @@ export class AnagraficaImportService implements IAnagraficaImportService {
                 toBeUpdate.dateOfBirth = importParams[i].dataNascita || undefined;
                 toBeUpdate.emergencyPhone = undefined;
                 toBeUpdate.bloodGroup = undefined;
-                toBeUpdate.notes = 'aggiornato!';
+                toBeUpdate.notes = undefined;
                 await repo.save({
                     ...check,      // existing fields
                     ...toBeUpdate // updated fields
@@ -64,7 +64,7 @@ export class AnagraficaImportService implements IAnagraficaImportService {
                 toBeInsered.dateOfBirth = importParams[i].dataNascita || undefined;
                 toBeInsered.emergencyPhone = undefined;
                 toBeInsered.bloodGroup = undefined;
-                toBeInsered.notes = 'inserito!';
+                toBeInsered.notes = undefined;
                 const toSave = repo.create(toBeInsered);
                 await repo.save(toSave);
                 returnValues.push(toBeInsered);
