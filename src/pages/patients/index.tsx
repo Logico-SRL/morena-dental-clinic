@@ -51,9 +51,6 @@ const PatientsPage: PageComponent = () => {
     const [editingPatient, setEditingPatient] = useState<IPatient>();
     // const searchInputRef = createRef<InputRef>();
 
-
-
-
     const controller = useRef<AbortController>();
 
     useEffect(() => {
@@ -105,6 +102,11 @@ const PatientsPage: PageComponent = () => {
         setShowImportModal(s => !s)
     }
 
+    const onImportCLose = () => {
+        setShowImportModal(false)
+        onSearch();
+    }
+
 
     return (<>
         <SplittedPage
@@ -115,7 +117,7 @@ const PatientsPage: PageComponent = () => {
         />
         <NewPatientModal open={showNewPatientModal} onCancel={onModalCancel} />
         <EditPatientModal open={showEditPatientModal} onCancel={onModalCancel} patient={editingPatient} />
-        <ImportPatientsModal open={showImportModal} onCancel={onImportClick} />
+        <ImportPatientsModal open={showImportModal} onClose={onImportCLose} />
     </>)
 }
 

@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { AAnagrafica } from '../repository/unoEntities/entities/AAnagrafica';
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
 
 const patientsStore = atom<IPatient[]>([]);
@@ -116,5 +117,14 @@ export const usePatients = () => {
             })
     }
 
-    return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient, searchExternalAnagrafica };
+    const importExternalAnagrafica = async (users: AAnagrafica[]) => {
+        return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
+            .then(res => res.data)
+            .catch(err => {
+                console.error('importExternalAnagrafica err', err);
+                throw err;
+            })
+    }
+
+    return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient, searchExternalAnagrafica, importExternalAnagrafica };
 }
