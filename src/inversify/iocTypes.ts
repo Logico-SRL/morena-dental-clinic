@@ -14,7 +14,8 @@ const IOCServiceTypes = {
     LibraryService: Symbol.for("LibraryService"),
     UnoDbService: Symbol.for("UnoDbService"),
     AnagraficasService: Symbol.for("AnagraficasService"),
-    AnagraficaImportService: Symbol.for("AnagraficaImportService")
+    AnagraficaImportService: Symbol.for("AnagraficaImportService"),
+    PubMedService: Symbol.for("PubMedService")
 
 };
 const IOCControllerTypes = {

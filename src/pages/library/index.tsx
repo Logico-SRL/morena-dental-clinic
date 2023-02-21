@@ -1,5 +1,6 @@
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { Library } from "../../components/library/library";
+import { SearchOnline } from "../../components/library/searchOnline";
 import UserControls from "../../userControls";
 
 
@@ -16,7 +17,10 @@ const LibraryPage: PageComponent = () => {
     return (<SplittedPage
         LeftTitle={LeftTitle}
         RightTitle={RightTitle}
-        Left={<Library />} />)
+        Left={<Library />}
+        Right={<SearchOnline />} />)
+
+
 
 }
 
