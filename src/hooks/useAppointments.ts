@@ -3,6 +3,7 @@ import { atom } from 'nanostores';
 import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { defaultPatient } from '../services/defaultValues';
 
 const appointmentsStore = atom<IAppointment[]>([]);
 const loadingAppointmentsStore = atom<boolean>(false)
@@ -39,6 +40,31 @@ export const useAppointments = () => {
         }
 
     }, [])
+
+    const mockedUpData: IAppointment[] = [{
+        id: 1,
+        dataOra: new Date(),
+        deImpegno: '',
+        durata: 120,
+        nota: '',
+        status: 1,
+        tipoImpegno: { key: '', value: 'tipoImpegno' },
+        categoria: { key: '', value: 'categoria' },
+        colore: { key: '', value: 'colore' },
+        idPostazione: { key: '', value: 'idPostazione' },
+        statoRecord: { key: '', value: 'statoRecord' },
+        patient: defaultPatient(),
+        allarm: null,
+        cloudId: '',
+        idAnagrafica: 0,
+        idOperatore: 0,
+        idOperatore2: 0,
+        oraAr: '',
+        oraIn: '',
+        oraOut: '',
+        timeStamp: null
+
+    }]
 
     const fetchAllAppointments = (controller: AbortController) => {
         loadingAppointmentsStore.set(true);
