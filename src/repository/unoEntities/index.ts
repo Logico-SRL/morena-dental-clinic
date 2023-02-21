@@ -4,6 +4,7 @@ import { AAnagraficaIndirizzi as UnoAAnagraficaIndirizziEntity } from './entitie
 import { AAnagraficaRecapiti as UnoAAnagraficaRecapitiEntity } from './entities/AAnagraficaRecapiti';
 import { AgImpegni as UnoAgImpegni } from './entities/AgImpegni';
 import { TabComuni as UnoTabComuniEntity } from './entities/TabComuni';
+import { TabPostazioni as UnoTabPostazioni } from './entities/TabPostazioni'
 
 export {
     UnoAnagraficaEntity,
@@ -11,6 +12,7 @@ export {
     UnoAAnagraficaIndirizziEntity,
     UnoTabComuniEntity,
     UnoAAnagraficaRecapitiEntity,
-    UnoAgImpegni
+    UnoAgImpegni,
+    UnoTabPostazioni
 };
 

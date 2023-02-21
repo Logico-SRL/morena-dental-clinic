@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
 import 'reflect-metadata';
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { unoDbConfig } from "../../db/unoDbConfig";
-import { UnoAnagraficaEntity, UnoAAnagraficaFamigliaEntity } from "../../repository/unoEntities";
+import { UnoAnagraficaEntity, UnoAAnagraficaFamigliaEntity, UnoAgImpegni, UnoTabPostazioni } from "../../repository/unoEntities";
 
 @injectable()
 export class UnoDbService implements IUnoDbService {
@@ -25,5 +25,11 @@ export class UnoDbService implements IUnoDbService {
 
     anagraficaRepo = async () => {
         return (await this.dataSource).getRepository(UnoAnagraficaEntity);
+    }
+    impegniRepo = async () => {
+        return (await this.dataSource).getRepository(UnoAgImpegni);
+    }
+    postazioniRepo = async () => {
+        return (await this.dataSource).getRepository(UnoTabPostazioni)
     }
 }

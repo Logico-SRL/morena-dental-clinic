@@ -41,29 +41,29 @@ export const useAppointments = () => {
 
     }, [])
 
-    const mockedUpData: IAppointment[] = [{
-        id: 1,
-        dataOra: new Date(),
-        deImpegno: '',
-        durata: 120,
-        nota: '',
-        status: 1,
-        tipoImpegno: { key: 'tipoImpegno', value: 'tipoImpegno' },
-        categoria: { key: 'categoria', value: 'categoria' },
-        colore: { key: 'colore', value: 'colore' },
-        idPostazione: { key: 'idPostazione', value: 'idPostazione' },
-        statoRecord: { key: 'statoRecord', value: 'statoRecord' },
-        patient: defaultPatient('01GSA4F3XGYKWW4V6Y2XYCFVYA'),
-        allarm: null,
-        cloudId: '',
-        idAnagrafica: 0,
-        idOperatore: 0,
-        idOperatore2: 0,
-        oraAr: '',
-        oraIn: '',
-        oraOut: '',
-        timeStamp: null
-    }]
+    // const mockedUpData: IAppointment[] = [{
+    //     id: 1,
+    //     dataOra: new Date(),
+    //     deImpegno: '',
+    //     durata: 120,
+    //     nota: '',
+    //     status: 1,
+    //     tipoImpegno: { key: 'tipoImpegno', value: 'tipoImpegno' },
+    //     categoria: { key: 'categoria', value: 'categoria' },
+    //     colore: { key: 'colore', value: 'colore' },
+    //     idPostazione: { key: 'idPostazione', value: 'idPostazione' },
+    //     statoRecord: { key: 'statoRecord', value: 'statoRecord' },
+    //     patient: defaultPatient('01GSA4F3XGYKWW4V6Y2XYCFVYA'),
+    //     allarm: null,
+    //     cloudId: '',
+    //     idAnagrafica: 0,
+    //     idOperatore: 0,
+    //     idOperatore2: 0,
+    //     oraAr: '',
+    //     oraIn: '',
+    //     oraOut: '',
+    //     timeStamp: null
+    // }]
 
     const fetchAllAppointments = (controller: AbortController) => {
         loadingAppointmentsStore.set(true);

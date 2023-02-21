@@ -1,10 +1,13 @@
 import { Container, interfaces } from "inversify";
 import { AnagraficasController } from "src/controllers/uno/anagrafica/anagraficasController";
 import { AnagraficaImportController } from "src/controllers/uno/import/AnagraficaImportController";
+import { AppointmentsController } from "src/controllers/uno/import/AppointmentsImportController";
 import { AnagraficasService } from "src/services/uno/anagrafica/AnagraficasService";
 import { IAnagraficasService } from "src/services/uno/anagrafica/IAnagraficasService";
+import { ImpegniService } from "src/services/uno/impegni/ImpegniService";
 import { AnagraficaImportService } from "src/services/uno/import/AnagraficaImportService";
 import { IAnagraficaImportService } from "src/services/uno/import/IAnagraficaImportService";
+import { IImpegniService } from 'src/services/uno/impegni/IImpegniService';
 import { FileController } from "../controllers/files/fileController";
 import { FileImportController } from "../controllers/files/fileImportController";
 import { FileThumbnailsController } from "../controllers/files/fileThumbnailsController";
@@ -54,6 +57,7 @@ NodeIOCContainer.bind<ILibraryService>(IOCServiceTypes.LibraryService).to(Librar
 NodeIOCContainer.bind<IUnoDbService>(IOCServiceTypes.UnoDbService).to(UnoDbService).inSingletonScope();
 NodeIOCContainer.bind<IAnagraficasService>(IOCServiceTypes.AnagraficasService).to(AnagraficasService).inSingletonScope();
 NodeIOCContainer.bind<IAnagraficaImportService>(IOCServiceTypes.AnagraficaImportService).to(AnagraficaImportService).inSingletonScope();
+NodeIOCContainer.bind<IImpegniService>(IOCServiceTypes.ImpegniService).to(ImpegniService).inSingletonScope();
 //
 //
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
@@ -74,6 +78,7 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagController).to(TagCo
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.LibraryController).to(LibraryController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.AnagraficasController).to(AnagraficasController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.AnagraficaImportController).to(AnagraficaImportController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.AppointmentsController).to(AppointmentsController);
 //
 NodeIOCContainer.bind<interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>>(IOCControllerTypes.ControllerFactory)
     .toFactory<IApiController, [symbol, NextApiRequest, NextApiResponse]>(context => {

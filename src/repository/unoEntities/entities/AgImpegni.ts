@@ -79,37 +79,37 @@ export class AgImpegni {
   @Column("nchar", { name: "OraOUT", nullable: true, length: 5 })
   oraOut: string | null;
 
-  // @Column("nvarchar", {
-  //   name: "LinkedObjInfo",
-  //   nullable: true,
-  //   length: 12,
-  //   default: () => "NULL",
-  // })
-  // linkedObjInfo: string | null;
+  @Column("nvarchar", {
+    name: "LinkedObjInfo",
+    nullable: true,
+    length: 12,
+    default: () => "NULL",
+  })
+  linkedObjInfo: string | null;
 
-  // @Column("smallint", {
-  //   name: "RifiutatoStatoRipristino",
-  //   default: () => "(0)",
-  // })
-  // rifiutatoStatoRipristino: number;
+  @Column("smallint", {
+    name: "RifiutatoStatoRipristino",
+    default: () => "(0)",
+  })
+  rifiutatoStatoRipristino: number;
 
-  // @Column("datetime", { name: "RifiutatoInData", nullable: true })
-  // rifiutatoInData: Date | null;
+  @Column("datetime", { name: "RifiutatoInData", nullable: true })
+  rifiutatoInData: Date | null;
 
-  // @Column("datetime", { name: "Inserted", nullable: true })
-  // inserted: Date | null;
+  @Column("datetime", { name: "Inserted", nullable: true })
+  inserted: Date | null;
 
-  // @Column("datetime", { name: "Updated", nullable: true })
-  // updated: Date | null;
+  @Column("datetime", { name: "Updated", nullable: true })
+  updated: Date | null;
 
-  // @Column("smallint", { name: "OLBStato", default: () => "(0)" })
-  // olbStato: number;
+  @Column("smallint", { name: "OLBStato", default: () => "(0)" })
+  olbStato: number;
 
-  // @Column("nvarchar", { name: "OLBId", nullable: true, length: 105 })
-  // olbId: string | null;
+  @Column("nvarchar", { name: "OLBId", nullable: true, length: 105 })
+  olbId: string | null;
 
-  // @Column("bit", { name: "VideoConf", default: () => "(0)" })
-  // videoConf: boolean;
+  @Column("bit", { name: "VideoConf", default: () => "(0)" })
+  videoConf: boolean;
 
   // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.agImpegnis)
   // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])

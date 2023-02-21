@@ -3,7 +3,9 @@ import {
     UnoAnagraficaEntity,
     UnoAAnagraficaFamigliaEntity,
     UnoAAnagraficaIndirizziEntity,
-    UnoTabComuniEntity
+    UnoTabComuniEntity,
+    UnoAgImpegni,
+    UnoTabPostazioni
 } from "../repository/unoEntities";
 
 
@@ -20,7 +22,9 @@ export const unoDbConfig = {
         UnoAnagraficaEntity,
         UnoAAnagraficaFamigliaEntity,
         UnoAAnagraficaIndirizziEntity,
-        UnoTabComuniEntity
+        UnoTabComuniEntity,
+        UnoAgImpegni,
+        UnoTabPostazioni
     ],
     options: {
         encrypt: false
