@@ -42,8 +42,10 @@ export const useAppointments = () => {
 
     const fetchAllAppointments = (controller: AbortController) => {
         loadingAppointmentsStore.set(true);
+        const params = new URLSearchParams();
+        params.append('take', '100');
 
-        return httpService.get<IAppointment[]>(`/api/protected/appointments`, { signal: controller?.signal })
+        return httpService.get<IAppointment[]>(`/api/protected/appointments?${params.toString()}`, { signal: controller?.signal })
             .then(d => {
                 appointmentsStore.set(d.data);
             })
