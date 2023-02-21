@@ -122,7 +122,7 @@ export const Library: React.FunctionComponent<PropType> = ({ }) => {
             <UserControls.Form.Item label='Tag search'>
                 <UserControls.AutoComplete
                     placeholder={`min length ${minTagTextSearchLength} chars`}
-                    dataSource={tagDataSource}
+                    options={tagDataSource}
                     onSearch={onTagInputChange}
                     onChange={onTagSelected}
                 />
