@@ -1,16 +1,22 @@
 const fs = require('fs');
 const path = require('path');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: true,
+    openAnalyzer: true,
+})
 
 const {
     PHASE_DEVELOPMENT_SERVER,
     PHASE_PRODUCTION_BUILD,
 } = require('next/constants')
 
+const isDev = (phase) => phase === PHASE_DEVELOPMENT_SERVER
+
 const getEnv = (phase) => {
 
     return new Promise((res, rej) => {
 
-        const isDev = phase === PHASE_DEVELOPMENT_SERVER
+
         const isAseo = process.env.IS_ASEO == 1;
         // const isProd = phase === PHASE_PRODUCTION_BUILD
 
@@ -19,7 +25,7 @@ const getEnv = (phase) => {
         try {
 
             const fixedEnv = {}
-            const envName = isDev ? 'development' : 'production';
+            const envName = isDev(phase) ? 'development' : 'production';
             const appConfPath = `env/app.${envName}.json`;
             const dbConfPath = isAseo ? `env/db.development.aseo.json` : `env/db.${envName}.json`;
             const appFile = JSON.parse(fs.readFileSync(path.resolve(appConfPath), { encoding: 'utf-8' }))
@@ -45,6 +51,7 @@ const getEnv = (phase) => {
 const nextConfig = async function (phase) {
 
     const env = await getEnv(phase);
+
     let config = {
         reactStrictMode: false,
         experimental: { appDir: false },
@@ -61,7 +68,7 @@ const nextConfig = async function (phase) {
 
 
     console.info('config.output', config.output);
-    return config;
+    return isDev(phase) ? config : withBundleAnalyzer(config);
 
 };
 
