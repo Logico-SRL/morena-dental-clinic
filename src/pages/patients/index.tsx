@@ -15,7 +15,7 @@ const Title = ({ onAddClick, onImportClick }: { onAddClick: () => void, onImport
     return <>
         <UserControls.Space align="center">
             <AntdIcons.UserOutlined style={{ fontSize: 30 }} />
-            <UserControls.Typography.Title style={{ margin: 0 }}>
+            <UserControls.Typography.Title level={3} style={{ margin: 0 }}>
                 PATIENTS
             </UserControls.Typography.Title>
         </UserControls.Space>
@@ -32,7 +32,7 @@ const Title = ({ onAddClick, onImportClick }: { onAddClick: () => void, onImport
 
 const FilterTitle = () => {
     return <UserControls.Space>
-        <UserControls.Typography.Title level={3} style={{ margin: 0 }}>
+        <UserControls.Typography.Title level={4} style={{ margin: 0 }}>
             FILTER
         </UserControls.Typography.Title>
     </UserControls.Space>

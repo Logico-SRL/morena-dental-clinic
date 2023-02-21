@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useAppointments } from "../../hooks/useAppointments";
 import UserControls from "../../userControls";
 import { formatUtils } from "../../utils/formatUtils";
+import { TouchableRow } from "../userControls/touchableRow";
 
 export const Dashboard = () => {
 
@@ -28,29 +29,49 @@ export const Dashboard = () => {
 
 const Header = () => {
     return <UserControls.Row>
-        <UserControls.Col xs={8}>
+        <UserControls.Col xs={6}>
             <UserControls.Typography.Title level={5}>
-                Date
+                Appointment Date
             </UserControls.Typography.Title>
         </UserControls.Col>
-        <UserControls.Col xs={8}>
+        <UserControls.Col xs={6}>
             <UserControls.Typography.Title level={5}>
                 Patient
+            </UserControls.Typography.Title>
+        </UserControls.Col>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography.Title level={5}>
+                Type
+            </UserControls.Typography.Title>
+        </UserControls.Col>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography.Title level={5}>
+                Category
             </UserControls.Typography.Title>
         </UserControls.Col>
     </UserControls.Row>
 }
 const renderItem = ({ onClick }: { onClick: (item: IAppointment) => void }) => (item: IAppointment) => {
-    return <UserControls.Row>
-        <UserControls.Col xs={8}>
+    return <TouchableRow onClick={() => onClick(item)}>
+        <UserControls.Col xs={6}>
             <UserControls.Typography>
                 {formatUtils.formatDate(item.dataOra)}
             </UserControls.Typography>
         </UserControls.Col>
-        <UserControls.Col xs={8}>
+        <UserControls.Col xs={6}>
             <UserControls.Typography>
                 {item.patient ? `${item.patient.firstName} ${item.patient.familyName}` : ' - '}
             </UserControls.Typography>
         </UserControls.Col>
-    </UserControls.Row>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography>
+                {item.tipoImpegno.value}
+            </UserControls.Typography>
+        </UserControls.Col>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography>
+                {item.categoria.value}
+            </UserControls.Typography>
+        </UserControls.Col>
+    </TouchableRow>
 }

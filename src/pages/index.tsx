@@ -9,9 +9,9 @@ const Home: PageComponent = () => {
 
 
     const LeftTitle = <UserControls.Typography.Title level={3} >
-        Upcoming Appointments
+        UPCOMING APPOINTMENTS
     </UserControls.Typography.Title>
-    const RightTitle = <UserControls.Typography.Title level={3} >
+    const RightTitle = <UserControls.Typography.Title level={4} >
         Latest Projects
     </UserControls.Typography.Title>
 

@@ -6,7 +6,7 @@ import UserControls from "../../userControls";
 const LibraryPage: PageComponent = () => {
 
     const LeftTitle = <UserControls.Typography.Title level={3}>
-        Library
+        LIBRARY
     </UserControls.Typography.Title>
 
     const RightTitle = <UserControls.Typography.Title level={4}>

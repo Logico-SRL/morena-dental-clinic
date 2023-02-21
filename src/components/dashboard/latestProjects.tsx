@@ -28,11 +28,11 @@ export const LatestProjects = () => {
 }
 
 const Header = () => <UserControls.Row style={{ fontWeight: 'bold' }}>
-    <UserControls.Col xs={10} offset={1}>
+    <UserControls.Col xs={11} offset={1}>
         id
     </UserControls.Col>
 
-    <UserControls.Col xs={13}>
+    <UserControls.Col xs={12}>
         Title
     </UserControls.Col>
 

@@ -1,5 +1,5 @@
 import UserControls from "../../../userControls"
-import { TouchableRow } from "./touchableRow"
+import { TouchableRow } from "../../userControls/touchableRow"
 
 export const visitRenderer: ItemRendererType<IVisitSearchResult> = (item, { router }) => {
     return <TouchableRow onClick={() => router.push(`/projects/${item.projectId}/visits/${item.id}`)}>

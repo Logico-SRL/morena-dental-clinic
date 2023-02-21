@@ -1,5 +1,5 @@
-export const defaultPatient = (): IPatient => ({
-    id: '',
+export const defaultPatient = (id: string = ''): IPatient => ({
+    id,
     firstName: '',
     familyName: '',
     fiscalCode: '',

@@ -18,3 +18,12 @@
     justify-content: flex-end;
   }
 }
+
+.touchableRow {
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid $item-border;
+  &:hover {
+    background-color: transparentize($color: #000000, $amount: 0.95);
+  }
+}

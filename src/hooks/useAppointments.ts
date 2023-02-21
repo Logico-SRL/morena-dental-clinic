@@ -48,12 +48,12 @@ export const useAppointments = () => {
         durata: 120,
         nota: '',
         status: 1,
-        tipoImpegno: { key: '', value: 'tipoImpegno' },
-        categoria: { key: '', value: 'categoria' },
-        colore: { key: '', value: 'colore' },
-        idPostazione: { key: '', value: 'idPostazione' },
-        statoRecord: { key: '', value: 'statoRecord' },
-        patient: defaultPatient(),
+        tipoImpegno: { key: 'tipoImpegno', value: 'tipoImpegno' },
+        categoria: { key: 'categoria', value: 'categoria' },
+        colore: { key: 'colore', value: 'colore' },
+        idPostazione: { key: 'idPostazione', value: 'idPostazione' },
+        statoRecord: { key: 'statoRecord', value: 'statoRecord' },
+        patient: defaultPatient('01GSA4F3XGYKWW4V6Y2XYCFVYA'),
         allarm: null,
         cloudId: '',
         idAnagrafica: 0,
@@ -63,7 +63,6 @@ export const useAppointments = () => {
         oraIn: '',
         oraOut: '',
         timeStamp: null
-
     }]
 
     const fetchAllAppointments = (controller: AbortController) => {
@@ -81,6 +80,7 @@ export const useAppointments = () => {
 
             })
             .finally(() => {
+                // appointmentsStore.set(mockedUpData);
                 loadingAppointmentsStore.set(false);
             })
     }
