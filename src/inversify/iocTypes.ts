@@ -14,11 +14,10 @@ const IOCServiceTypes = {
     LibraryService: Symbol.for("LibraryService"),
     UnoDbService: Symbol.for("UnoDbService"),
     AnagraficasService: Symbol.for("AnagraficasService"),
-    AnagraficaImportService: Symbol.for("AnagraficaImportService")
-    PubMedService: Symbol.for("PubMedService")
+    AnagraficaImportService: Symbol.for("AnagraficaImportService"),
+    PubMedService: Symbol.for("PubMedService"),
     AppointmentsService: Symbol.for("AppointmentsService"),
-    ImpegniService: Symbol.for('ImpegniService')
-
+    ImpegniService: Symbol.for('ImpegniService'),
 };
 const IOCControllerTypes = {
     ControllerFactory: Symbol.for("ControllerFactory"),
