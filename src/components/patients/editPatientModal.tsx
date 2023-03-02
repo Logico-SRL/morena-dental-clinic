@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { usePatients } from "../../hooks/usePatients";
+import { useWebLogger } from "../../hooks/useWebLogger";
 import UserControls from "../../userControls";
 import { PatientForm } from "./patientForm";
 
@@ -17,6 +18,7 @@ export const EditPatientModal = ({ open, onCancel, patient }: PropType) => {
 
     const [form] = Form.useForm<IPatient>();
     const [notif] = UserControls.notification.useNotification();
+    const logger = useWebLogger();
 
     useEffect(() => {
         patient && form.setFieldsValue(patient);
@@ -24,10 +26,12 @@ export const EditPatientModal = ({ open, onCancel, patient }: PropType) => {
 
 
     const onOk = () => {
+
         form.validateFields().
-            then(async (pat) => {
-                await savePatient(pat);
-                notif.success({
+            then(async (patient) => {
+                logger.info(`saving patient ${patient.id}`, { test: '1234', patient });
+                await savePatient(patient);
+                notif.success, ({
                     message: 'Done',
                     description: 'Patient correctly saved',
                     placement: 'bottomLeft'

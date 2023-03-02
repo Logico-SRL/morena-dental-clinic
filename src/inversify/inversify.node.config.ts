@@ -4,10 +4,10 @@ import { AnagraficaImportController } from "src/controllers/uno/import/Anagrafic
 import { AppointmentsController } from "src/controllers/uno/import/AppointmentsImportController";
 import { AnagraficasService } from "src/services/uno/anagrafica/AnagraficasService";
 import { IAnagraficasService } from "src/services/uno/anagrafica/IAnagraficasService";
+import { IImpegniService } from 'src/services/uno/impegni/IImpegniService';
 import { ImpegniService } from "src/services/uno/impegni/ImpegniService";
 import { AnagraficaImportService } from "src/services/uno/import/AnagraficaImportService";
 import { IAnagraficaImportService } from "src/services/uno/import/IAnagraficaImportService";
-import { IImpegniService } from 'src/services/uno/impegni/IImpegniService';
 import { FileController } from "../controllers/files/fileController";
 import { FileImportController } from "../controllers/files/fileImportController";
 import { FileThumbnailsController } from "../controllers/files/fileThumbnailsController";
@@ -38,11 +38,14 @@ import { TagsService } from "../services/tags/TagsService";
 import { UnoDbService } from "../services/unoDb/UnoDbService";
 import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
+import { LoggerController } from "../controllers/logger/loggerController";
+import { LoggerService } from "../services/logger/LoggerService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
 
 const NodeIOCContainer = new Container();
 
-NodeIOCContainer.bind<DbService>(IOCServiceTypes.DbService).to(DbService).inSingletonScope();
+NodeIOCContainer.bind<ILogger>(IOCServiceTypes.LoggerService).to(LoggerService).inSingletonScope();
+NodeIOCContainer.bind<IDbService>(IOCServiceTypes.DbService).to(DbService).inSingletonScope();
 NodeIOCContainer.bind<IPatientsService>(IOCServiceTypes.PatientsService).to(PatientsService).inSingletonScope();
 NodeIOCContainer.bind<IProjectCategoriesService>(IOCServiceTypes.ProjectCategoriesService).to(ProjectCategoriesService).inSingletonScope();
 NodeIOCContainer.bind<IProjectsService>(IOCServiceTypes.ProjectsService).to(ProjectsService).inSingletonScope();
@@ -60,6 +63,7 @@ NodeIOCContainer.bind<IAnagraficaImportService>(IOCServiceTypes.AnagraficaImport
 NodeIOCContainer.bind<IImpegniService>(IOCServiceTypes.ImpegniService).to(ImpegniService).inSingletonScope();
 //
 //
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.LoggerController).to(LoggerController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);

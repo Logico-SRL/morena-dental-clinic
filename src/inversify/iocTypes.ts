@@ -1,4 +1,5 @@
 const IOCServiceTypes = {
+    LoggerService: Symbol.for("LoggerService"),
     DbService: Symbol.for("DbService"),
     PatientsService: Symbol.for("PatientsService"),
     ProjectCategoriesService: Symbol.for("ProjectCategoriesService"),
@@ -21,6 +22,7 @@ const IOCServiceTypes = {
 };
 const IOCControllerTypes = {
     ControllerFactory: Symbol.for("ControllerFactory"),
+    LoggerController: Symbol.for("LoggerController"),
     PatientsController: Symbol.for("PatientsController"),
     PatientController: Symbol.for("PatientController"),
     ProjectsController: Symbol.for("ProjectsController"),

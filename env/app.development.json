@@ -2,7 +2,8 @@
     "NEXTAUTH_URL": "http://localhost:3000",
     "NEXTAUTH_SECRET": "2a8b7c886091443034c65bc6248187130b7d852666b3ed6f7c43dfe5dd6bf22c",
     "NEXT_PUBLIC_CURRENT_ENV_NAME": "development",
-    "LOG_LEVEL": "info",
+    "LOG_LEVEL": "debug",
+    "LOG_DIRNAME": "logs",
     "DEFAULT_QUALITY": "50",
     "PREVIEW_SIZE": "800",
     "THUMBNAIL_SIZE": "200"

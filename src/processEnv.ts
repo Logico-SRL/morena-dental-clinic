@@ -5,7 +5,12 @@ export const processEnv = () => {
         nextAuthUrl: process.env.NEXTAUTH_URL || '',
         nextAuthSecret: process.env.NEXTAUTH_SECRET,
         currentEnvName: process.env.NEXT_PUBLIC_CURRENT_ENV_NAME,
-        logLevel: process.env.LOG_LEVEL,
+
+        logs: {
+            level: process.env.LOG_LEVEL,
+            dirname: process.env.LOG_DIRNAME || '',
+
+        },
 
         db: {
             type: process.env.DB_TYPE,

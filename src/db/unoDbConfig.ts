@@ -1,11 +1,7 @@
 import { processEnv } from "../processEnv";
 import {
-    UnoAnagraficaEntity,
     UnoAAnagraficaFamigliaEntity,
-    UnoAAnagraficaIndirizziEntity,
-    UnoTabComuniEntity,
-    UnoAgImpegni,
-    UnoTabPostazioni
+    UnoAAnagraficaIndirizziEntity, UnoAgImpegni, UnoAnagraficaEntity, UnoTabComuniEntity, UnoTabPostazioni
 } from "../repository/unoEntities";
 
 
@@ -17,7 +13,7 @@ export const unoDbConfig = {
     database: processEnv().unoDb.database,
     port: processEnv().unoDb.port,
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: [
         UnoAnagraficaEntity,
         UnoAAnagraficaFamigliaEntity,
