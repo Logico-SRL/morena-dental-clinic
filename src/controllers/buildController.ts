@@ -12,7 +12,7 @@ export const buildController = (pars: symbol) => async (req: NextApiRequest, res
 
     if (callable && typeof callable === 'function') {
         try {
-            logger.debug(`callable calling api`, { url: req.url, a: 'test' })
+            // logger.debug(`callable calling api`, { url: req.url, a: 'test' })
             await callable(req, res)
         } catch (ex: any) {
             logger.error('callable error', { error: ex.message })

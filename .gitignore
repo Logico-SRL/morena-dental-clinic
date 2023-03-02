@@ -113,3 +113,4 @@ ffmpeg/ffmpeg.exe
 ffmpeg/ffprobe.exe
 ffmpeg/ffplay.exe
 env/.env.db.production
+morena-dental-sqlite

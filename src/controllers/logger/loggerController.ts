@@ -15,7 +15,7 @@ export class LoggerController extends BaseController {
 
     POST = async () => {
         const { level, meta, message } = this.logObj;
-        console.info('post meta', meta)
+        // console.info('post meta', meta)
         await this.loggerService[level](message, meta);
         return this.res.status(200).send('done')
     }

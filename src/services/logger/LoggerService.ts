@@ -1,8 +1,9 @@
 import { injectable } from "inversify";
-import path from "path";
 import 'reflect-metadata';
 import winston, { format, Logger } from 'winston';
 import { processEnv } from "../../processEnv";
+import { Sqlite3Transport } from "./transports/sqliteTransport";
+import { getLogDir } from "./utils";
 
 @injectable()
 export class LoggerService implements ILogger {
@@ -10,9 +11,7 @@ export class LoggerService implements ILogger {
     private readonly logger: Logger;
 
     constructor() {
-        const dirname = path.isAbsolute(processEnv().logs.dirname) ?
-            processEnv().logs.dirname :
-            path.resolve(processEnv().logs.dirname);
+        const dirname = getLogDir();
 
         this.logger = winston.createLogger({
             level: processEnv().logs.level,
@@ -36,6 +35,11 @@ export class LoggerService implements ILogger {
                 //
                 new winston.transports.File({ filename: 'error.log', level: 'error', dirname }),
                 new winston.transports.File({ filename: 'combined.log', dirname }),
+                new Sqlite3Transport({
+                    db: `${dirname}/morena-dental-sqlite.db`,
+                    tableName: 'logs',
+                    params: ['level', 'message', 'meta']
+                })
             ],
         });
         if (process.env.NODE_ENV !== 'production') {
