@@ -36,7 +36,7 @@ export class Sqlite3Transport extends Transport {
 
     log(info: any, callback: () => void) {
         const logparams = Object.assign({}, info);
-        console.info('transport info', logparams);
+        // console.info('transport info', logparams);
         const { timestamp, level, message, ...meta } = logparams
         setImmediate(() => this.emit('logged', info));
 

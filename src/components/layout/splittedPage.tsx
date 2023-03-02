@@ -6,42 +6,29 @@ type PropsType = {
     LeftTitle?: React.ReactNode,
     Right?: React.ReactNode,
     RightTitle?: React.ReactNode,
+    fullWidth?: boolean
 
 }
 
-export const SplittedPage = ({ Left, Right, LeftTitle, RightTitle }: PropsType) => {
+export const SplittedPage = ({ Left, Right, LeftTitle, RightTitle, fullWidth }: PropsType) => {
 
     return <UserControls.Row className={classNames.container}>
         {(LeftTitle || RightTitle) && <UserControls.Row className={classNames.titleRow}>
-            <UserControls.Col xs={15} className={`${classNames.left} ${classNames.title}`}>
+            <UserControls.Col xs={fullWidth ? 24 : 15} className={`${classNames.left} ${classNames.title}`}>
                 {LeftTitle && LeftTitle}
             </UserControls.Col>
-            <UserControls.Col xs={9} className={`${classNames.right} ${classNames.title}`}>
+            {!fullWidth && <UserControls.Col xs={9} className={`${classNames.right} ${classNames.title}`}>
                 {RightTitle && RightTitle}
-            </UserControls.Col>
+            </UserControls.Col>}
         </UserControls.Row>
         }
         <UserControls.Row className={classNames.contentRow}>
-            <UserControls.Col xs={15} className={classNames.left}>
-                {/* <UserControls.Row>
-                    <UserControls.Col xs={24}>
-                    {LeftTitle && LeftTitle}
-                    </UserControls.Col>
-                <UserControls.Col xs={24}> */}
+            <UserControls.Col xs={fullWidth ? 24 : 15} className={classNames.left}>
                 {Left && Left}
-                {/* </UserControls.Col>
-                </UserControls.Row> */}
             </UserControls.Col>
-            <UserControls.Col xs={9} className={classNames.right}>
-                {/* <UserControls.Row>
-                    <UserControls.Col xs={24}>
-                    {RightTitle && RightTitle}
-                    </UserControls.Col>
-                <UserControls.Col xs={24}> */}
+            {!fullWidth && <UserControls.Col xs={9} className={classNames.right}>
                 {Right && Right}
-                {/* </UserControls.Col>
-                </UserControls.Row> */}
-            </UserControls.Col>
+            </UserControls.Col>}
         </UserControls.Row>
     </UserControls.Row >
 }

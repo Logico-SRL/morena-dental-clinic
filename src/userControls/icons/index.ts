@@ -1,5 +1,5 @@
 import {
-    AppstoreOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, EyeOutlined, HomeOutlined, ImportOutlined, LoginOutlined,
+    AppstoreOutlined, BugOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, EyeOutlined, HomeOutlined, ImportOutlined, LoginOutlined,
     PlusOutlined, SearchOutlined, SettingOutlined, TagOutlined, TaobaoOutlined, UnorderedListOutlined, UploadOutlined, UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
 
@@ -20,5 +20,6 @@ export const AntdIcons = {
     ImportOutlined,
     EyeOutlined,
     TagOutlined,
-    SearchOutlined
+    SearchOutlined,
+    BugOutlined
 }

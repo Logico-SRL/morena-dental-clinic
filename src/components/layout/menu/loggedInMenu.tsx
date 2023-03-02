@@ -42,6 +42,13 @@ export const loggedInMenu = [{
         <AntdIcons.SettingOutlined />
         SETTINGS
     </Link>
+},
+{
+    key: '/logs',
+    label: <Link href="/logs" className={classnames.menuItem}>
+        <AntdIcons.BugOutlined />
+        LOGS
+    </Link>
 }
 ]
 
