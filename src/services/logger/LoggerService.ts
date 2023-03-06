@@ -55,7 +55,7 @@ export class LoggerService implements ILogger {
         if (session) {
             const { user } = session;
             if (user) {
-                console.info('addUserChildLogger adding', user.id)
+                // console.info('addUserChildLogger adding', user.id)
                 return this.logger.child({
                     userId: user.id
                 })

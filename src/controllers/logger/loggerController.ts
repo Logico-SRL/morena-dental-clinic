@@ -52,7 +52,7 @@ export class LoggerController extends BaseController {
         }
 
         const statement = `SELECT * FROM logs WHERE ${where} ORDER BY timestamp DESC LIMIT 500`
-        console.info('logs get', statement);
+        // console.info('logs get', statement);
 
         const logs = database.prepare(statement).all();
         return this.res.status(200).json(logs)

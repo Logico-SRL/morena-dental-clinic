@@ -44,7 +44,6 @@ export class Sqlite3Transport extends Transport {
         const obj: any = { timestamp, level, message, userId, meta: JSON.stringify(meta) };
         this.insert.run(obj);
 
-
         callback();
     }
 };

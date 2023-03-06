@@ -37,7 +37,7 @@ const getEnv = (phase) => {
                 ...dbFile
             }
 
-            console.info('found env', env);
+            // console.info('found env', env);
             res(env)
 
         } catch (err) {
