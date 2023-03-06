@@ -4,6 +4,7 @@ type ILogObj = {
     id?: number,
     timestamp?: number,
     level: logLevels,
+    userId: string,
     message: string,
     meta: Object
 }

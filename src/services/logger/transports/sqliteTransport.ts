@@ -23,7 +23,8 @@ export class Sqlite3Transport extends Transport {
         // the 'log' table always has 'id' and 'timestamp'
         const cols = [
             "id INTEGER PRIMARY KEY",
-            "timestamp INTEGER DEFAULT (strftime('%s','now'))"
+            "timestamp INTEGER DEFAULT (strftime('%s','now'))",
+            // "userId TEXT",
         ];
 
         // add user-provided columns to the table and create the table
@@ -36,13 +37,13 @@ export class Sqlite3Transport extends Transport {
 
     log(info: any, callback: () => void) {
         const logparams = Object.assign({}, info);
-        // console.info('transport info', logparams);
-        const { timestamp, level, message, ...meta } = logparams
+        const { timestamp, level, message, userId, ...meta } = logparams
         setImmediate(() => this.emit('logged', info));
 
         // Perform the writing to the remote service
-        const obj: any = { timestamp, level, message, meta: JSON.stringify(meta) };
+        const obj: any = { timestamp, level, message, userId, meta: JSON.stringify(meta) };
         this.insert.run(obj);
+
 
         callback();
     }

@@ -43,10 +43,11 @@ export const useLogs = () => {
 
     // }, [])
 
-    const fetchLogs = (controller: AbortController, level: logLevels) => {
+    const fetchLogs = (controller: AbortController, level: logLevels, userId: string) => {
         loadingLogsStore.set(true);
         const pars = new URLSearchParams()
         pars.append('level', level)
+        pars.append('userId', userId)
 
         return httpService.get<ILogObj[]>(`/api/logs?${pars.toString()}`, { signal: controller?.signal })
             .then(d => {

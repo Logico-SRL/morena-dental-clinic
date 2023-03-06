@@ -3,6 +3,11 @@ import { NextApiRequest, NextApiResponse } from "next/types";
 import { NodeIOCContainer } from "../inversify/inversify.node.config";
 import { IOCControllerTypes, IOCServiceTypes } from "../inversify/iocTypes";
 
+const whiteListUris = [
+    `/api/logs`,
+    `/api/logger`,
+]
+
 export const buildController = (pars: symbol) => async (req: NextApiRequest, res: NextApiResponse) => {
 
     const controllerFactory = NodeIOCContainer.get(IOCControllerTypes.ControllerFactory) as interfaces.Factory<IApiController, [symbol, NextApiRequest, NextApiResponse]>;
@@ -12,7 +17,8 @@ export const buildController = (pars: symbol) => async (req: NextApiRequest, res
 
     if (callable && typeof callable === 'function') {
         try {
-            logger.debug(`callable calling api`, { url: req.url, a: 'test' })
+
+            !whiteListUris.some(u => req.url?.startsWith(u)) && logger.debug(`callable calling api`, { url: req.url })
             await callable(req, res)
         } catch (ex: any) {
             logger.error('callable error', { error: ex.message })
