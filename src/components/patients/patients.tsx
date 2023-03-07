@@ -1,7 +1,7 @@
 // 'use client'
 
 import { useRouter } from "next/navigation";
-import { ChangeEventHandler, FunctionComponent } from "react";
+import { ChangeEvent, forwardRef, useImperativeHandle } from "react";
 import UserControls from "../../userControls";
 import { PatientListItem } from "./patientListItem";
 
@@ -10,12 +10,29 @@ type PropType = {
     patients: IPatient[],
     loading: boolean,
     onPatientEdit: (p: IPatient) => void,
-    onSearchChange: ChangeEventHandler<HTMLInputElement>,
-    searchInputValue: string
+    onSearchChange: (search: string) => void,
+    // searchInputValue: string
 }
 
-export const Patients: FunctionComponent<PropType> = ({ patients, loading, onPatientEdit, onSearchChange, searchInputValue }) => {
+export type PatientsRefType = {
+    clearInput: () => void
+}
 
+export const Patients = forwardRef<PatientsRefType, PropType>(({ patients, loading, onPatientEdit, onSearchChange }, ref) => {
+
+    const [form] = UserControls.Form.useForm();
+
+    useImperativeHandle(ref, () => {
+        return {
+            clearInput: () => {
+                form.setFieldValue('search', '')
+            }
+        };
+    }, []);
+
+    const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        onSearchChange(e.target.value);
+    }
 
     const router = useRouter();
     const onClick = (patient: IPatient) => {
@@ -25,6 +42,7 @@ export const Patients: FunctionComponent<PropType> = ({ patients, loading, onPat
     const onEdit = (patient: IPatient) => {
         onPatientEdit(patient)
     }
+
 
     const Header = () => <UserControls.Row style={{ fontWeight: 'bold' }}>
         <UserControls.Col xs={7} offset={1}>
@@ -48,10 +66,11 @@ export const Patients: FunctionComponent<PropType> = ({ patients, loading, onPat
 
     return <UserControls.Row>
         <UserControls.Col xs={24}>
-            <UserControls.Form.Item label="Search" >
-                <UserControls.Input placeholder="Lastname, Firstname *min 3 charachters" onChange={onSearchChange} value={searchInputValue} />
-            </UserControls.Form.Item>
-
+            <UserControls.Form form={form} initialValues={{ search: '' }} >
+                <UserControls.Form.Item label="Search" name={'search'}>
+                    <UserControls.Input placeholder="Lastname, Firstname *min 3 charachters" onChange={onInputChange} />
+                </UserControls.Form.Item>
+            </UserControls.Form>
         </UserControls.Col>
         <UserControls.Col xs={24}>
             <UserControls.List
@@ -62,4 +81,4 @@ export const Patients: FunctionComponent<PropType> = ({ patients, loading, onPat
             />
         </UserControls.Col>
     </UserControls.Row>
-}
+})

@@ -1,9 +1,9 @@
-import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+import { createRef, useCallback, useEffect, useRef, useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditPatientModal } from "../../components/patients/editPatientModal";
 import { ImportPatientsModal } from "../../components/patients/importPatientsModal";
 import { NewPatientModal } from "../../components/patients/newPatientModal";
-import { Patients } from "../../components/patients/patients";
+import { Patients, PatientsRefType } from "../../components/patients/patients";
 import { PatientsFilter } from "../../components/patients/patientsFilter";
 import { usePatients } from "../../hooks/usePatients";
 import UserControls from "../../userControls";
@@ -41,7 +41,7 @@ const FilterTitle = () => {
 const PatientsPage: PageComponent = () => {
 
     const [filters, setFilters] = useState<IPatientSearchParams>({})
-    const [searchInputValue, setSearchInputValue] = useState<string>('')
+
     const [showImportModal, setShowImportModal] = useState(false)
 
     const { patients, loadingPatients, fetchFilteredPatients } = usePatients();
@@ -81,21 +81,29 @@ const PatientsPage: PageComponent = () => {
         setShowEditPatientModal(true);
     }
 
-    const onSearchChange: ChangeEventHandler<HTMLInputElement> = e => {
-        const val = e.target.value;
-        setSearchInputValue(val)
+    const ref = createRef<PatientsRefType>();
+
+    const onSearchChange = useCallback((val: string) => {
+        // const val = e.target.value;
+        // setSearchInputValue(val)
 
         if (val && val.length > 2) {
-            setFilters(f => ({ ...f, nameSurname: val }))
+            updateFilters((f: IPatientSearchParams) => ({ ...f, nameSurname: val }))
         } else {
-            setFilters(f => f.nameSurname != '' ? ({ ...f, nameSurname: '' }) : f)
+            updateFilters((f: IPatientSearchParams) => f.nameSurname != '' ? ({ ...f, nameSurname: '' }) : f)
         }
-    }
+    }, []);
+
+    const updateFilters = useDebouncedCallback((setter: (filt: IPatientSearchParams) => IPatientSearchParams) => {
+        setFilters(setter)
+    }, 200)
 
     const resetFilters = () => {
-
         setFilters({});
-        setSearchInputValue('')
+        if (ref.current) {
+            ref.current.clearInput();
+        }
+        // setSearchInputValue('')
     }
 
     const onImportClick = () => {
@@ -112,7 +120,13 @@ const PatientsPage: PageComponent = () => {
         <SplittedPage
             LeftTitle={<Title onAddClick={onAddClick} onImportClick={onImportClick} />}
             RightTitle={<FilterTitle />}
-            Left={<Patients patients={patients} loading={loadingPatients} onPatientEdit={onPatientEdit} onSearchChange={onSearchChange} searchInputValue={searchInputValue} />}
+            Left={<Patients patients={patients}
+                loading={loadingPatients}
+                onPatientEdit={onPatientEdit}
+                onSearchChange={onSearchChange}
+                // searchInputValue={searchInputValue}
+                ref={ref}
+            />}
             Right={<PatientsFilter reset={resetFilters} filters={filters} setFilters={setFilters} />}
         />
         <NewPatientModal open={showNewPatientModal} onCancel={onModalCancel} />
