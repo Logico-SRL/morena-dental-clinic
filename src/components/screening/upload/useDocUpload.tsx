@@ -30,7 +30,7 @@ export const useDocUpload = (projectId: string, visitId: string) => {
     const onDocUploadChange = async (pars: UploadChangeParam<UploadFile<SnapShotType>>) => {
 
         const { status, response } = pars.file
-        console.info('onDocUploadChange', pars);
+        // console.info('onDocUploadChange', pars);
 
         if (status == 'done' || status == 'success') {
             setDocFileList([])
@@ -71,7 +71,7 @@ export const useDocUpload = (projectId: string, visitId: string) => {
                                 config
                             );
 
-                            console.info("thumnail axios res", res);
+                            // console.info("thumnail axios res", res);
 
                             onSuccess && onSuccess(res.data);
                             setDocFileList([])

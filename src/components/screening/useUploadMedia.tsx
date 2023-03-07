@@ -59,14 +59,14 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
             );
 
             onSuccess && onSuccess(res.data);
-            console.info("file uploaded res", res);
+            // console.info("file uploaded res", res);
             if (afterAxiosPost) {
                 await afterAxiosPost(res.data)
             }
             setFileList([])
             addMedia(res.data)
         } catch (err) {
-            console.error("file uploaded error", err);
+            // console.error("file uploaded error", err);
             onError && onError(err as any);
         }
     },
@@ -74,7 +74,7 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
 
         const { status, response } = info.file;
 
-        console.info('onChange', status, info.fileList)
+        // console.info('onChange', status, info.fileList)
 
         if (status === 'done' || status === 'success') {
             setFileList([]);
@@ -83,7 +83,7 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
         }
     },
     beforeUpload(file, FileList) {
-        console.info(`beforeUpload file.type ${file.type}`)
+        // console.info(`beforeUpload file.type ${file.type}`)
         // const accepted = file.type.startsWith(mediaSourceType)
         // return accepted;
         return true
@@ -101,9 +101,9 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
     const modalUploadContext = useContext(UploadMediaContext);
     const modalImportContext = useContext(ImportMediaContext);
 
-    useEffect(() => {
-        console.info('fileList effect', fileList)
-    }, [fileList])
+    // useEffect(() => {
+    // console.info('fileList effect', fileList)
+    // }, [fileList])
 
     const getDefaultParams: () => UploadPropsParamsType = () => ({
         projectId,
@@ -154,7 +154,7 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
         const [selected, setSelected] = useState<{ [index: string]: boolean }>({})
 
         useEffect(() => {
-            console.info('setting context.setModalOkAction(confirmSelectedFiles)')
+            // console.info('setting context.setModalOkAction(confirmSelectedFiles)')
             context.setModalOkAction(() => confirmSelectedFiles)
         }, [selected])
 

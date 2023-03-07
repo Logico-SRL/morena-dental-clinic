@@ -28,7 +28,7 @@ export const useProjects = () => {
 
         if (!initialized.current) {
             initialized.current = true;
-            console.info('useProjects', initialized.current);
+            // console.info('useProjects', initialized.current);
 
             // initialized = true;
             if (abortController.current) {

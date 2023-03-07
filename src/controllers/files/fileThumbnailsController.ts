@@ -31,7 +31,7 @@ export class FileThumbnailsController extends BaseController {
     }
 
     POST = async () => {
-        console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
+        // console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
 
         const snapshot = await new Promise<SnapShotType>((resolve, reject) => {
             const busboy = Busboy({ headers: this.req.headers });
@@ -45,14 +45,14 @@ export class FileThumbnailsController extends BaseController {
 
                 })
 
-                console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
+                // console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
 
                 file.on('data', async (chunk: any) => {
                     chunks.push(chunk)
                 });
 
                 file.on('end', async () => {
-                    console.log('File [' + fieldname + '] Finished');
+                    // console.log('File [' + fieldname + '] Finished');
 
                     const buffer = Buffer.concat(chunks);
 

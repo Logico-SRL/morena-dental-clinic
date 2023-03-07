@@ -20,5 +20,14 @@ export const formatUtils = {
         return dt.format('DD/MM/YYYY')
 
     },
+    formatDateTime: (date?: Date | null) => {
+        if (!date)
+            return '';
+        const dt = dayjs(date);
+        if (!dt.isValid())
+            return '';
+        return dt.format('DD/MM/YYYY HH:mm')
+
+    },
 
 }

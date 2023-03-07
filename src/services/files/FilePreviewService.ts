@@ -9,9 +9,12 @@ import { processEnv } from '../../processEnv';
 export class FilePreviewService implements IFilePreviewService {
 
     private readonly fileService: IFilesService;
+    private readonly loggerServ: ILogger;
 
-    constructor(@inject(IOCServiceTypes.FilesService) fileServ: IFilesService) {
+    constructor(@inject(IOCServiceTypes.FilesService) fileServ: IFilesService,
+        @inject(IOCServiceTypes.LoggerService) loggerServ: ILogger) {
         this.fileService = fileServ;
+        this.loggerServ = loggerServ
     }
 
     getPreview = async (params: FilePreviewServicePropsType) => {
@@ -70,14 +73,14 @@ export class FilePreviewService implements IFilePreviewService {
 
                     const inst = (isLast: boolean) => ffmpeg(params.path)
                         .on('start', function (cmd) {
-                            console.log('Started ' + cmd);
+                            // console.log('Started ' + cmd);
                         })
                         .on('end', function () {
-                            console.log('Screenshots taken');
+                            // console.log('Screenshots taken');
                             isLast && res(true)
                         })
                         .on('error', function (err) {
-                            console.error('ffmpeg error', err);
+                            // console.error('ffmpeg error', err);
                             isLast && res(false)
                         });
 
@@ -99,19 +102,19 @@ export class FilePreviewService implements IFilePreviewService {
                     //     folder: params.saveToDir,
                     // })
                 }).catch(err => {
-                    console.error('ffmpeg catched err', err);
+                    this.loggerServ.error('ffmpeg catched err', err);
                 });
 
 
 
                 if (done) {
-                    console.info('fetching preview jpeg files');
+                    // console.info('fetching preview jpeg files');
                     await Promise.all(timemarks.map(async (mark, ind) => {
                         const filePreviewPath = `${params.saveToDir}/${params.mediaId}_${ind + 1}.jpg`
                         try {
 
                             const file = await this.fileService.get(filePreviewPath)
-                            console.info(`file ${filePreviewPath} fetched`)
+                            // console.info(`file ${filePreviewPath} fetched`)
 
                             const b64Thumbnail = await sharp(file)
                                 .resize(processEnv().previews.thumbnailSize)
@@ -119,7 +122,7 @@ export class FilePreviewService implements IFilePreviewService {
                                 .toBuffer()
                                 .then(b => b.toString('base64'))
                                 .catch(err => {
-                                    console.error('sharp 200 err', err)
+                                    this.loggerServ.error('sharp 200 err', err)
                                     throw err;
                                 })
 
@@ -130,7 +133,7 @@ export class FilePreviewService implements IFilePreviewService {
                                 .then(b => b.toString('base64'))
                                 .catch(err => {
                                     // reject(err);
-                                    console.error('sharp 1024 err', err)
+                                    this.loggerServ.error('sharp 1024 err', err)
                                     throw err;
                                 })
 
@@ -139,8 +142,8 @@ export class FilePreviewService implements IFilePreviewService {
                                 b64Thumbnail
                             })
 
-                        } catch (err) {
-                            console.error(`FileUploadController file ${filePreviewPath}`, err);
+                        } catch (err: any) {
+                            this.loggerServ.error(`FileUploadController file ${filePreviewPath}`, err);
                         }
                     }));
                 }

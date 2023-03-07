@@ -53,7 +53,7 @@ const Comp: PageComponent = () => {
 
     const projectId = query.projectId as string;
 
-    console.info('query project id ', projectId)
+    // console.info('query project id ', projectId)
 
     const { project, loadingProject, saveProject } = useProject(projectId || '')
 

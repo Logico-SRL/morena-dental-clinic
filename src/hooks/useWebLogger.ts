@@ -10,32 +10,32 @@ export const useWebLogger = () => {
         httpService.post(`/api/logger`, obj)
     }
     const logger: ILogger = {
-        debug: (message: string, meta: ILogObj['meta']) => {
+        debug: (message: string, meta?: ILogObj['meta']) => {
             log({
                 level: 'debug',
                 message,
-                meta
+                meta: meta || {}
             })
         },
-        info: (message: string, meta: ILogObj['meta']) => {
+        info: (message: string, meta?: ILogObj['meta']) => {
             log({
                 level: 'info',
                 message,
-                meta
+                meta: meta || {}
             })
         },
-        warn: (message: string, meta: ILogObj['meta']) => {
+        warn: (message: string, meta?: ILogObj['meta']) => {
             log({
                 level: 'warn',
                 message,
-                meta
+                meta: meta || {}
             })
         },
-        error: (message: string, meta: ILogObj['meta']) => {
+        error: (message: string, meta?: ILogObj['meta']) => {
             log({
                 level: 'error',
                 message,
-                meta
+                meta: meta || {}
             })
         },
     }

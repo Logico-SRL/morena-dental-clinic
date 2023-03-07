@@ -21,7 +21,7 @@ export const VisitMedia = ({ projectId }: Pick<VisitPropType, 'projectId'>) => {
 
     useEffect(() => {
         if (settings.mediaSources.length > 0 && (selectedMediaSource?.id != settings.mediaSources[0].id)) {
-            console.info('settings set')
+            // console.info('settings set')
             setSelectedMediaSource(settings.mediaSources[0])
         }
     }, [settings])

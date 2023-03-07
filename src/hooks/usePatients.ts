@@ -5,42 +5,20 @@ import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { AAnagrafica } from '../repository/unoEntities/entities/AAnagrafica';
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
+import { useWebLogger } from './useWebLogger';
 
 const patientsStore = atom<IPatient[]>([]);
 const loadingPatientsStore = atom<boolean>(false)
 const initializing = { current: false };
 
 export const usePatients = () => {
+    const logger = useWebLogger();
     // const [patients, setPatients] = React.useState<IPatient[]>([])
     // const [loading, setLoading] = React.useState<boolean>(false)
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const patients = useStore(patientsStore);
     const loadingPatients = useStore(loadingPatientsStore);
 
-    // useEffect(() => {
-
-    //     // console.info('usePatients patients', patients);
-
-    //     if (!initializing.current) {
-    //         initializing.current = true;
-    //         // initialized = true;
-    //         const controller = new AbortController();
-    //         fetchAllPatients(controller)
-    //             .then(() => {
-    //                 // initializing.current = true;
-    //             })
-    //         return () => {
-    //             controller.abort();
-    //             initializing.current = false;
-    //         }
-    //     }
-
-    // }, [])
-
-    // const fetchAllPatients = (controller?: AbortController) => {
-    //     return fetchFilteredPatients({}, controller)
-
-    // }
 
 
     const fetchFilteredPatients = (params: IPatientSearchParams, controller?: AbortController) => {
@@ -89,14 +67,6 @@ export const usePatients = () => {
     const savePatient = async (p: IPatient) => {
         loadingPatientsStore.set(true);
 
-        // if (p.tags) {
-        //     p.tags.forEach(t => {
-        //         t.patients = undefined;
-        //         t.projects = undefined;
-        //         t.visits = undefined;
-        //     })
-        // }
-
         httpService.put<IPatient>(`/api/protected/patients/${p.id}`, p).then(d => {
             const curr = [...patientsStore.get()];
             const ind = curr.findIndex(c => c.id === p.id);
@@ -112,7 +82,7 @@ export const usePatients = () => {
         return httpService.get<UnoAnagraficaEntity[]>(`/api/protected/uno/anagrafica?${pars.toString()}`)
             .then(res => res.data)
             .catch(err => {
-                console.error('searchExternalAnagrafica err', err);
+                logger.error('usePatients searchExternalAnagrafica err', err);
                 return []
             })
     }
@@ -121,7 +91,7 @@ export const usePatients = () => {
         return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
             .then(res => res.data)
             .catch(err => {
-                console.error('importExternalAnagrafica err', err);
+                logger.error('usePatients importExternalAnagrafica err', err);
                 throw err;
             })
     }

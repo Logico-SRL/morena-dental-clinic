@@ -43,7 +43,7 @@ export class FileUploadController extends BaseController {
     }
 
     POST = async () => {
-        console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
+        // console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
 
         const mediaSource = await this.settingsService.getMediaSource(this.mediaSourceId);
         const visit = await this.visitsServ.get(this.visitId);
@@ -108,7 +108,7 @@ export class FileUploadController extends BaseController {
 
                 fs.mkdirSync(saveToDir, { recursive: true });
 
-                console.info('saveTo', saveTo)
+                // console.info('saveTo', saveTo)
                 const stream = fs.createWriteStream(saveTo)
                 file.pipe(stream)
 
@@ -117,7 +117,7 @@ export class FileUploadController extends BaseController {
                 });
 
                 file.on('end', async () => {
-                    console.log('File [' + fieldname + '] Finished');
+                    // console.log('File [' + fieldname + '] Finished');
 
                     const buffer = Buffer.concat(chunks);
 
@@ -142,8 +142,8 @@ export class FileUploadController extends BaseController {
         });
 
         if (snapshots.length > 0) {
-            console.info('snapshots[0].b64Preview.length', snapshots[0].b64Preview.length)
-            console.info('snapshots[0].b64Thumbnail.length', snapshots[0].b64Thumbnail.length)
+            // console.info('snapshots[0].b64Preview.length', snapshots[0].b64Preview.length)
+            // console.info('snapshots[0].b64Thumbnail.length', snapshots[0].b64Thumbnail.length)
 
             media.b64Preview = snapshots[0].b64Preview;
             media.b64Thumbnail = snapshots[0].b64Thumbnail;

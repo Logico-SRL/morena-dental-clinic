@@ -25,7 +25,7 @@ export class FileController extends BaseController {
     }
 
     GET = async () => {
-        console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
+        // console.info(`API method: ${this.req.method}, query: ${JSON.stringify(this.req.query)} `)
 
         const media = await this.mediaServ.get(this.mediaId);
         if (!media) {
@@ -36,7 +36,7 @@ export class FileController extends BaseController {
         // console.info('media.source.type', media.source.type)
         if (media.mimeType.startsWith('video')) {
             const range = this.req.headers.range;
-            console.info('requested range', range);
+            // console.info('requested range', range);
             if (!range) {
                 return this.res.status(400).send("Requires Range header");
             }

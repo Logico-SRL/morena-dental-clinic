@@ -40,7 +40,7 @@ export const useSettings = () => {
                 })
 
             return () => {
-                console.info('useSettings dismounting');
+                // console.info('useSettings dismounting');
                 // controller.abort();
                 initializing.current = false;
             }

@@ -1,5 +1,7 @@
 import { Collapse, Typography } from "antd";
 import { Component, ErrorInfo, PropsWithChildren } from "react";
+import { WebIOCContainer } from "../../inversify/inversify.web.config";
+import { IOCServiceTypes } from "../../inversify/iocTypes";
 // import { WebLogger } from "../../utils/logging/webLogger";
 
 interface Props {
@@ -36,13 +38,19 @@ class ErrorBoundary extends Component<PropsWithChildren<Props>, State> {
         errorStack: ''
     };
 
-    // logger: ILogger;
+    private readonly logger: ILogger;
+    private readonly httpService: IHttpService;
     /**
      *
      */
     constructor(p: any) {
         super(p);
-        // this.logger = new WebLogger();
+        // this.logger = WebIOCContainer.get<ILogger>(IOCServiceTypes.LoggerService);
+        this.httpService = WebIOCContainer.get<IHttpService>(IOCServiceTypes.HttpService)
+    }
+
+    private log = (obj: ILogObj) => {
+        this.httpService.post(`/api/logger`, obj)
     }
 
     public static getDerivedStateFromError(e: Error): State {
@@ -51,8 +59,12 @@ class ErrorBoundary extends Component<PropsWithChildren<Props>, State> {
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        // this.logger.log('error', 'Uncaught error:', error, errorInfo);
-        console.error('ErrorBoundary Uncaught error:', error, errorInfo);
+        this.log({
+            level: 'error',
+            message: 'ErrorBoundary Uncaught error',
+            meta: { error, errorInfo }
+        });
+        // console.error('ErrorBoundary Uncaught error:', error, errorInfo);
     }
 
     public render() {

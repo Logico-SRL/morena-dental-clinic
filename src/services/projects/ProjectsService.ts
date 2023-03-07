@@ -26,7 +26,7 @@ export class ProjectsService implements IProjectsService {
             .orWhere(`MATCH(notes) AGAINST ('${search}*' ${mode})`)
             .getMany()
 
-        console.info('resp', resp)
+        // console.info('resp', resp)
 
         return resp ? resp.map(r => ({ ...repoProjToProj(r), type: 'project' as 'project' })) : [];
     }

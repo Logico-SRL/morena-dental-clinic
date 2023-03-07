@@ -3,6 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { useCategories } from "../../hooks/useCategories";
 import { usePatients } from "../../hooks/usePatients";
 import { useTags } from "../../hooks/useTags";
+import { useWebLogger } from "../../hooks/useWebLogger";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { NewCategoryModal } from "../categories/newCategoryModal";
@@ -28,7 +29,7 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
 
     const { patients } = usePatients()
     const { categories } = useCategories()
-
+    const logger = useWebLogger();
 
     const patientsOptions: SearchSelectOptionType<IPatient>[] = patients.map(p => {
 
@@ -69,20 +70,20 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
         // debugger;
         const d = form.getFieldsValue();
 
-        console.info('onFinish d:', d)
+        // console.info('onFinish d:', d)
 
         form.validateFields()
             .then((vals) => {
                 const patient = patients.find(p => p.id == vals.patient.id)
                 if (!patient) {
-                    console.error(`patient ${vals.patient.id} not found`)
+                    logger.error(`projectForm patient ${vals.patient.id} not found`)
                 } else {
                     vals.patient = patient;
                     onSave(vals);
                 }
-                console.info('onFinish success', vals);
+                // console.info('onFinish success', vals);
             }).catch(err => {
-                console.error('onFinish error', err)
+                logger.error('projectForm onFinish error', err)
             })
     };
 
@@ -126,11 +127,6 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
 
     const filterOnLabel = (inputValue: string, option?: SearchSelectOptionType<any>) => option!.label.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 
-    const onValuesChange = (changedValues: any, values: any) => {
-        console.info('onValuesChange', changedValues, values)
-
-    }
-
     const { searchTags } = useTags()
     const [searchTagsResults, setSearchTagsResults] = useState<ITag[]>([])
     const [searchingTags, setSearchingTags] = useState(false);
@@ -144,7 +140,7 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
             .then(res => {
                 setSearchTagsResults(res.data)
             }).catch(ex => {
-                console.error('getTags err', ex);
+                logger.error('projectForm getTags err', ex);
                 setSearchTagsResults([])
             }).finally(() => {
                 setSearchingTags(false)
@@ -152,7 +148,7 @@ export const ProjectForm = ({ form, onSave, loading, submitText, onBack }: PropT
     }
 
     return <UserControls.Skeleton loading={loading}>
-        <Form form={form} labelCol={{ span: 6 }} onValuesChange={onValuesChange}>
+        <Form form={form} labelCol={{ span: 6 }} >
             <Form.Item name={'id'} label={'Id'} required>
                 <UserControls.Input disabled />
             </Form.Item>

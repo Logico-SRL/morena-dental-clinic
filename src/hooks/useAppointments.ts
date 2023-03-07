@@ -3,7 +3,7 @@ import { atom } from 'nanostores';
 import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
-import { defaultPatient } from '../services/defaultValues';
+import { useWebLogger } from './useWebLogger';
 
 const appointmentsStore = atom<IAppointment[]>([]);
 const loadingAppointmentsStore = atom<boolean>(false)
@@ -15,6 +15,7 @@ const abortController = {
 }
 
 export const useAppointments = () => {
+    const logger = useWebLogger();
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const appointments = useStore(appointmentsStore);
     const loadingAppointments = useStore(loadingAppointmentsStore);
@@ -68,14 +69,14 @@ export const useAppointments = () => {
     const fetchAllAppointments = (controller: AbortController) => {
         loadingAppointmentsStore.set(true);
         const params = new URLSearchParams();
-        params.append('take', '100');
+        params.append('take', '50');
 
         return httpService.get<IAppointment[]>(`/api/protected/appointments?${params.toString()}`, { signal: controller?.signal })
             .then(d => {
                 appointmentsStore.set(d.data);
             })
             .catch((ex) => {
-                console.error('fetchAllAppointments error', ex);
+                logger.error('useAppointments fetchAllAppointments error', ex);
                 appointmentsStore.set([]);
 
             })

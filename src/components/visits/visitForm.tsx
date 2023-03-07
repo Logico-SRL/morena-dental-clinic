@@ -2,6 +2,7 @@ import { FormInstance } from "antd";
 import { useRef, useState } from "react";
 import { visitTypesArr } from "../../configurations/visitTypes";
 import { useTags } from "../../hooks/useTags";
+import { useWebLogger } from "../../hooks/useWebLogger";
 import UserControls from "../../userControls";
 
 
@@ -17,6 +18,7 @@ type PropType = {
 export const VisitForm = ({ form, onSave, loading, submitText }: PropType) => {
 
     const Form = UserControls.Form;
+    const logger = useWebLogger();
 
     const onFinish = (values: IVisit) => {
         onSave(values);
@@ -34,7 +36,7 @@ export const VisitForm = ({ form, onSave, loading, submitText }: PropType) => {
             .then(res => {
                 setSearchTagsResults(res.data)
             }).catch(ex => {
-                console.error('getTags err', ex);
+                logger.error('visitForm getTags err', ex);
                 setSearchTagsResults([])
             }).finally(() => {
                 setSearchingTags(false)

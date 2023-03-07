@@ -46,7 +46,7 @@ const SignIn: PageComponent = () => {
     }
 
     useEffect(() => {
-        console.log(`isConnected: ${isConnected}, userId: ${userId}`);
+        // console.log(`isConnected: ${isConnected}, userId: ${userId}`);
 
         const tm = setTimeout(() => {
             if (isConnected && !userId) {

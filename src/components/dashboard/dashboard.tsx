@@ -12,9 +12,10 @@ export const Dashboard = () => {
     const onClick = (item: IAppointment) => {
         if (item.patient) {
             push(`/patients/${item.patient.id}`)
-        } else {
-            console.warn(`appointment ${item.id} does not contain a patient`)
         }
+        // else {
+        //     console.warn(`appointment ${item.id} does not contain a patient`)
+        // }
     }
 
     return <UserControls.Skeleton loading={loadingAppointments}>
@@ -55,7 +56,7 @@ const renderItem = ({ onClick }: { onClick: (item: IAppointment) => void }) => (
     return <TouchableRow onClick={() => onClick(item)}>
         <UserControls.Col xs={6}>
             <UserControls.Typography>
-                {formatUtils.formatDate(item.dataOra)}
+                {formatUtils.formatDateTime(item.dataOra)}
             </UserControls.Typography>
         </UserControls.Col>
         <UserControls.Col xs={6}>

@@ -2,6 +2,7 @@ import { FormInstance } from "antd";
 import { useState } from "react";
 import { gendersArr, gendersKeysType } from "../../configurations/genders";
 import { useTags } from "../../hooks/useTags";
+import { useWebLogger } from "../../hooks/useWebLogger";
 import UserControls from "../../userControls";
 
 
@@ -15,6 +16,7 @@ export const PatientForm = ({ form }: PropType) => {
     const { searchTags } = useTags()
     const [searchTagsResults, setSearchTagsResults] = useState<ITag[]>([])
     const [searchingTags, setSearchingTags] = useState(false);
+    const logger = useWebLogger();
 
     // const abortController = useRef<AbortController>();
 
@@ -25,7 +27,7 @@ export const PatientForm = ({ form }: PropType) => {
             .then(res => {
                 setSearchTagsResults(res.data)
             }).catch(ex => {
-                console.error('getTags err', ex);
+                logger.error('getTags err', ex);
                 setSearchTagsResults([])
             }).finally(() => {
                 setSearchingTags(false)

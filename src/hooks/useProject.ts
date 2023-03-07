@@ -29,7 +29,7 @@ export const useProject = (projectId: string) => {
 
     React.useEffect(() => {
 
-        console.info('useProject effect', fetchingId, projectId, project);
+        // console.info('useProject effect', fetchingId, projectId, project);
 
         if (projectId && (fetchingId.current != projectId) && (project.id != projectId)) {
 
@@ -40,9 +40,9 @@ export const useProject = (projectId: string) => {
                 abortController.current = new AbortController();
             }
 
-            console.info(`fetchingIdStore.set(${projectId})`);
+            // console.info(`fetchingIdStore.set(${projectId})`);
             fetchingId.current = projectId;
-            console.info(`fetching project ${projectId}`);
+            // console.info(`fetching project ${projectId}`);
 
             // console.info(`loadingProject ${loadingProject}, projectId: ${projectId}, project.id ${project.id}`)
             loadingProjectStore.set(true);
@@ -53,7 +53,7 @@ export const useProject = (projectId: string) => {
             httpService.get<IProject>(`/api/protected/projects/${projectId}`, { signal: abortController.current.signal }).then(d => {
 
                 const proj = d.data;
-                console.info('proj', proj)
+                // console.info('proj', proj)
 
                 if (proj.patient) {
                     proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)

@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
 import { PatientEntity } from "src/repository/entities";
-import { AAnagrafica } from "src/repository/unoEntities/entities/AAnagrafica";
 import { repoPatientToPatient } from "src/services/converters";
-import { Like, MoreThanOrEqual, Repository } from "typeorm";
+import { IsNull, MoreThanOrEqual, Not, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../../inversify/iocTypes";
-import { UnoAnagraficaEntity, UnoAgImpegni, UnoTabPostazioni } from '../../../repository/unoEntities/index'
+import { UnoAgImpegni, UnoAnagraficaEntity, UnoTabPostazioni } from '../../../repository/unoEntities/index';
+import { Sorter } from "../../../utils/sorter";
 import { IImpegniService } from "./IImpegniService";
 
 @injectable()
@@ -13,6 +13,7 @@ export class ImpegniService implements IImpegniService {
 
     private readonly UnoDbService: IUnoDbService;
     private readonly DbService: IDbService;
+    private readonly loggerServ: ILogger;
 
     private get getRepoImpegni() { return this.UnoDbService.impegniRepo() as Promise<Repository<UnoAgImpegni>> }
     private get getRepoAnagrafica() { return this.UnoDbService.anagraficaRepo() as Promise<Repository<UnoAnagraficaEntity>> }
@@ -21,9 +22,11 @@ export class ImpegniService implements IImpegniService {
 
     constructor(
         @inject(IOCServiceTypes.UnoDbService) UnoDbService: IUnoDbService,
-        @inject(IOCServiceTypes.DbService) dbService: IDbService) {
+        @inject(IOCServiceTypes.DbService) dbService: IDbService,
+        @inject(IOCServiceTypes.LoggerService) loggerServ: ILogger) {
         this.UnoDbService = UnoDbService;
         this.DbService = dbService;
+        this.loggerServ = loggerServ;
     }
 
     find = async (take: number) => {
@@ -32,7 +35,11 @@ export class ImpegniService implements IImpegniService {
         //
         const data = await repoImpegni.find({
             take: take,
-            where: { dataOra: MoreThanOrEqual(new Date()) },
+            where: {
+                dataOra: MoreThanOrEqual(new Date()),
+                idAnagrafica: Not(IsNull())
+
+            },
             order: { dataOra: "ASC" }
         });
         const res: IAppointment[] = [];
@@ -77,7 +84,7 @@ export class ImpegniService implements IImpegniService {
                         res.push(appendere)
                     }
                     else {
-                        console.error('Errore nella ricerca su UNO del Paziente' + unAppuntamento.idAnagrafica)
+                        this.loggerServ.error('Errore nella ricerca su UNO del Paziente' + unAppuntamento.idAnagrafica)
                     }
                 }
                 else {
@@ -94,10 +101,10 @@ export class ImpegniService implements IImpegniService {
                 }
             }
             else {
-                console.error('Paziente non valorizzato su Appuntamento con id ' + unAppuntamento.id)
+                this.loggerServ.error('Paziente non valorizzato su Appuntamento con id ' + unAppuntamento.id)
             }
         }));
-        return res;
+        return res.sort(new Sorter<IAppointment>('dataOra').sortAsc);
     };
 
     private _findPatient = async (idUno: string) => {

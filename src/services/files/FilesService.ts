@@ -23,9 +23,9 @@ export class FilesService implements IFilesService {
         }
 
         mkdirSync(dirTo, { recursive: true });
-        console.info(`FileService copying ${fromPath} to ${toPath}`)
+        // console.info(`FileService copying ${fromPath} to ${toPath}`)
         copyFileSync(fromPath, toPath, constants.COPYFILE_FICLONE)
-        console.info(`FileService file copied`)
+        // console.info(`FileService file copied`)
         return true;
 
     }

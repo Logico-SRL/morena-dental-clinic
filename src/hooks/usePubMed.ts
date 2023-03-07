@@ -1,11 +1,13 @@
 import { useRef, useState } from "react";
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { useWebLogger } from "./useWebLogger";
 
 
 
 export const usePubMed = () => {
 
+    const logger = useWebLogger();
     const pubMedService = useService<IPubMedWebService>(IOCServiceTypes.PubMedService)
 
     const abortController = useRef<AbortController>()
@@ -36,8 +38,8 @@ export const usePubMed = () => {
 
             ret = await pubMedService.search(term, take, retstart, abortController.current.signal);
 
-        } catch (ex) {
-            console.error('fetchArticles ex', ex)
+        } catch (ex: any) {
+            logger.error('usePubMeds fetchArticles ex', ex)
         } finally {
             setFetchingArticles(false)
         }

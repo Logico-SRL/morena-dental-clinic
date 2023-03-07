@@ -17,6 +17,8 @@ import { nextAuthOptions } from "./nextAuthOptions"
 // https://next-auth.js.org/configuration/options
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
+  const loggerService = NodeIOCContainer.get<ILogger>(IOCServiceTypes.LoggerService)
+
   const providers: Provider[] = [
     CredentialsProvider({
       name: "Ethereum",
@@ -34,7 +36,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       },
       async authorize(credentials) {
         try {
-          console.info('authorize', credentials);
+          // console.info('authorize', credentials);
           const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"))
           const nextAuthUrl = new URL(processEnv().nextAuthUrl)
 
@@ -48,11 +50,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           if (result.success) {
 
             const dbService = NodeIOCContainer.get<IDbService>(IOCServiceTypes.DbService);
-            console.info(`result.success`, siwe.address);
+            // console.info(`result.success`, siwe.address);
             const usersRepo = await dbService.usersRepo();
-            console.info(`userRepo resolved`);
+            // console.info(`userRepo resolved`);
             const user = await usersRepo.findOneBy({ id: siwe.address });
-            console.info(`userRepo user`, user);
+            // console.info(`userRepo user`, user);
 
             if (!user || !user.allowed) {
               return null
@@ -65,7 +67,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           }
           return null
         } catch (e) {
-          console.error(`authorize`, e);
+          loggerService.error(`authorize`, { e });
           return null
         }
       },
