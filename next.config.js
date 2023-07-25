@@ -17,17 +17,17 @@ const getEnv = (phase) => {
     return new Promise((res, rej) => {
 
 
-        const isAseo = process.env.IS_ASEO == 1;
+        // const isAseo = process.env.IS_ASEO == 1;
         // const isProd = phase === PHASE_PRODUCTION_BUILD
 
-        console.info('isAseo', isAseo);
+        // console.info('isAseo', isAseo);
 
         try {
 
             const fixedEnv = {}
             const envName = isDev(phase) ? 'development' : 'production';
             const appConfPath = `env/app.${envName}.json`;
-            const dbConfPath = isAseo ? `env/db.development.aseo.json` : `env/db.${envName}.json`;
+            const dbConfPath = `env/db.${envName}.json`;
             const appFile = JSON.parse(fs.readFileSync(path.resolve(appConfPath), { encoding: 'utf-8' }))
             const dbFile = JSON.parse(fs.readFileSync(path.resolve(dbConfPath), { encoding: 'utf-8' }))
 
@@ -68,7 +68,7 @@ const nextConfig = async function (phase) {
 
 
     console.info('config.output', config.output);
-    return isDev(phase) ? config : withBundleAnalyzer(config);
+    return config; //isDev(phase) ? config : withBundleAnalyzer(config);
 
 };
 

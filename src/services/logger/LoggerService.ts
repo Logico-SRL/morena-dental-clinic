@@ -63,22 +63,22 @@ export class LoggerService implements ILogger {
         }
         return this.logger;
     }
-    public debug = (message: string, meta: Object, session: Session | null = null) => {
+    public debug = (message: string, meta?: Object, session: Session | null = null) => {
         const logger = this.addUserChildLogger(session);
         logger.debug(message, meta);
     }
 
-    public info = (message: string, meta: Object, session: Session | null = null) => {
+    public info = (message: string, meta?: Object, session: Session | null = null) => {
         const logger = this.addUserChildLogger(session);
         logger.info(message, meta);
     }
 
-    public warn = (message: string, meta: Object, session: Session | null = null) => {
+    public warn = (message: string, meta?: Object, session: Session | null = null) => {
         const logger = this.addUserChildLogger(session);
         logger.warn(message, meta);
     }
 
-    public error = (message: string, meta: Object, session: Session | null = null) => {
+    public error = (message: string, meta?: Object, session: Session | null = null) => {
         const logger = this.addUserChildLogger(session);
         logger.error(message, meta);
     }

@@ -18,7 +18,9 @@ services:
       - 3306:3306
     networks:
       - morena-network
-
+    volumes:
+      - mdc-mysql-data:/var/lib/mysql
+      
   adminer:
     image: adminer
     restart: always
@@ -31,3 +33,6 @@ networks:
   morena-network:
     name: docker_morena-network
     driver: bridge
+
+volumes:
+  mdc-mysql-data:

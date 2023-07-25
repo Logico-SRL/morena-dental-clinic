@@ -20,7 +20,7 @@ export class HttpService implements IHttpService {
         return axios.get(url, { ...defaultConfig, ...config }).then(res => {
             const isRedirect = !(res.request.responseURL as string).endsWith(url)
             if (isRedirect) {
-                debugger;
+                // debugger;
                 window.dispatchEvent(new RedirectEvent({ to: res.request.responseURL }).event)
                 throw new Error("Redirecting");
             }
