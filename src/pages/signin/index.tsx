@@ -6,6 +6,7 @@ import { SiweMessage } from "siwe"
 import { useAccount, useConnect, useNetwork, useSignMessage } from "wagmi"
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { useAuthSession } from "../../hooks/useAuthSession"
+import { processEnv } from "src/processEnv"
 
 const SignIn: PageComponent = () => {
     const { signMessageAsync } = useSignMessage()
@@ -21,7 +22,7 @@ const SignIn: PageComponent = () => {
 
     const handleLogin = async () => {
         try {
-            const callbackUrl = "/protected"
+            const callbackUrl = processEnv().nextAuthUrl;
             const message = new SiweMessage({
                 domain: window.location.host,
                 address: address,
@@ -54,8 +55,8 @@ const SignIn: PageComponent = () => {
             } else if (isConnected && userId) {
                 const u = query.get('callbackUrl') as string | undefined;
 
-                u ? push(u) : push(`/`);
-
+                // u ? push(u) : push(`/`);
+                push(`/`);
             }
         }, 400)
 

@@ -66,7 +66,7 @@ const nextConfig = async function (phase) {
         env
     }
 
-
+    process.env.NEXTAUTH_URL = env.NEXTAUTH_URL;
     console.info('config.output', config.output);
     return config; //isDev(phase) ? config : withBundleAnalyzer(config);
 

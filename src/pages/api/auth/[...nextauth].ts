@@ -16,7 +16,7 @@ import { nextAuthOptions } from "./nextAuthOptions"
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-
+  //console.info("@@@@", process.env.NEXTAUTH_URL)
   const loggerService = NodeIOCContainer.get<ILogger>(IOCServiceTypes.LoggerService)
 
   const providers: Provider[] = [
