@@ -1,15 +1,22 @@
 // 'use client'
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
+import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { AAnagrafica } from '../repository/unoEntities/entities/AAnagrafica';
 import { convertPropsToDayjs, convertPropsToDayjsArr } from '../utils/convertPropsToDayjs';
+import { useAuthSession } from './useAuthSession';
 import { useWebLogger } from './useWebLogger';
 
 const patientsStore = atom<IPatient[]>([]);
 const loadingPatientsStore = atom<boolean>(false)
-const initializing = { current: false };
+
+const initialized = { current: false };
+
+const abortController = {
+    current: new AbortController()
+}
 
 export const usePatients = () => {
     const logger = useWebLogger();
@@ -19,6 +26,27 @@ export const usePatients = () => {
     const patients = useStore(patientsStore);
     const loadingPatients = useStore(loadingPatientsStore);
 
+    const { isLoggedIn } = useAuthSession();
+
+    useEffect(() => {
+
+        if (!initialized.current && isLoggedIn) {
+            initialized.current = true;
+
+            if (abortController.current) {
+                abortController.current.abort();
+                abortController.current = new AbortController();
+            }
+
+            fetchFilteredPatients({}, abortController.current);
+
+            return () => {
+
+                // initialized.current = false;
+            }
+        }
+
+    }, [isLoggedIn])
 
 
     const fetchFilteredPatients = (params: IPatientSearchParams, controller?: AbortController) => {

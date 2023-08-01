@@ -24,14 +24,17 @@ export const NewProject = ({ }: PropType) => {
     }, [])
 
     const onSave = async (proj: IProject) => {
-        await createProject(proj);
-        await notif.success({
-            message: 'Done',
-            description: 'Project correctly created',
-            placement: 'bottomLeft'
+        const pr = await createProject(proj);
+        if (pr) {
 
-        })
-        await push(`/projects`)
+            await notif.success({
+                message: 'Done',
+                description: 'Project correctly created',
+                placement: 'bottomLeft'
+
+            })
+            await push(`/projects/${pr.id}`)
+        }
     }
 
     return <ProjectForm form={form} onSave={onSave} loading={creatingProjects} submitText={'Create'} onBack={() => { }} />

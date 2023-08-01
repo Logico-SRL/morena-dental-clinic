@@ -80,16 +80,17 @@ export const useProjects = () => {
 
 
 
-    const createProject = async (p: IProject) => {
+    const createProject = async (p: IProject): Promise<IProject | null> => {
 
         creatingProjectStore.set(true);
-        httpService.post<IProject>(`/api/protected/projects`, p)
+        return httpService.post<IProject>(`/api/protected/projects`, p)
             .then(d => {
                 projectsStore.set([...allProjects, d.data]);
+                return d.data;
             })
             .catch(() => {
                 projectsStore.set([]);
-
+                return null;
             })
             .finally(() => {
                 creatingProjectStore.set(false);
