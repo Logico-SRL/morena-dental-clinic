@@ -3,6 +3,7 @@ import { atom } from 'nanostores';
 import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { useAuthSession } from './useAuthSession';
 import { useWebLogger } from './useWebLogger';
 
 const appointmentsStore = atom<IAppointment[]>([]);
@@ -19,10 +20,11 @@ export const useAppointments = () => {
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const appointments = useStore(appointmentsStore);
     const loadingAppointments = useStore(loadingAppointmentsStore);
+    const { isLoggedIn } = useAuthSession();
 
     useEffect(() => {
 
-        if (!initialized.current) {
+        if (!initialized.current && isLoggedIn) {
             initialized.current = true;
 
             if (abortController.current) {
@@ -40,7 +42,7 @@ export const useAppointments = () => {
             }
         }
 
-    }, [])
+    }, [isLoggedIn])
 
     // const mockedUpData: IAppointment[] = [{
     //     id: 1,

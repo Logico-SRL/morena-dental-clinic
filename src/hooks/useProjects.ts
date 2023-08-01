@@ -3,6 +3,7 @@ import { atom } from 'nanostores';
 import { useEffect } from 'react';
 import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
+import { useAuthSession } from './useAuthSession';
 
 const projectsStore = atom<IProject[]>([]);
 const filteredProjectsStore = atom<IProject[]>([]);
@@ -22,11 +23,12 @@ export const useProjects = () => {
     const loadingProjects = useStore(loadingProjectsStore);
     const loadingFilteredProjects = useStore(loadingFilteredProjectsStore);
     const creatingProjects = useStore(creatingProjectStore);
+    const { isLoggedIn } = useAuthSession();
 
     useEffect(() => {
 
 
-        if (!initialized.current) {
+        if (!initialized.current && isLoggedIn) {
             initialized.current = true;
             // console.info('useProjects', initialized.current);
 
@@ -46,7 +48,7 @@ export const useProjects = () => {
             }
         }
 
-    }, [])
+    }, [isLoggedIn])
 
     const fetchAllProjects = (controller: AbortController) => {
         loadingProjectsStore.set(true)
