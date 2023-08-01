@@ -12,6 +12,7 @@ const mediaTypesOptions: { value: mediaTypes, label: string }[] = [
     { value: 'image', label: 'Image' },
     { value: 'video', label: 'Video' },
     { value: 'doc', label: 'Document' },
+    { value: 'tac', label: 'Tac' },
 ]
 
 export const MediaSourceModal = ({ open, onClose, form }: PropTpe) => {

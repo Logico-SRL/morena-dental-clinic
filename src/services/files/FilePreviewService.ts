@@ -151,6 +151,7 @@ export class FilePreviewService implements IFilePreviewService {
                 break;
             }
             case 'doc':
+            case 'tac':
             default: {
 
                 break;

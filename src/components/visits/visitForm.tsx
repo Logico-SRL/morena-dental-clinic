@@ -53,7 +53,7 @@ export const VisitForm = ({ form, onSave, loading, submitText }: PropType) => {
                 <UserControls.Input />
             </Form.Item>
             <Form.Item name={'visitDate'} label={'Visit date'}>
-                <UserControls.DatePicker showTime showSecond={false} minuteStep={15} />
+                <UserControls.DatePicker showTime showSecond={false} minuteStep={15 as any} />
             </Form.Item>
             <Form.Item name={'diagnosis'} label={'Diagnosis'}>
                 <UserControls.Input.TextArea rows={5} />

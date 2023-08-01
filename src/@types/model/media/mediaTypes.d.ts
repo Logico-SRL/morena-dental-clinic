@@ -1,1 +1,1 @@
-type mediaTypes = 'image' | 'video' | 'doc'
+type mediaTypes = 'image' | 'video' | 'doc' | 'tac'

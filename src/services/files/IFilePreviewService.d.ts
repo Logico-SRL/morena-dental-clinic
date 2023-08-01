@@ -13,6 +13,11 @@ type FilePreviewServicePropsType =
     {
         path: string,
         type: 'doc',
+    }
+        |
+    {
+        path: string,
+        type: 'tac',
     })
 
 

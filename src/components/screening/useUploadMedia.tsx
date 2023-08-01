@@ -3,6 +3,7 @@ import { UploadChangeParam } from "antd/es/upload";
 import axios, { AxiosRequestConfig } from "axios";
 import dayjs from "dayjs";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { ulid } from "ulid";
 import { acceptedFileExtensions } from "../../configurations/acceptedFileExtensions";
 import { useMedia } from "../../hooks/useMedia";
 import { useMediaImport } from "../../hooks/useMediaImport";
@@ -25,18 +26,22 @@ export type UploadPropsParamsType = {
     fileList: UploadFile<IMedia>[],
     setFileList: Dispatch<SetStateAction<UploadFile<IMedia>[]>>
     afterAxiosPost?: (res: UploadMediaResp) => {},
-    mediaSourceType: mediaTypes
+    mediaSourceType: mediaTypes,
+    directory?: boolean,
+    uploadId?: string
 }
 
 
 const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
-    projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType
+    projectId, visitId, mediaSourceId, addMedia, setFileList, fileList, afterAxiosPost, mediaSourceType,
+    directory, uploadId
 }) => ({
     listType: 'picture',
     showUploadList: true,
     multiple: false,
     fileList,
     accept: acceptedFileExtensions[mediaSourceType],
+    directory,
     customRequest: async options => {
 
         const { onSuccess, onError, file, onProgress } = options;
@@ -50,10 +55,18 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
                     onProgress({ percent: (event.loaded / (event.total || 1)) * 100 });
             }
         };
-        fmData.append("image", file);
+        // console.info('file', file);
+        // webkitRelativePath
+
+        fmData.append("file", file);
         try {
+
+            const endPoint = uploadId ?
+                `/api/protected/projects/${projectId}/visits/${visitId}/mediasources/${mediaSourceId}/upload/${uploadId}` :
+                `/api/protected/projects/${projectId}/visits/${visitId}/mediasources/${mediaSourceId}/upload`;
+
             const res = await axios.post<UploadMediaResp>(
-                `/api/protected/projects/${projectId}/visits/${visitId}/mediasources/${mediaSourceId}/upload`,
+                endPoint,
                 fmData,
                 config
             );
@@ -129,7 +142,9 @@ export const useUploadMedia = (projectId: string, selectedMediaSource: IMediaSou
             case 'video': {
                 return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost: afterAxiosPostVideo });
             }
-
+            case 'tac': {
+                return defaultUploadProps({ ...getDefaultParams(), directory: true, uploadId: ulid() });
+            }
             case 'doc':
             default: {
                 return defaultUploadProps({ ...getDefaultParams(), afterAxiosPost: afterAxiosPostDoc });

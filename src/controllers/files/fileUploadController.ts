@@ -14,6 +14,10 @@ type QueryType = {
     mediaSourceId: string
 }
 
+const TacStartRegex = /^(DICOMDIR|DICOMRM).*/
+const TacRegex = /(DICOMDIR|DICOMRM).*/
+const TacStartFileRegex = /^(DICOMDIR)/
+
 @injectable()
 export class FileUploadController extends BaseController {
 
@@ -48,7 +52,6 @@ export class FileUploadController extends BaseController {
         const mediaSource = await this.settingsService.getMediaSource(this.mediaSourceId);
         const visit = await this.visitsServ.get(this.visitId);
 
-
         if (!mediaSource) {
             throw new Error(`media source with id ${this.mediaSourceId} not found`);
         }
@@ -62,7 +65,7 @@ export class FileUploadController extends BaseController {
         // const snapshots: SnapShotType[] = []
 
         const media: IMedia = {
-            id: ulid(),
+            id: this.req.query['uploadId'] as string || ulid(),
             visit,
             source: mediaSource,
             b64Preview: '',
@@ -76,60 +79,102 @@ export class FileUploadController extends BaseController {
             mimeType: ''
         }
 
-        let fileExtension = 'notfound'
+        let fileExtension = 'notfound';
 
         const snapshots = await new Promise<SnapShotType[]>((resolve, reject) => {
-            const busboy = Busboy({ headers: this.req.headers });
+            const busboy = Busboy({ headers: this.req.headers, preservePath: true });
 
             const chunks: Array<Uint8Array> = [];
 
-            busboy.on('file', (fieldname: string, file: Readable, { encoding, filename, mimeType }: FileInfo) => {
+            busboy.on('file', (fieldname: string, file: Readable, { encoding, filename, mimeType, ...rest }: FileInfo) => {
 
                 file.on('error', ({ message }) => {
                     throw new Error(`File upload error: ${message}`);
-
                 })
 
-                // console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimeType,);
+                if (mediaSource.type === 'tac') {
 
-                media.encoding = encoding;
-                media.filename = filename;
-                media.mimeType = mimeType;
+                    console.info('uploading tac folder, file', filename);
 
-                if (filename) {
-                    const parts = filename.split('.');
-                    if (parts)
-                        fileExtension = parts[parts.length - 1];
+                    if (!TacStartRegex.test(filename)) {
+                        if (!TacRegex.test(filename)) {
+                            throw new Error(`${TacStartRegex} not matched`);
+                        } else {
+                            const m = filename.match(TacRegex);
+                            filename = m ? m[0] : '';
+                        }
+                    }
+
+                    const saveToDirBase = `${mediaSource.basePath}/${this.projectId}/${this.visitId}/${media.id}`;
+                    const parts = filename.split('/');
+                    const name = parts.splice(parts.length - 1)[0];
+                    const saveToDir = `${saveToDirBase}/${parts.join('/')}`;
+
+                    const saveTo = `${saveToDir}/${name}`;
+
+                    console.info('saving to dir', saveToDir, ' with name ', name);
+
+                    fs.mkdirSync(saveToDir, { recursive: true });
+
+                    const stream = fs.createWriteStream(saveTo)
+                    file.pipe(stream)
+
+                    file.on('data', async (chunk: any) => {
+                        chunks.push(chunk)
+                    });
+
+                    if (TacStartFileRegex.test(filename)) {
+                        media.filename = filename;
+                        media.path = saveTo;
+                    }
+
+                    file.on('end', async () => {
+                        resolve([]);
+                    });
+
+                } else {
+
+
+
+                    media.encoding = encoding;
+                    media.filename = filename;
+                    media.mimeType = mimeType;
+
+                    if (filename) {
+                        const parts = filename.split('.');
+                        if (parts)
+                            fileExtension = parts[parts.length - 1];
+                    }
+
+                    const saveToDir = `${mediaSource.basePath}/${this.projectId}/${this.visitId}`;
+                    const saveTo = `${saveToDir}/${media.id}.${fileExtension}`;
+
+                    media.path = saveTo;
+
+                    fs.mkdirSync(saveToDir, { recursive: true });
+                    const stream = fs.createWriteStream(saveTo)
+                    file.pipe(stream)
+
+                    file.on('data', async (chunk: any) => {
+                        chunks.push(chunk)
+                    });
+
+                    file.on('end', async () => {
+                        // console.log('File [' + fieldname + '] Finished');
+
+                        const buffer = Buffer.concat(chunks);
+
+                        resolve(await this.filePreviewServ.getPreview({
+                            buffer,
+                            mediaId: media.id,
+                            path: saveTo,
+                            saveToDir: saveToDir,
+                            type: media.source?.type,
+                        }))
+
+                    });
                 }
 
-                const saveToDir = `${mediaSource.basePath}/${this.projectId}/${this.visitId}`;
-                const saveTo = `${saveToDir}/${media.id}.${fileExtension}`;
-                media.path = saveTo;
-
-                fs.mkdirSync(saveToDir, { recursive: true });
-
-                // console.info('saveTo', saveTo)
-                const stream = fs.createWriteStream(saveTo)
-                file.pipe(stream)
-
-                file.on('data', async (chunk: any) => {
-                    chunks.push(chunk)
-                });
-
-                file.on('end', async () => {
-                    // console.log('File [' + fieldname + '] Finished');
-
-                    const buffer = Buffer.concat(chunks);
-
-                    resolve(await this.filePreviewServ.getPreview({
-                        buffer,
-                        mediaId: media.id,
-                        path: saveTo,
-                        saveToDir: saveToDir,
-                        type: media.source?.type,
-                    }))
-
-                });
             });
             busboy.on('field', function (fieldname, val) {
                 // console.log('Field [' + fieldname + ']: value: ' + inspect(val));
@@ -149,10 +194,12 @@ export class FileUploadController extends BaseController {
             media.b64Thumbnail = snapshots[0].b64Thumbnail;
         }
 
-        await this.mediaServ.create(media);
-
-
-        this.res.status(200).send({ ...media, snapshots })
+        if (media.filename) {
+            await this.mediaServ.create(media);
+            this.res.status(200).send({ ...media, snapshots })
+        } else {
+            this.res.status(200).send(null);
+        }
     }
 
 
