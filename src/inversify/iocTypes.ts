@@ -35,6 +35,7 @@ const IOCControllerTypes = {
     FileUploadController: Symbol.for("FileUploadController"),
     FileThumbnailsController: Symbol.for("FileThumbnailsController"),
     FileController: Symbol.for("FileController"),
+    FileDownloadController: Symbol.for("FileDownloadController"),
     FileImportController: Symbol.for("FileImportController"),
     TagsController: Symbol.for("TagsController"),
     TagController: Symbol.for("TagController"),

@@ -1,4 +1,5 @@
 import UserControls from "../../userControls";
+import { formatUtils } from "../../utils/formatUtils";
 
 
 type PropType = {
@@ -26,7 +27,7 @@ export const VisitInfo = ({ visit, loading }: PropType) => {
             </Col>
             <Col xs={12}>
                 <Form.Item label={'visit date'}>
-                    {new Date(visit.visitDate || new Date()).toLocaleDateString()}
+                    {formatUtils.formatDateTime(new Date(visit.visitDate || new Date()))}
                 </Form.Item>
             </Col>
             <Col xs={12}>

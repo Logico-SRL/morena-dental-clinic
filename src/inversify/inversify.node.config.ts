@@ -38,6 +38,7 @@ import { TagsService } from "../services/tags/TagsService";
 import { UnoDbService } from "../services/unoDb/UnoDbService";
 import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
+import { FileDownloadController } from "../controllers/files/FileDownloadController";
 import { LoggerController } from "../controllers/logger/loggerController";
 import { LoggerService } from "../services/logger/LoggerService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
@@ -76,6 +77,7 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SettingsMediaSourcesCon
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileUploadController).to(FileUploadController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileThumbnailsController).to(FileThumbnailsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileController).to(FileController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileDownloadController).to(FileDownloadController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.FileImportController).to(FileImportController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagsController).to(TagsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.TagController).to(TagController);

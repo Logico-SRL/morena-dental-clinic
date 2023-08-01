@@ -10,6 +10,7 @@ type PropType = {
 export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedia, onCancel }) => {
 
     const src = selectedMedia ? `${location.origin}/api/protected/media/${selectedMedia.id}` : ''
+    const srcDownload = selectedMedia ? `${location.origin}/api/protected/media/${selectedMedia.id}/download` : ''
     const type = selectedMedia ? selectedMedia.source.type : 'none'
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const embedRef = useRef<HTMLEmbedElement | null>(null);
@@ -33,7 +34,7 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
     // console.info('rendering src', src)
 
     return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onCancel}
-        footer={[<UserControls.Button type="primary" href={src} download>
+        footer={[<UserControls.Button type="primary" href={srcDownload} download>
             DOWNLOAD
         </UserControls.Button>,
         <UserControls.Button type="primary" onClick={onCancel}>
