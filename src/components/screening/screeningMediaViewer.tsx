@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useRef } from "react";
 import UserControls from "../../userControls";
 import classnames from './screening.module.scss';
+import { TacViewer } from "./viewer/tacViewer";
 
 type PropType = {
     selectedMedia: IMedia | undefined,
@@ -47,7 +48,7 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
         {type == 'video' && <video ref={videoRef} style={{ maxWidth: '100%', maxHeight: '100%' }} controls autoPlay={true} src={src}>
             <source src={src} type={'video/mp4'} />
         </video>}
-        {type == 'doc' && <embed ref={embedRef} src={src} width={'100%'} height={'100%'}>
-        </embed>}
+        {type == 'doc' && <embed ref={embedRef} src={src} width={'100%'} height={'100%'} />}
+        {type == 'tac' && <TacViewer src={src} />}
     </UserControls.Modal>
 }

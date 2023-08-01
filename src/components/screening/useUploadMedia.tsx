@@ -87,7 +87,7 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
 
         const { status, response } = info.file;
 
-        // console.info('onChange', status, info.fileList)
+        console.info('onChange', status, info.fileList)
 
         if (status === 'done' || status === 'success') {
             setFileList([]);
@@ -96,7 +96,7 @@ const defaultUploadProps: (params: UploadPropsParamsType) => UploadProps = ({
         }
     },
     beforeUpload(file, FileList) {
-        // console.info(`beforeUpload file.type ${file.type}`)
+        console.info(`beforeUpload file.type ${file.type}`)
         // const accepted = file.type.startsWith(mediaSourceType)
         // return accepted;
         return true
