@@ -227,6 +227,7 @@ class DwvComponent extends React.Component<propType, stateType> {
       // reset flags
       this.loadedItems = 0;
       this.didReceivedLoadError = false;
+      this.isFirstRender = true;
 
       // isFirstRender = true;
     });
@@ -249,19 +250,20 @@ class DwvComponent extends React.Component<propType, stateType> {
     app.addEventListener("load", (/*event*/) => {
       // console.info('app load')
       this.setState({
-        // metaData: app.getMetaData(0),
-        dataLoaded: true,
-        scrollable: app.canScroll()
+        metaData: app.getMetaData(0),
+        // dataLoaded: true,
+        // scrollable: app.canScroll()
       });
 
     });
     app.addEventListener('loadend', (/*event*/) => {
       if (this.didReceivedLoadError) {
-        this.setState({ loadProgress: 0 });
+        // this.setState({ loadProgress: 0 });
         alert('Received errors during load. Check log for details.');
         // show drop box if nothing has been loaded
       }
-      this.setState({ loadProgress: 0 });
+      this.setState({ loadProgress: 0, dataLoaded: true });
+
     });
 
     app.addEventListener('loaditem', (/*event*/) => {

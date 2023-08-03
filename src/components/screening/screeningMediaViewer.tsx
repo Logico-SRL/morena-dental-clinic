@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useRef } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import UserControls from "../../userControls";
 import classnames from './screening.module.scss';
 import { TacViewer } from "./viewer/tacViewer";
@@ -15,11 +15,14 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
     const type = selectedMedia ? selectedMedia.source.type : 'none'
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const embedRef = useRef<HTMLEmbedElement | null>(null);
+    const [unload, setUnload] = useState(false);
 
     useEffect(() => {
 
         if (!selectedMedia) {
             disposeMedia();
+        } else {
+            setUnload(false);
         }
     }, [selectedMedia])
 
@@ -31,15 +34,23 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
         if (embedRef.current) {
             embedRef.current = null;
         }
+        setUnload(true)
+    }
+
+    const onInternalCancel = () => {
+        disposeMedia();
+        setTimeout(() => {
+            onCancel();
+        }, 200);
     }
 
     // console.info('rendering src', src)
 
-    return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onCancel}
+    return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onInternalCancel}
         footer={[<UserControls.Button key={'download'} type="primary" href={srcDownload} download>
             DOWNLOAD
         </UserControls.Button>,
-        <UserControls.Button key={'close'} type="primary" onClick={onCancel}>
+        <UserControls.Button key={'close'} type="primary" onClick={onInternalCancel}>
             CLOSE
         </UserControls.Button>
         ]}
@@ -50,6 +61,6 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
             <source src={src} type={'video/mp4'} />
         </video>}
         {type == 'doc' && <embed ref={embedRef} src={src} width={'100%'} height={'100%'} />}
-        {type == 'tac' && <TacViewer src={src} />}
+        {type == 'tac' && <TacViewer src={src} unload={unload} />}
     </UserControls.Modal>
 }
