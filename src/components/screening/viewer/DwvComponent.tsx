@@ -32,6 +32,7 @@ import {
   App, decoderScripts, getDwvVersion
 } from 'dwv';
 import { processEnv } from '../../../processEnv';
+import UserControls from '../../../userControls';
 import Progress from '../../../userControls/components/progress';
 import Slider from '../../../userControls/components/slider';
 import classnames from './DwvComponent.module.scss';
@@ -78,6 +79,7 @@ type stateType = {
   selectedTool: string,
   loadProgress: number,
   dataLoaded: boolean,
+  scrollable: boolean,
   dwvApp: App | null,
   metaData: any,
   orientation: string | undefined,
@@ -104,6 +106,7 @@ class DwvComponent extends React.Component<propType, stateType> {
       selectedTool: 'Select Tool',
       loadProgress: 0,
       dataLoaded: false,
+      scrollable: false,
       dwvApp: null,
       metaData: {},
       orientation: undefined,
@@ -113,7 +116,7 @@ class DwvComponent extends React.Component<propType, stateType> {
 
   render() {
     // const { classes } = this.props;
-    const { versions, tools, loadProgress, dataLoaded, metaData } = this.state;
+    const { versions, tools, loadProgress, dataLoaded, metaData, scrollable } = this.state;
 
     // const handleToolChange = (event, newTool) => {
     //   if (newTool) {
@@ -135,35 +138,14 @@ class DwvComponent extends React.Component<propType, stateType> {
           {loadProgress > 0 && <Progress percent={loadProgress} />}
         </Row>
         <Row justify={"center"} className={classnames.toolbarRow}>
-          {/* <ToggleButtonGroup size="small"
-            color="primary"
-            value={this.state.selectedTool}
-            exclusive
-            onChange={handleToolChange}
-          >
-            {toolsButtons}
-          </ToggleButtonGroup>
-
-          <ToggleButton size="small"
-            value="reset"
-            title="Reset"
-            disabled={!dataLoaded}
-            onChange={this.onReset}
-          ><RefreshIcon /></ToggleButton>
-
-          <ToggleButton size="small"
-            value="toggleOrientation"
-            title="Toggle Orientation"
-            disabled={!dataLoaded}
-            onClick={this.toggleOrientation}
-          ><CameraswitchIcon /></ToggleButton> */}
-
-          {/* <ToggleButton size="small"
-            value="tags"
-            title="Tags"
-            disabled={!dataLoaded}
-            onClick={this.handleTagsDialogOpen}
-          ><LibraryBooksIcon /></ToggleButton> */}
+          <UserControls.Radio.Group buttonStyle="solid" onChange={ev => this.onChangeTool(ev.target.value)} value={this.state.selectedTool}>
+            <UserControls.Radio.Button disabled={!dataLoaded || !scrollable} onChange={ev => this.onChangeTool(ev.target.value)} value="Scroll">Scroll</UserControls.Radio.Button>
+            <UserControls.Radio.Button disabled={!dataLoaded} onChange={ev => this.onChangeTool(ev.target.value)} value="ZoomAndPan">ZoomAndPan</UserControls.Radio.Button>
+            <UserControls.Radio.Button disabled={!dataLoaded} onChange={ev => this.onChangeTool(ev.target.value)} value="WindowLevel">WindowLevel</UserControls.Radio.Button>
+            <UserControls.Radio.Button disabled={!dataLoaded} onChange={ev => this.onChangeTool(ev.target.value)} value="Draw">Draw</UserControls.Radio.Button>
+          </UserControls.Radio.Group>
+          {/* <UserControls.Button disabled={!dataLoaded} onClick={this.onReset} value="Reset">Reset</UserControls.Button> */}
+          <UserControls.Button disabled={!dataLoaded} onClick={this.toggleOrientation} value="Toggle Orientation">Toggle Orientation</UserControls.Button>
 
           {/* <Dialog
             open={this.state.showDicomTags}
@@ -184,82 +166,110 @@ class DwvComponent extends React.Component<propType, stateType> {
           </Dialog> */}
         </Row>
         <div id="layerGroup0" className={classnames.layerGroup} />
-      </div>
+      </div >
     );
   }
 
   componentDidUpdate(prevProps: propType, prevState: stateType): void {
-    if (prevProps.dcmUri !== this.props.dcmUri) {
-      this.unloadApp();
-      const app = this.initApp();
-      this.loadUri(app, this.props.dcmUri)
+    if (prevProps.dcmUri !== this.props.dcmUri && this.state.dwvApp) {
+      this.resetApp(this.state.dwvApp);
+      this.loadUri(this.state.dwvApp, this.props.dcmUri)
     }
 
   }
 
-  unloadApp = () => {
-    if (this.state.dwvApp) {
-      const app = this.state.dwvApp;
-      app.reset();
-    }
+  componentDidMount() {
+
+    const app = this.initApp();
+    this.loadUri(app, this.props.dcmUri);
+
   }
+
+
+  loadedItems = 0;
+  didReceivedLoadError = false;
+  isFirstRender = true;
+
+  resetApp = (app: App) => {
+
+    this.loadedItems = 0;
+    this.didReceivedLoadError = false;
+    this.isFirstRender = true;
+
+    this.setState({ dataLoaded: false });
+
+    app.reset();
+
+    // app.resetDisplay();
+    // app.resetLayout();
+    // app.resetZoom();
+
+  }
+
+
 
   initApp = () => {
     const app = new App();
     // initialise app
     app.init({
       "dataViewConfigs": { '*': [{ divId: 'layerGroup0' }] },
+      viewOnFirstLoadItem: true,
       "tools": this.state.tools
     });
 
     // load events
-    let nLoadItem = 0;
-    let nReceivedLoadError = false;
-    let isFirstRender = false;
+    // let nLoadItem = 0;
+    // let nReceivedLoadError = false;
+    // let isFirstRender = false;
 
     app.addEventListener('loadstart', (/*event*/) => {
-      console.info('app loadstart')
+      // console.info('app loadstart')
       // reset flags
-      nLoadItem = 0;
-      nReceivedLoadError = false;
+      this.loadedItems = 0;
+      this.didReceivedLoadError = false;
 
-      isFirstRender = true;
+      // isFirstRender = true;
     });
     app.addEventListener("loadprogress", (event: any) => {
       this.setState({ loadProgress: event.loaded });
     });
     app.addEventListener('renderend', (/*event*/) => {
-      if (isFirstRender) {
-        isFirstRender = false;
-        // available tools
-        let selectedTool = 'ZoomAndPan';
+      if (this.isFirstRender) {
+        console.info('renderend event', this.isFirstRender);
+        this.isFirstRender = false;
         if (app.canScroll()) {
-          selectedTool = 'Scroll';
+          // console.info('rendered setting Scroll tool')
+          this.onChangeTool('Scroll');
+        } else {
+          // console.info('rendered setting ZoomAndPan tool')
+          this.onChangeTool('ZoomAndPan');
         }
-        this.onChangeTool(selectedTool);
       }
     });
     app.addEventListener("load", (/*event*/) => {
-      console.info('app load')
-      // set dicom tags
-      this.setState({ metaData: app.getMetaData(0) });
-      // set data loaded flag
-      this.setState({ dataLoaded: true });
+      // console.info('app load')
+      this.setState({
+        // metaData: app.getMetaData(0),
+        dataLoaded: true,
+        scrollable: app.canScroll()
+      });
+
     });
     app.addEventListener('loadend', (/*event*/) => {
-      if (nReceivedLoadError) {
+      if (this.didReceivedLoadError) {
         this.setState({ loadProgress: 0 });
         alert('Received errors during load. Check log for details.');
         // show drop box if nothing has been loaded
       }
       this.setState({ loadProgress: 0 });
     });
+
     app.addEventListener('loaditem', (/*event*/) => {
-      ++nLoadItem;
+      ++this.loadedItems;
     });
     app.addEventListener('loaderror', (event: any) => {
-      console.error(event.error);
-      nReceivedLoadError = true;
+      console.error('loaderror ', event);
+      this.didReceivedLoadError = true;
     });
     // app.addEventListener('loadabort', (/*event*/) => {
     //   ++nReceivedLoadAbort;
@@ -282,21 +292,13 @@ class DwvComponent extends React.Component<propType, stateType> {
     if (app) {
       app.loadURLs([this.props.dcmUri]);
     } else {
-      console.error('!app')
+      console.error('loadUri !app')
     }
   }
 
 
 
-  componentDidMount() {
 
-    // create app
-
-    const app = this.initApp();
-    this.loadUri(app, this.props.dcmUri);
-
-
-  }
 
   /**
    * Get the icon of a tool.
@@ -322,12 +324,23 @@ class DwvComponent extends React.Component<propType, stateType> {
    * Handle a change tool event.
    * @param {string} tool The new tool name.
    */
-  onChangeTool = (tool: any) => {
-    if (this.state.dwvApp) {
+  onChangeTool = (tool: 'Scroll' | 'ZoomAndPan' | 'WindowLevel' | 'Draw') => {
+    console.info('onChangeTool, ', this.state.dwvApp)
+    if (this.state.dwvApp != null) {
+
+      // const isSame = this.state.selectedTool === tool;
+
+      // if (isSame) {
+      //   this.setState({ selectedTool: '' });
+      //   this.state.dwvApp.setTool('none');
+
+      // } else {
+
       this.setState({ selectedTool: tool });
       this.state.dwvApp.setTool(tool);
-      // if (tool === 'Draw') {
-      //   this.onChangeShape(this.state.tools.Draw.options[0]);
+      if (tool === 'Draw') {
+        this.onChangeShape('Ruler');
+      }
       // }
     }
   }
@@ -353,53 +366,57 @@ class DwvComponent extends React.Component<propType, stateType> {
   /**
    * Toogle the viewer orientation.
    */
-  // toggleOrientation = () => {
-  //   if (typeof this.state.orientation !== 'undefined') {
-  //     if (this.state.orientation === 'axial') {
-  //       this.state.orientation = 'coronal';
-  //     } else if (this.state.orientation === 'coronal') {
-  //       this.state.orientation = 'sagittal';
-  //     } else if (this.state.orientation === 'sagittal') {
-  //       this.state.orientation = 'axial';
-  //     }
-  //   } else {
-  //     // default is most probably axial
-  //     this.state.orientation = 'coronal';
-  //   }
-  //   // update data view config
-  //   const config = {
-  //     '*': [
-  //       {
-  //         divId: 'layerGroup0',
-  //         orientation: this.state.orientation
-  //       }
-  //     ]
-  //   };
-  //   this.state.dwvApp.setDataViewConfig(config);
-  //   // render data
-  //   for (let i = 0; i < this.state.dwvApp.getNumberOfLoadedData(); ++i) {
-  //     this.state.dwvApp.render(i);
-  //   }
-  // }
+  toggleOrientation = () => {
+    let orientation = 'coronal';
+
+    if (typeof this.state.orientation !== 'undefined') {
+      if (this.state.orientation === 'axial') {
+        orientation = 'coronal';
+      } else if (this.state.orientation === 'coronal') {
+        orientation = 'sagittal';
+      } else if (this.state.orientation === 'sagittal') {
+        orientation = 'axial';
+      }
+    }
+
+    this.setState({ orientation })
+    // update data view config
+    const config = {
+      '*': [
+        {
+          divId: 'layerGroup0',
+          orientation: this.state.orientation
+        }
+      ]
+    };
+
+    if (this.state.dwvApp) {
+
+      this.state.dwvApp.setDataViewConfig(config);
+      // render data
+      for (let i = 0; i < this.state.dwvApp.getNumberOfLoadedData(); ++i) {
+        this.state.dwvApp.render(i);
+      }
+    }
+  }
 
   /**
    * Handle a change draw shape event.
    * @param {string} shape The new shape name.
    */
-  // onChangeShape = (shape) => {
-  //   if (this.state.dwvApp) {
-  //     this.state.dwvApp.setToolFeatures({ shapeName: shape });
-  //   }
-  // }
+  onChangeShape = (shape: string) => {
+    if (this.state.dwvApp) {
+      this.state.dwvApp.setToolFeatures({ shapeName: shape });
+    }
+  }
 
   /**
    * Handle a reset event.
    */
-  onReset = () => {
-    if (this.state.dwvApp) {
-      this.state.dwvApp.resetDisplay();
-    }
-  }
+  // onReset = () => {
+  //   this.resetApp();
+  //   this.state.dwvApp && this.loadUri(this.state.dwvApp, this.props.dcmUri)
+  // }
 
   /**
    * Open the DICOM tags dialog.

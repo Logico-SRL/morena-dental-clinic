@@ -4,7 +4,7 @@ import { useMedia } from "../../hooks/useMedia";
 import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
-import { defaultMediaB64 } from "./defaultMediaB64";
+import { defaultsB64 } from "./defaults";
 import classnames from './screening.module.scss';
 import { ScreeningMediaViewer } from "./screeningMediaViewer";
 
@@ -91,13 +91,14 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
                 }}
             >
                 {media.filter(m => !!m).map(m => {
-                    const src = m.b64Thumbnail ? `data:image/png;base64,${m.b64Thumbnail}` : m.source.defaultThumbnailB64 || defaultMediaB64;
+                    const def = defaultsB64[m.source.type]
+                    const src = m.b64Thumbnail ? `data:image/png;base64,${m.b64Thumbnail}` : m.source.defaultThumbnailB64 || def;
                     const preview: ImageProps['preview'] = isDeleting ? false : {
                         src: m.b64Preview ?
                             `data:image/png;base64,${m.b64Preview}` :
                             m.b64Thumbnail ?
                                 `data:image/png;base64,${m.b64Thumbnail}` :
-                                m.source.defaultThumbnailB64 || defaultMediaB64,
+                                m.source.defaultThumbnailB64 || def,
                         mask: <UserControls.Space direction="vertical" size={0}>
                             <UserControls.Space direction="horizontal">
                                 <AntdIcons.EyeOutlined />

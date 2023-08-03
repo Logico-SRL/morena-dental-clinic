@@ -9,7 +9,7 @@ export const antdTheme: ThemeConfig = {
     },
     components: {
         Menu: {
-            colorItemBg: 'inherit',
+            itemBg: 'inherit',
             // colorBgContainer: '#DEE4EA'
         },
         Layout: {

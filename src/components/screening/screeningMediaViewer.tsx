@@ -17,7 +17,7 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
     const embedRef = useRef<HTMLEmbedElement | null>(null);
 
     useEffect(() => {
-        console.info('selectedMedia effect', selectedMedia);
+
         if (!selectedMedia) {
             disposeMedia();
         }
@@ -36,10 +36,10 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
     // console.info('rendering src', src)
 
     return <UserControls.Modal open={!!selectedMedia} wrapClassName={classnames.bigModalWrap} onCancel={onCancel}
-        footer={[<UserControls.Button type="primary" href={srcDownload} download>
+        footer={[<UserControls.Button key={'download'} type="primary" href={srcDownload} download>
             DOWNLOAD
         </UserControls.Button>,
-        <UserControls.Button type="primary" onClick={onCancel}>
+        <UserControls.Button key={'close'} type="primary" onClick={onCancel}>
             CLOSE
         </UserControls.Button>
         ]}
