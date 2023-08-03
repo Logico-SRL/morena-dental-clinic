@@ -1,9 +1,12 @@
-import { useLayoutEffect } from "react";
+import DwvComponent from "./DwvComponent";
 
-export const TacViewer = ({ src }: { src: string }) => {
-    useLayoutEffect(() => {
-        fetch(`${src}/opentacviewer`)
-    }, [src])
 
-    return null;
+type PropType = {
+    src: string,
+    // open: boolean
+
+}
+export const TacViewer = ({ src }: PropType) => {
+
+    return !!src ? <DwvComponent dcmUri={src} /> : null;
 }

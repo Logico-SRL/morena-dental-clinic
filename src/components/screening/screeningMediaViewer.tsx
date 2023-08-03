@@ -17,6 +17,7 @@ export const ScreeningMediaViewer: FunctionComponent<PropType> = ({ selectedMedi
     const embedRef = useRef<HTMLEmbedElement | null>(null);
 
     useEffect(() => {
+        console.info('selectedMedia effect', selectedMedia);
         if (!selectedMedia) {
             disposeMedia();
         }

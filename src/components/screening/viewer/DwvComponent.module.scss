@@ -1,0 +1,33 @@
+.dwv {
+  height: 100%;
+  width: 100%;
+
+  .progressRow {
+    height: 5%;
+  }
+  .toolbarRow {
+    text-align: center;
+    height: 5%;
+  }
+
+  /* Layers */
+  .layerGroup {
+    position: relative;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    width: 90%;
+    margin: auto;
+
+    :global(.layer) {
+      position: absolute;
+      pointer-events: none;
+    }
+    :global(.drawDiv) {
+      position: absolute;
+      pointer-events: none;
+    }
+  }
+}

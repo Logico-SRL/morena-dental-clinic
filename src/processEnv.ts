@@ -32,7 +32,8 @@ export const processEnv = () => {
             quality: +(process.env.DEFAULT_QUALITY || '50'),
             previewSize: +(process.env.PREVIEW_SIZE || '800'),
             thumbnailSize: +(process.env.THUMBNAIL_SIZE || '200')
-        }
+        },
+        publicUrl: process.env.NEXT_PUBLIC_URL
     }
 
     return ret;

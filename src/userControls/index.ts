@@ -18,12 +18,14 @@ import List from "./components/list";
 import Menu from "./components/menu";
 import Modal from "./components/modal";
 import notification from "./components/notification";
+import Progress from "./components/progress";
 import Radio from "./components/radio";
 import Row from "./components/row";
 import Segmented from "./components/segmented";
 import Select from "./components/select";
 import Sider from "./components/sider";
 import Skeleton from "./components/skeleton";
+import Slider from "./components/slider";
 import Space from "./components/space";
 import Tag from "./components/tag";
 import TagList from "./components/tagList/tagList";
@@ -66,6 +68,8 @@ const UserControls = {
     Tag,
     TagListSelect,
     TagList,
+    Slider,
+    Progress
 }
 
 export default UserControls;

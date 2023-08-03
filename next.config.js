@@ -53,7 +53,7 @@ const nextConfig = async function (phase) {
     const env = await getEnv(phase);
 
     let config = {
-        reactStrictMode: false,
+        reactStrictMode: true,
         experimental: { appDir: false },
         output: 'standalone',
         webpack(config) {
