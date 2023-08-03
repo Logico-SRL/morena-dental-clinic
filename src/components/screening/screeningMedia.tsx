@@ -8,6 +8,7 @@ import { defaultsB64 } from "./defaults";
 import classnames from './screening.module.scss';
 import { ScreeningMediaViewer } from "./screeningMediaViewer";
 
+
 type PropType = Pick<VisitPropType, 'sources' | 'selectedVisit' | 'selectedMediaSource' | 'isDeleting' | 'projectId'>
 
 
@@ -49,8 +50,14 @@ export const ScreeningMedia = ({ sources, selectedVisit, selectedMediaSource, is
         <ScreeningMediaViewer selectedMedia={selectedMedia} onCancel={onScreeningMediaViewerCancel} />
         <UserControls.Row>
             <UserControls.Image.PreviewGroup
+                icons={{
+                    close: <AntdIcons.CloseCircleOutlined style={{ fontSize: 30 }} />,
+                    left: <AntdIcons.LeftCircleOutlined style={{ fontSize: 50 }} />,
+                    right: <AntdIcons.RightCircleOutlined style={{ fontSize: 50 }} />
+                }}
                 preview={{
                     visible: previewVisible,
+                    className: classnames.previewGroupContainer,
                     // current,
                     onVisibleChange(value, prevValue) {
                         setPreviewVisible(value);

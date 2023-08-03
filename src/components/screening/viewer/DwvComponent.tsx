@@ -262,7 +262,7 @@ class DwvComponent extends React.Component<propType, stateType> {
         alert('Received errors during load. Check log for details.');
         // show drop box if nothing has been loaded
       }
-      this.setState({ loadProgress: 0, dataLoaded: true });
+      this.setState({ loadProgress: 0, dataLoaded: true, scrollable: app.canScroll() });
 
     });
 

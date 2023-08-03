@@ -6,10 +6,17 @@
   justify-content: space-between;
   padding: 15px 0;
 }
-
+.previewGroupContainer {
+  background-color: transparentize($color: #000000, $amount: 0.7);
+  :global(.ant-image-preview-close) {
+    background-color: red;
+  }
+}
 .previewItemContainer {
   :global(.ant-image-preview-img) {
     cursor: zoom-in;
+    background-color: transparentize($color: #fff, $amount: 0.2);
+    border-radius: 15px;
   }
 }
 
@@ -54,7 +61,7 @@ $imgSize: 30%;
   border-radius: 5px;
   position: relative;
   margin: 2px;
-  background-color: transparentize($color: #000000, $amount: 0.95);
+  background-color: transparentize($color: #000000, $amount: 0.9);
   :global(.ant-image-mask) {
     border-radius: 5px;
     :global(.ant-typography) {
