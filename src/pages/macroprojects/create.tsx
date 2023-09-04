@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { SplittedPage } from "../../components/layout/splittedPage";
-import { NewProject } from "../../components/projects/newProject";
+import { NewMacroProject } from "../../components/macroprojects/newMacroProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 
 const LeftTitle = ({ onList }: { onList: () => void }) => {
     return <>
         <UserControls.Typography.Title level={3}>
-            NEW PROJECT
+            NEW MACRO PROJECT
         </UserControls.Typography.Title>
         <UserControls.Button onClick={onList} size="large" style={{ marginLeft: 'auto' }} icon={<AntdIcons.UnorderedListOutlined />} />
     </>
@@ -34,14 +34,13 @@ const Comp: PageComponent = () => {
 
 
     const onList = () => {
-        push(`/projects`)
+        push(`/macroprojects`)
     }
 
 
 
     const RightTitle = () => {
         return null;
-
         // return <UserControls.Typography.Title level={4}>
         //     ONLINE LIBRARY
         // </UserControls.Typography.Title>
@@ -50,7 +49,7 @@ const Comp: PageComponent = () => {
     return (<><SplittedPage
         LeftTitle={<LeftTitle onList={onList} />}
         RightTitle={<RightTitle />}
-        Left={<NewProject />}
+        Left={<NewMacroProject />}
     />
     </>)
 }

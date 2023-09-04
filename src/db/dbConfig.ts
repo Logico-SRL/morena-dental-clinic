@@ -1,5 +1,8 @@
 import { processEnv } from "../processEnv";
-import { AppUserEntity, MediaEntity, MediaSourceEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity, TagEntity, VisitEntity } from "../repository/entities";
+import {
+    AppUserEntity, MacroProjectEntity, MediaEntity, MediaSourceEntity, NoteEntity, PatientEntity,
+    ProjectCategoryEntity, ProjectEntity, TagEntity, VisitEntity
+} from "../repository/entities";
 
 
 export const dbConfig = {
@@ -15,6 +18,8 @@ export const dbConfig = {
         AppUserEntity,
         PatientEntity,
         ProjectEntity,
+        MacroProjectEntity,
+        NoteEntity,
         ProjectCategoryEntity,
         VisitEntity,
         MediaEntity,

@@ -12,6 +12,7 @@ type IDbService = {
     patientsRepo: () => Promise<Repository<PatientEntity>>
     projectCategoriesRepo: () => Promise<Repository<ProjectCategoryEntity>>
     projectsRepo: () => Promise<Repository<ProjectEntity>>
+    macroProjectsRepo: () => Promise<Repository<MacroProjectEntity>>
     visitsRepo: () => Promise<Repository<VisitEntity>>
     mediaRepo: () => Promise<Repository<MediaEntity>>
     mediaSourceRepo: () => Promise<Repository<MediaSourceEntity>>

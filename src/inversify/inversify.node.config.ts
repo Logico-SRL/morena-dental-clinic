@@ -40,8 +40,11 @@ import { VisitsService } from "../services/visits/VisitsService";
 // import { PatientsService } from "../services/patients/PatientsService";
 import { FileDownloadController } from "../controllers/files/FileDownloadController";
 import { LoggerController } from "../controllers/logger/loggerController";
+import { MacroProjectController } from "../controllers/macroProjects/macroProjectController";
+import { MacroProjectsController } from "../controllers/macroProjects/macroProjectsController";
 import { TacViewerController } from "../controllers/tac/tacViewerController";
 import { LoggerService } from "../services/logger/LoggerService";
+import { MacroProjectsService } from "../services/macroprojects/MacroProjectsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
 
 const NodeIOCContainer = new Container();
@@ -51,6 +54,7 @@ NodeIOCContainer.bind<IDbService>(IOCServiceTypes.DbService).to(DbService).inSin
 NodeIOCContainer.bind<IPatientsService>(IOCServiceTypes.PatientsService).to(PatientsService).inSingletonScope();
 NodeIOCContainer.bind<IProjectCategoriesService>(IOCServiceTypes.ProjectCategoriesService).to(ProjectCategoriesService).inSingletonScope();
 NodeIOCContainer.bind<IProjectsService>(IOCServiceTypes.ProjectsService).to(ProjectsService).inSingletonScope();
+NodeIOCContainer.bind<IMacroProjectsService>(IOCServiceTypes.MacroProjectsService).to(MacroProjectsService).inSingletonScope();
 NodeIOCContainer.bind<IExternalPatientsService>(IOCServiceTypes.ExternalPatientsService).to(ExternalPatientsService).inSingletonScope();
 NodeIOCContainer.bind<IVisitsService>(IOCServiceTypes.VisitsService).to(VisitsService).inSingletonScope();
 NodeIOCContainer.bind<IMediaService>(IOCServiceTypes.MediaService).to(MediaService).inSingletonScope();
@@ -70,6 +74,8 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectController).to(ProjectController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.MacroProjectsController).to(MacroProjectsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.MacroProjectController).to(MacroProjectController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsCategoriesController).to(ProjectsCategoriesController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitsController).to(VisitsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.VisitController).to(VisitController);

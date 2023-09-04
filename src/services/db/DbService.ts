@@ -3,7 +3,7 @@ import 'reflect-metadata';
 // import { defaultDataSource } from "../../db/dataSource";
 import { DataSource } from "typeorm";
 import { dbConfig } from "../../db/dbConfig";
-import { AppUserEntity, MediaEntity, MediaSourceEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity, TagEntity, VisitEntity } from '../../repository/entities';
+import { AppUserEntity, MacroProjectEntity, MediaEntity, MediaSourceEntity, PatientEntity, ProjectCategoryEntity, ProjectEntity, TagEntity, VisitEntity } from '../../repository/entities';
 // import { AppUserEntity } from "../../repository/entities/appUser";
 // import { PatientEntity } from "../../repository/entities/patient";
 
@@ -50,6 +50,9 @@ export class DbService implements IDbService {
 
     projectsRepo = async () => {
         return (await this.dataSource).getRepository(ProjectEntity);
+    }
+    macroProjectsRepo = async () => {
+        return (await this.dataSource).getRepository(MacroProjectEntity);
     }
     tagsRepo = async () => {
         return (await this.dataSource).getRepository(TagEntity);

@@ -30,6 +30,13 @@ export const loggedInMenu = [{
     </Link>
 },
 {
+    key: '/macroprojects',
+    label: <Link href="/macroprojects" className={classnames.menuItem}>
+        <AntdIcons.ClusterOutlined />
+        MACRO
+    </Link>
+},
+{
     key: '/library',
     label: <Link href="/library" className={classnames.menuItem}>
         <AntdIcons.ContainerOutlined />
