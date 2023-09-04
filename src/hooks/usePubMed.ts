@@ -11,7 +11,9 @@ export const usePubMed = () => {
     const pubMedService = useService<IPubMedWebService>(IOCServiceTypes.PubMedService)
 
     const abortController = useRef<AbortController>()
+    const abortControllerSingle = useRef<AbortController>()
     const [fetchingArticles, setFetchingArticles] = useState(false);
+    const [fetchingArticle, setFetchingArticle] = useState(false);
 
     const fetchArticles = async (term: string, take: number = 100, retstart: number = 0) => {
 
@@ -46,5 +48,27 @@ export const usePubMed = () => {
         return ret;
     }
 
-    return { fetchArticles, fetchingArticles };
+    const fetchArticle = async (id: string) => {
+
+        let ret: IPubMedDetail | null = null
+        if (abortControllerSingle.current) {
+            abortControllerSingle.current.abort()
+        }
+        abortControllerSingle.current = new AbortController();
+
+        try {
+            setFetchingArticle(true)
+
+            ret = await pubMedService.get(id, abortControllerSingle.current.signal);
+
+        } catch (ex: any) {
+            logger.error(`usePubMeds fetchArticle ex ${ex.message}`)
+        } finally {
+            setFetchingArticle(false)
+        }
+
+        return ret;
+    }
+
+    return { fetchArticles, fetchingArticles, fetchArticle, fetchingArticle };
 }

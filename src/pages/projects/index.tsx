@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { SplittedPage } from "../../components/layout/splittedPage";
+import { SearchOnline } from "../../components/library/searchOnline";
 import { Projects } from "../../components/projects/projects";
 import { useProjects } from "../../hooks/useProjects";
 import UserControls from "../../userControls";
@@ -57,6 +58,7 @@ const Comp: PageComponent = () => {
         Left={<Projects
             projects={filteredProjects}
             loading={loadingFilteredProjects} />}
+        Right={<SearchOnline />}
     />
         {/* <NewProjectModal open={showNewProjectModal} onCancel={onModalCancel} />
         <EditProjectModal open={showEditProjectModal} onCancel={onModalCancel} project={editingProject} /> */}

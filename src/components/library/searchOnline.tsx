@@ -4,6 +4,7 @@ import { usePubMed } from "../../hooks/usePubMed";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { TouchableRow } from "../userControls/touchableRow";
+import { LibraryModal } from "./libraryModal";
 
 type PropType = {}
 
@@ -17,13 +18,17 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ }) => {
     const { fetchArticles, fetchingArticles } = usePubMed();
     const [isPending, startTransition] = useTransition();
 
-    const onClick = () => {
+    const [libraryModalOpen, setLibraryModalOpen] = useState(false);
+    const [modalItem, setModalItem] = useState<IPubMedSummary>();
 
+    const onClick = (item: IPubMedSummary) => {
+        setModalItem(item)
+        setLibraryModalOpen(true)
     }
 
     const itemRenderer = (item: IPubMedSummary, index: number) => {
         // return searchResulRenderer[item.type](item as any, { router })
-        return <TouchableRow onClick={onClick}>
+        return <TouchableRow onClick={() => onClick(item)}>
             <UserControls.Col xs={4}>
                 {item.uid}
             </UserControls.Col>
@@ -140,7 +145,11 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ }) => {
                     renderItem={itemRenderer}
                 />
             </UserControls.Col>
-
         </UserControls.Row>
+        <LibraryModal
+            open={libraryModalOpen}
+            onCancel={() => setLibraryModalOpen(false)}
+            pubMedId={modalItem?.uid ?? ''}
+        />
     </UserControls.Form>
 }

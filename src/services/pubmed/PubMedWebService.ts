@@ -1,8 +1,10 @@
 import { inject, injectable } from "inversify";
+import { xml2json } from 'xml-js';
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 
 const baseSearchUrl = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi'
 const baseSummaryUrl = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi'
+const baseDetailUrl = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi'
 
 @injectable()
 export class PubMedWebService implements IPubMedWebService {
@@ -39,9 +41,27 @@ export class PubMedWebService implements IPubMedWebService {
         params.append('retmax', take.toString())
         params.append('id', ids.join(','));
         return await this.httpService.get<IPubMedSummaryResultResponse>(`${baseSummaryUrl}?${params.toString()}`, { signal });
-        // console.info('getsummary', resp.data);
     }
 
+    getDetail = async (id: string, signal: AbortSignal) => {
+        const params = new URLSearchParams();
+        params.append('db', 'pubmed');
+        params.append('id', id);
+        const res = await this.httpService.get<string>(`${baseDetailUrl}?${params.toString()}`,
+            { signal, params: { format: "xml" }, responseType: 'text' },
+            false);
+
+
+        const converted: IPubMedDetail = JSON.parse(xml2json(res.data, { compact: true }));
+        console.info('converted', converted)
+        return converted;
+    }
+
+
+    get = async (id: string, signal: AbortSignal) => {
+        const resp = await this.getDetail(id, signal);
+        return resp ?? null;
+    }
 
 
 }

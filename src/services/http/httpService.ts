@@ -16,10 +16,10 @@ export class HttpService implements IHttpService {
     constructor() { }
 
 
-    get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    get<T>(url: string, config?: AxiosRequestConfig, allowRedirect: boolean = true): Promise<AxiosResponse<T>> {
         return axios.get(url, { ...defaultConfig, ...config }).then(res => {
             const isRedirect = !(res.request.responseURL as string).endsWith(url)
-            if (isRedirect) {
+            if (isRedirect && allowRedirect) {
                 // debugger;
                 window.dispatchEvent(new RedirectEvent({ to: res.request.responseURL }).event)
                 throw new Error("Redirecting");
