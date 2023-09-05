@@ -19,7 +19,7 @@ export const AddProjectModal = ({ open, onCancel, onAdd, macroproj }: PropType) 
         return allProjects.filter(p => (macroproj?.projects || []).findIndex(pr => pr.id === p.id) < 0).map(p => (
             {
                 value: p.id,
-                label: `${p.title} - ${p.id}`,
+                label: `${p.title} - ${p.id}, ${p.category?.name}, ${p.patient.familyName} ${p.patient.firstName}`,
                 item: p
             }))
 
@@ -27,11 +27,11 @@ export const AddProjectModal = ({ open, onCancel, onAdd, macroproj }: PropType) 
 
     return <UserControls.Modal open={open} width={'70vw'} onCancel={onCancel} okText={'Add'}
         onOk={() => selectedProj && onAdd(selectedProj)} okButtonProps={{ disabled: !selectedProj }}>
-        <UserControls.Row>
+        <UserControls.Row style={{ minHeight: '50vh', paddingTop: 80 }}>
             <UserControls.Col xs={24}>
-
                 <UserControls.Select
-                    style={{ width: '80%' }}
+                    defaultOpen
+                    style={{ width: '100%' }}
                     placeholder={'Select a project'}
                     showSearch
                     allowClear
