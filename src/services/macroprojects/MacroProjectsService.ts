@@ -46,11 +46,16 @@ export class MacroProjectsService implements IMacroProjectsService {
         return resp ? repoMacroProjToMacroProj(resp) : undefined;
     }
     save = async (project: IMacroProject) => {
-        throw new Error("not implemtented");
-        // const repo = (await this.dbService.projectsRepo())
-        // stripNestedTags(project);
-        // repo.save(project);
-        // return project;
+        const repo = (await this.dbService.macroProjectsRepo())
+        if (project.notes) {
+            project.notes.forEach(note => {
+                if (!note.id)
+                    note.id = ulid();
+            })
+        }
+        console.info('MacroProjectsService saving ', project);
+        await repo.save(project);
+        return await this.get(project.id) || project;
     }
     create = async (project: IMacroProject) => {
         const repo = (await this.dbService.macroProjectsRepo())

@@ -1,7 +1,12 @@
 import { Divider } from "antd";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { useMacroProject } from "../../hooks/useMacroProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
+import classnames from './macroprojects.module.scss';
+import { AddNoteModal } from "./modals/addNoteModal";
+import { AddProjectModal } from "./modals/addProjectModal";
 
 type PropType = {
     macroProject: IMacroProject | undefined,
@@ -10,6 +15,11 @@ type PropType = {
 export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
 
     const { push } = useRouter();
+    const [addNoteModalOpen, setAddNoteModalOpen] = useState(false);
+    const [addProjectModalOpen, setAddProjectModalOpen] = useState(false);
+
+    const [editingNote, setEditingNote] = useState<INote | null>(null)
+    const { saveNote, removeNote, addProject, removeProject } = useMacroProject(macroProject?.id || '');
 
     // const { patient } = macroProject || {};
 
@@ -22,78 +32,45 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
     }
 
     const onAddNoteClick = () => {
-        alert('todo')
+        setEditingNote(null)
+        setAddNoteModalOpen(true)
     }
 
     const onAddProjectClick = () => {
-        alert('todo')
+        setAddProjectModalOpen(true);
     }
 
-    // const onAllProjectsClick = () => {
-    //     push(`/projects`)
-    // }
+    const onNoteSave = async (note: INote) => {
+        await saveNote(note);
+        setAddNoteModalOpen(false);
+    }
 
-    // const onVisitClick = (visit: IVisit) => {
-    //     setSelectedVisit(visit)
-    //     // push(`/projects/${project?.id}/visits/${visit.id}`)
-    // }
+    const onNoteClick = (note: INote) => {
+        setEditingNote(note);
+        setAddNoteModalOpen(true);
+    }
 
-    // const onAddVisitClick = () => {
-    //     push(`/projects/${project?.id}/visits/create`)
-    // }
+    const onNoteDelete = async (note: INote) => {
+        UserControls.Modal.confirm({
+            title: 'Confirmation',
+            content: 'Are you sure you want to delete selected paragraph?',
+            onOk: async () => await removeNote(note)
+        })
+    }
 
+    const onProjectAdd = async (project: IProject) => {
+        await addProject(project);
+        setAddProjectModalOpen(false);
+    }
 
-    // const onShowVisitClick = () => {
-    //     selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}/show`)
-    // }
+    const onProjectRemove = async (project: IProject) => {
+        UserControls.Modal.confirm({
+            title: 'Confirmation',
+            content: 'Are you sure you want to remove selected project?',
+            onOk: async () => await removeProject(project)
+        })
 
-    // const onEditVisitClick = () => {
-    //     selectedVisit && push(`/projects/${project?.id}/visits/${selectedVisit.id}`)
-    // }
-
-    // const onDeleteVisitClick = () => {
-
-    //     if (selectedVisit) {
-    //         UserControls.Modal.confirm({
-    //             title: 'Confirmation',
-    //             content: 'All media related to selected visit will be deleted as well. Do you want to proceed?',
-    //             type: 'warn',
-    //             onOk: async () => {
-
-    //                 await deleteVisit(project?.id || '', selectedVisit.id)
-    //                 removeVisit(selectedVisit)
-    //                 setSelectedVisit(undefined);
-    //             }
-    //         })
-    //     }
-    // }
-
-    // const VisitLinks = <UserControls.Row gutter={10}>
-    //     <UserControls.Col>
-    //         <VisitButton disabled={!selectedVisit} text={
-    //             <UserControls.Space>
-    //                 <AntdIcons.EditOutlined />
-    //                 Edit {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
-    //             </UserControls.Space>} onClick={onEditVisitClick} />
-    //     </UserControls.Col>
-    //     <UserControls.Col>
-    //         <VisitButton disabled={!selectedVisit} danger text={
-    //             <UserControls.Space>
-    //                 <AntdIcons.DeleteOutlined />
-    //                 Delete {selectedVisit?.type == 'visit' ? 'Visit' : 'Surgery'}
-    //             </UserControls.Space>} onClick={onDeleteVisitClick} />
-    //     </UserControls.Col>
-    //     <UserControls.Col>
-    //         <VisitButton
-    //             type={'primary'}
-    //             text={
-    //                 <UserControls.Space>
-    //                     <AntdIcons.PlusOutlined />
-    //                     Add Visit
-    //                 </UserControls.Space>
-    //             } onClick={onAddVisitClick} />
-    //     </UserControls.Col>
-    // </UserControls.Row>
+    }
 
     return <>
         <UserControls.Row>
@@ -130,19 +107,19 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
 
             <Divider />
 
-            {macroProject?.notes.map(n => (
-                <UserControls.Col xs={24} key={n.id}>
-                    <UserControls.Typography.Title level={5}>
-                        <i>{n.title}</i>
+            {(macroProject?.notes || []).map(note => (
+                <UserControls.Col key={note.id} xs={24} className={classnames.note} onClick={() => onNoteClick(note)} >
+                    <UserControls.Typography.Title level={4} className={classnames.title}>
+                        {note.title}
                     </UserControls.Typography.Title>
                     <UserControls.Typography.Paragraph>
-                        {n.content}
+                        {note.content}
                     </UserControls.Typography.Paragraph>
-                </UserControls.Col>
-            ))}
-            <UserControls.Col xs={24} style={{ textAlign: 'right' }}>
+                </UserControls.Col>))}
+
+            <UserControls.Col xs={24} style={{ textAlign: 'right', marginTop: 20 }}>
                 <UserControls.Button type="primary" icon={<AntdIcons.PlusOutlined />} onClick={onAddNoteClick} >
-                    Aggiungi Nota
+                    Aggiungi Sezione
                 </UserControls.Button>
             </UserControls.Col>
 
@@ -153,11 +130,35 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
             </UserControls.Col>
             <Divider />
 
-            <UserControls.Col xs={24} style={{ textAlign: 'right' }}>
+            {(macroProject?.projects || []).map(proj => (<UserControls.Col xs={24} className={classnames.project}>
+                <UserControls.Row>
+                    <UserControls.Col flex={1}>
+                        {proj.title}
+                    </UserControls.Col>
+                    <UserControls.Col>
+                        <UserControls.Button icon={<AntdIcons.DeleteOutlined />} onClick={e => { e.stopPropagation(); e.preventDefault(); onProjectRemove(proj) }} />
+                    </UserControls.Col>
+                </UserControls.Row>
+            </UserControls.Col>))}
+
+            <UserControls.Col xs={24} style={{ textAlign: 'right', marginTop: 20 }}>
                 <UserControls.Button type="primary" icon={<AntdIcons.PlusOutlined />} onClick={onAddProjectClick} >
                     Aggiungi Progetto
                 </UserControls.Button>
             </UserControls.Col>
+            <AddNoteModal
+                open={addNoteModalOpen}
+                onCancel={() => setAddNoteModalOpen(false)}
+                onSave={onNoteSave}
+                onDelete={onNoteDelete}
+                note={editingNote}
+            />
+            {macroProject && <AddProjectModal
+                open={addProjectModalOpen}
+                onCancel={() => setAddProjectModalOpen(false)}
+                onAdd={onProjectAdd}
+                macroproj={macroProject}
+            />}
         </UserControls.Row>
     </>
 }

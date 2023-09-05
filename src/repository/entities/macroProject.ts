@@ -20,7 +20,7 @@ export class MacroProjectEntity {
     @ManyToOne(type => ProjectCategoryEntity)
     subCategory: ProjectCategoryEntity
 
-    @OneToMany(type => NoteEntity, v => v.macroProject)
+    @OneToMany(type => NoteEntity, v => v.macroProject, { cascade: true })
     notes?: NoteEntity[]
 
     @Column({ type: 'datetime', nullable: true })

@@ -5,9 +5,9 @@ import { IOCServiceTypes } from "../inversify/iocTypes";
 import { useService } from "../inversify/useService";
 import { defaultMacroProject } from "../services/defaultValues/defaultMacroProject";
 
-const projectStore = atom<IMacroProject>(defaultMacroProject());
+const macroProjectStore = atom<IMacroProject>(defaultMacroProject());
 // const selectedVisitStore = atom<IVisit | undefined>(undefined);
-const loadingProjectStore = atom<boolean>(false)
+const loadingMacroProjectStore = atom<boolean>(false)
 
 const fetchingId = {
     current: 'none'
@@ -20,9 +20,9 @@ const abortController = {
 export const useMacroProject = (projectId: string) => {
 
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
-    const macroProject = useStore(projectStore);
+    const macroProject = useStore(macroProjectStore);
     // const selectedVisit = useStore(selectedVisitStore);
-    const loadingMacroProject = useStore(loadingProjectStore);
+    const loadingMacroProject = useStore(loadingMacroProjectStore);
 
     React.useEffect(() => {
 
@@ -36,60 +36,63 @@ export const useMacroProject = (projectId: string) => {
             }
 
             fetchingId.current = projectId;
-            loadingProjectStore.set(true);
+            loadingMacroProjectStore.set(true);
 
             httpService.get<IMacroProject>(`/api/protected/macroprojects/${projectId}`, { signal: abortController.current.signal }).then(d => {
 
                 const proj = d.data;
 
-                projectStore.set(proj);
+                macroProjectStore.set(proj);
             })
                 .catch(err => {
-                    projectStore.set(defaultMacroProject());
+                    macroProjectStore.set(defaultMacroProject());
                 })
                 .finally(() => {
-                    loadingProjectStore.set(false);
+                    loadingMacroProjectStore.set(false);
                 })
 
             return () => { }
         }
     }, [projectId, macroProject])
 
-    // const setVisit = (visit: IVisit) => {
 
-    //     const curr = projectStore.get();
-    //     if (!curr) {
-    //         return;
-    //     }
-    //     if (!curr.visits) {
-    //         curr.visits = [visit]
-    //     } else {
-    //         const idx = curr.visits.findIndex(v => v.id === visit.id)
-    //         if (idx >= 0) {
-    //             curr.visits.splice(idx, 1, visit)
-    //         } else {
-    //             curr.visits.push(visit)
-    //         }
-    //     }
 
-    //     projectStore.set(curr);
-    // }
+    const saveNote = async (note: INote) => {
 
-    // const removeVisit = (visit: IVisit) => {
+        const curr = macroProjectStore.get();
+        if (!curr) {
+            return;
+        }
 
-    //     const curr = projectStore.get();
-    //     if (!curr) {
-    //         return;
-    //     }
-    //     if (curr.visits) {
-    //         const idx = curr.visits.findIndex(v => v.id === visit.id)
-    //         if (idx >= 0) {
-    //             curr.visits.splice(idx, 1)
-    //         }
-    //     }
+        if (!curr.notes) {
+            curr.notes = [note]
+        } else {
+            const idx = curr.notes.findIndex(v => v.id === note.id)
+            if (idx >= 0) {
+                curr.notes.splice(idx, 1, note)
+            } else {
+                curr.notes.push(note)
+            }
+        }
 
-    //     projectStore.set(curr);
-    // }
+        return await saveMacroProject(curr);
+    }
+
+    const removeNote = async (note: INote) => {
+
+        const curr = macroProjectStore.get();
+        if (!curr) {
+            return;
+        }
+        if (curr.notes) {
+            const idx = curr.notes.findIndex(v => v.id === note.id)
+            if (idx >= 0) {
+                curr.notes.splice(idx, 1)
+            }
+        }
+
+        return await saveMacroProject(curr);
+    }
 
     const saveMacroProject = async (p: IMacroProject) => {
         // if (p.tags) {
@@ -103,8 +106,7 @@ export const useMacroProject = (projectId: string) => {
         httpService.put<IMacroProject>(`/api/protected/macroprojects/${projectId}`, p)
             .then(d => {
                 const proj = d.data;
-                projectStore.set(proj);
-
+                macroProjectStore.set(proj);
             })
     }
 
@@ -113,6 +115,39 @@ export const useMacroProject = (projectId: string) => {
     // }
 
 
+    const addProject = async (proj: IProject) => {
+        const curr = macroProjectStore.get();
+        if (!curr) {
+            return;
+        }
+
+        if (!curr.projects) {
+            curr.projects = [proj]
+        } else {
+            const idx = (curr.projects || []).findIndex(v => v.id === proj.id)
+            if (idx >= 0) {
+                (curr.projects || []).splice(idx, 1, proj)
+            } else {
+                (curr.projects || []).push(proj)
+            }
+        }
+
+        return await saveMacroProject(curr);
+    }
+    const removeProject = async (proj: IProject) => {
+        const curr = macroProjectStore.get();
+        if (!curr) {
+            return;
+        }
+        if (curr.notes) {
+            const idx = (curr.projects || []).findIndex(v => v.id === proj.id)
+            if (idx >= 0) {
+                (curr.projects || []).splice(idx, 1)
+            }
+        }
+
+        return await saveMacroProject(curr);
+    }
 
 
 
@@ -120,9 +155,9 @@ export const useMacroProject = (projectId: string) => {
         macroProject,
         loadingMacroProject,
         saveMacroProject,
-        // setVisit,
-        // selectedVisit,
-        // setSelectedVisit,
-        // removeVisit,
+        saveNote,
+        removeNote,
+        addProject,
+        removeProject
     };
 }
