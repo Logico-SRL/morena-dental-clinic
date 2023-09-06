@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
-import { MacroProjectEntity, PatientEntity, ProjectCategoryEntity, TagEntity, VisitEntity } from ".";
+import { LibraryEntity, MacroProjectEntity, PatientEntity, ProjectCategoryEntity, TagEntity, VisitEntity } from ".";
 
 @Entity({
     name: "projects"
@@ -40,10 +40,15 @@ export class ProjectEntity {
     @OneToMany(type => VisitEntity, v => v.project)
     visits?: VisitEntity[]
 
-    @ManyToMany(type => TagEntity, t => t.projects, { cascade: ['insert'] })
+    @ManyToMany(type => TagEntity, t => t.projects, { cascade: ['insert', 'update'] })
     @JoinTable()
     tags: TagEntity[]
 
     @ManyToOne(type => MacroProjectEntity, macro => macro.projects)
     macroProject?: MacroProjectEntity
+
+    @ManyToMany(type => LibraryEntity, v => v.projects, { cascade: ['insert', 'update'] })
+    @JoinTable()
+    libraries?: LibraryEntity[]
+
 }

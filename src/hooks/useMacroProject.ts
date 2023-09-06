@@ -24,38 +24,48 @@ export const useMacroProject = (projectId: string) => {
     // const selectedVisit = useStore(selectedVisitStore);
     const loadingMacroProject = useStore(loadingMacroProjectStore);
 
+
+
     React.useEffect(() => {
 
         // console.info('useProject effect', fetchingId, projectId, project);
-
         if (projectId && (fetchingId.current != projectId) && (macroProject.id != projectId)) {
-
-            if (abortController.current) {
-                abortController.current.abort();
-                abortController.current = new AbortController();
-            }
-
-            fetchingId.current = projectId;
-            loadingMacroProjectStore.set(true);
-
-            httpService.get<IMacroProject>(`/api/protected/macroprojects/${projectId}`, { signal: abortController.current.signal }).then(d => {
-
-                const proj = d.data;
-
-                macroProjectStore.set(proj);
-            })
-                .catch(err => {
-                    macroProjectStore.set(defaultMacroProject());
-                })
-                .finally(() => {
-                    loadingMacroProjectStore.set(false);
-                })
-
-            return () => { }
+            loadMacroProj(projectId)
         }
+
+        return () => { }
     }, [projectId, macroProject])
 
+    const reloadMacroProj = () => {
+        loadMacroProj(projectId)
+    }
 
+    const loadMacroProj = (id: string) => {
+
+
+        if (abortController.current) {
+            abortController.current.abort();
+            abortController.current = new AbortController();
+        }
+
+        fetchingId.current = id;
+        loadingMacroProjectStore.set(true);
+
+        httpService.get<IMacroProject>(`/api/protected/macroprojects/${id}`, { signal: abortController.current.signal }).then(d => {
+
+            const proj = d.data;
+
+            macroProjectStore.set(proj);
+        })
+            .catch(err => {
+                macroProjectStore.set(defaultMacroProject());
+            })
+            .finally(() => {
+                loadingMacroProjectStore.set(false);
+            })
+
+
+    }
 
     const saveNote = async (note: INote) => {
 
@@ -158,6 +168,7 @@ export const useMacroProject = (projectId: string) => {
         saveNote,
         removeNote,
         addProject,
-        removeProject
+        removeProject,
+        reloadMacroProj
     };
 }

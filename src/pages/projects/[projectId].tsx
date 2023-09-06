@@ -3,12 +3,14 @@ import { useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditProject } from "../../components/projects/editProject";
 import { VisitMedia } from "../../components/screening/VisitMedia";
+import { SearchOnlineModal } from "../../components/search/searchOnlineModal";
+import { useLibrary } from "../../hooks/useLIbrary";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 
 
-const LeftTitle = ({ onList, onEditClick, inEdit }: { onList: () => void, onEditClick: () => void, inEdit: boolean }) => {
+const LeftTitle = ({ onList, onEditClick, inEdit, onPubmedClick }: { onList: () => void, onEditClick: () => void, inEdit: boolean, onPubmedClick: () => void }) => {
     return <>
         <UserControls.Typography.Title level={3}>
             PROJECT
@@ -16,6 +18,9 @@ const LeftTitle = ({ onList, onEditClick, inEdit }: { onList: () => void, onEdit
         <UserControls.Space style={{ marginLeft: 'auto' }}>
             <UserControls.Button size="large" icon={<AntdIcons.EditOutlined />} onClick={onEditClick} >
                 {inEdit ? 'Cancel edit' : 'Edit'}
+            </UserControls.Button>
+            <UserControls.Button size="large" icon={<AntdIcons.TranslationOutlined />} onClick={onPubmedClick} >
+                Pubmed
             </UserControls.Button>
             <UserControls.Button onClick={onList} size="large" icon={<AntdIcons.UnorderedListOutlined />} >
                 All
@@ -55,10 +60,10 @@ const Comp: PageComponent = () => {
 
     // console.info('query project id ', projectId)
 
-    const { project, loadingProject, saveProject } = useProject(projectId || '')
-
+    const { project, loadingProject, saveProject, reloadProj } = useProject(projectId || '')
     const [inEdit, setInEdit] = useState(false);
-
+    const { addToProj } = useLibrary()
+    const [showPubmedModal, setShowPubmedModal] = useState(false);
 
     const onList = () => {
         push(`/projects`)
@@ -69,12 +74,29 @@ const Comp: PageComponent = () => {
         // push(`/projects/${projectId}/edit`)
     }
 
+    const onPubmedClick = () => {
+        setShowPubmedModal(true)
+    }
+
+    const onSaveItem = async (item: IPubMedDetail) => {
+        if (project) {
+            await addToProj(item, project)
+            reloadProj();
+            setShowPubmedModal(false);
+        }
+    }
+
     return (<><SplittedPage
-        LeftTitle={<LeftTitle onList={onList} onEditClick={onEditClick} inEdit={inEdit} />}
+        LeftTitle={<LeftTitle onList={onList} onEditClick={onEditClick} inEdit={inEdit} onPubmedClick={onPubmedClick} />}
         RightTitle={<RightTitle />}
         Left={<EditProject project={project} loadingProject={loadingProject} saveProject={saveProject} inEdit={inEdit} setInEdit={setInEdit} />}
         Right={<VisitMedia projectId={projectId} />}
     />
+        <SearchOnlineModal
+            open={showPubmedModal}
+            onCancel={() => setShowPubmedModal(false)}
+            onSaveItem={onSaveItem}
+        />
     </>)
 }
 

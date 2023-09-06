@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { SplittedPage } from "../../components/layout/splittedPage";
-import { SearchOnline } from "../../components/library/searchOnline";
 import { MacroProjects } from "../../components/macroprojects/macroprojects";
+import { SearchOnline } from "../../components/search/searchOnline";
 import { useMacroProjects } from "../../hooks/useMacroProjects";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";

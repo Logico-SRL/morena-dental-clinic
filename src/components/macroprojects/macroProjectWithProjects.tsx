@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useMacroProject } from "../../hooks/useMacroProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
+import { LibraryInfo } from "../library/libraryInfo";
+import { SectionHeader } from "../userControls/sectionHeader";
 import classnames from './macroprojects.module.scss';
 import { AddNoteModal } from "./modals/addNoteModal";
 import { AddProjectModal } from "./modals/addProjectModal";
@@ -71,6 +73,9 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
         })
 
     }
+    const onProjectClick = (proj: IProject) => {
+        push(`/projects/${proj.id}`)
+    }
 
     return <>
         <UserControls.Row>
@@ -124,13 +129,11 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
             </UserControls.Col>
 
             <UserControls.Col xs={24} style={{ marginTop: 20 }}>
-                <UserControls.Typography.Title level={5}>
-                    <i>Progetti associati</i>
-                </UserControls.Typography.Title>
+                <SectionHeader title={'Progetti associati'} links={[]} />
             </UserControls.Col>
             <Divider />
 
-            {(macroProject?.projects || []).map(proj => (<UserControls.Col xs={24} className={classnames.project}>
+            {(macroProject?.projects || []).map(proj => (<UserControls.Col xs={24} className={classnames.project} onClick={() => onProjectClick(proj)}>
                 <UserControls.Row>
                     <UserControls.Col flex={1}>
                         {proj.title}
@@ -159,6 +162,12 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
                 onAdd={onProjectAdd}
                 macroproj={macroProject}
             />}
+            <UserControls.Col xs={24} style={{ marginTop: 30 }}>
+                <SectionHeader title={'Libraries'} links={[]} />
+            </UserControls.Col>
+            <LibraryInfo
+                libraries={macroProject?.libraries || []}
+            />
         </UserControls.Row>
     </>
 }

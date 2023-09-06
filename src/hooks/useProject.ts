@@ -20,65 +20,51 @@ const abortController = {
 
 export const useProject = (projectId: string) => {
 
-
-
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const project = useStore(projectStore);
     const selectedVisit = useStore(selectedVisitStore);
     const loadingProject = useStore(loadingProjectStore);
 
-    React.useEffect(() => {
+    const reloadProj = () => {
+        loadProj(projectId)
+    }
 
-        // console.info('useProject effect', fetchingId, projectId, project);
+    React.useEffect(() => {
 
         if (projectId && (fetchingId.current != projectId) && (project.id != projectId)) {
 
-            selectedVisitStore.set(undefined)
+            loadProj(projectId)
 
-            if (abortController.current) {
-                abortController.current.abort();
-                abortController.current = new AbortController();
-            }
-
-            // console.info(`fetchingIdStore.set(${projectId})`);
-            fetchingId.current = projectId;
-            // console.info(`fetching project ${projectId}`);
-
-            // console.info(`loadingProject ${loadingProject}, projectId: ${projectId}, project.id ${project.id}`)
-            loadingProjectStore.set(true);
-            // projectStore.set(defaultProject());
-
-            // const controller = new AbortController()
-
-            httpService.get<IProject>(`/api/protected/projects/${projectId}`, { signal: abortController.current.signal }).then(d => {
-
-                const proj = d.data;
-                // console.info('proj', proj)
-
-                if (proj.patient) {
-                    proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
-                }
-
-                // if (selectedVisit && (!proj.visits || !proj.visits.find(v => v.id === selectedVisit?.id))) {
-                //     setSelectedVisit(undefined);
-                // }
-                projectStore.set(proj);
-            })
-                .catch(err => {
-                    projectStore.set(defaultProject());
-                })
-                .finally(() => {
-                    loadingProjectStore.set(false);
-                    // fetchingId.current = '';
-                    // setLoading(false);
-                })
-
-            return () => {
-                // console.info('calling controller abort')
-                // controller.abort();
-            }
+            return () => { }
         }
     }, [projectId, project])
+
+    const loadProj = (id: string) => {
+        selectedVisitStore.set(undefined)
+
+        if (abortController.current) {
+            abortController.current.abort();
+            abortController.current = new AbortController();
+        }
+
+        fetchingId.current = id;
+        loadingProjectStore.set(true);
+        httpService.get<IProject>(`/api/protected/projects/${id}`, { signal: abortController.current.signal }).then(d => {
+
+            const proj = d.data;
+
+            if (proj.patient) {
+                proj.patient = convertPropsToDayjs(['dateOfBirth'], proj.patient)
+            }
+            projectStore.set(proj);
+        })
+            .catch(err => {
+                projectStore.set(defaultProject());
+            })
+            .finally(() => {
+                loadingProjectStore.set(false);
+            })
+    }
 
     const setVisit = (visit: IVisit) => {
 
@@ -186,5 +172,6 @@ export const useProject = (projectId: string) => {
         selectedVisit,
         setSelectedVisit,
         removeVisit,
+        reloadProj
     };
 }

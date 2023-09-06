@@ -1,35 +1,41 @@
 import { inject, injectable } from "inversify";
+import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
 
 @injectable()
 export class LibraryService implements ILibraryService {
 
     private readonly dbService: IDbService;
-    private readonly patientsService: IPatientsService;
-    private readonly projectsService: IProjectsService;
-    private readonly visitsService: IVisitsService;
+    private get getRepo() { return this.dbService.libraryRepo() as Promise<Repository<LibraryEntity>> }
 
-    constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService,
-        @inject(IOCServiceTypes.PatientsService) patientsService: IPatientsService,
-        @inject(IOCServiceTypes.ProjectsService) projectsService: IProjectsService,
-        @inject(IOCServiceTypes.VisitsService) visitsService: IVisitsService) {
+    constructor(@inject(IOCServiceTypes.DbService) dbService: IDbService) {
         this.dbService = dbService;
-        this.patientsService = patientsService;
-        this.projectsService = projectsService;
-        this.visitsService = visitsService;
     }
 
-    find = async (search: string) => {
-        const res: ISearchResult[] = [];
-        const patsRes = await this.patientsService.find(search)
-        const projsRes = await this.projectsService.find(search)
-        const visitsRes = await this.visitsService.find(search)
+    public get = async () => {
+        const repo = await this.getRepo;
+        return await repo.find({
+            relations: [
+                'projects',
+                'macroProjects'
+            ]
+        })
 
-        patsRes.forEach(p => res.push({ ...p, type: 'patient' }))
-        projsRes.forEach(p => res.push({ ...p, type: 'project' }))
-        visitsRes.forEach(p => res.push({ ...p, type: 'visit' }))
+    }
 
-        return res;
+    public add = async (item: ILibrary) => {
+        const repo = await this.getRepo;
+        item.id = ulid();
+        const it = repo.create(item);
+        repo.save(it);
+        return it;
+    }
+
+    public remove = async (id: string) => {
+        const repo = await this.getRepo;
+        repo.delete({
+            'id': id
+        })
     }
 
 }

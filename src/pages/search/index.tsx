@@ -1,21 +1,13 @@
 import { SplittedPage } from "../../components/layout/splittedPage";
-import { Library } from "../../components/library/library";
+import { Search } from "../../components/search/search";
 import { SearchOnline } from "../../components/search/searchOnline";
-import { useLibrary } from "../../hooks/useLIbrary";
 import UserControls from "../../userControls";
 
 
 const LibraryPage: PageComponent = () => {
 
-    const { addToLibrary } = useLibrary();
-
-    const onSaveItem = async (item: IPubMedDetail) => {
-        await addToLibrary(item);
-
-    }
-
     const LeftTitle = <UserControls.Typography.Title level={3}>
-        LIBRARY
+        FULL SEARCH
     </UserControls.Typography.Title>
 
     const RightTitle = <UserControls.Typography.Title level={4}>
@@ -25,8 +17,10 @@ const LibraryPage: PageComponent = () => {
     return (<SplittedPage
         LeftTitle={LeftTitle}
         RightTitle={RightTitle}
-        Left={<Library />}
-        Right={<SearchOnline onSaveItem={onSaveItem} />} />)
+        Left={<Search />}
+        Right={<SearchOnline />} />)
+
+
 
 }
 

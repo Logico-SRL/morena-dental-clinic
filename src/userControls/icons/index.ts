@@ -1,6 +1,6 @@
 import {
     AppstoreOutlined, BugOutlined, CloseCircleOutlined, ClusterOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, EyeOutlined, HomeOutlined, ImportOutlined, LeftCircleOutlined, LoginOutlined,
-    PlusOutlined, ReloadOutlined, RightCircleOutlined, SearchOutlined, SettingOutlined, TagOutlined, TaobaoOutlined, UnorderedListOutlined, UploadOutlined, UserAddOutlined, UserOutlined
+    PlusOutlined, ReloadOutlined, RightCircleOutlined, SearchOutlined, SettingOutlined, TagOutlined, TaobaoOutlined, TranslationOutlined, UnorderedListOutlined, UploadOutlined, UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
 import {
     AntdIconProps
@@ -29,7 +29,8 @@ const AntdIconsInt = {
     CloseCircleOutlined,
     LeftCircleOutlined,
     RightCircleOutlined,
-    ClusterOutlined
+    ClusterOutlined,
+    TranslationOutlined
 } as const
 
 type KeysOfAntdICons = keyof typeof AntdIconsInt;

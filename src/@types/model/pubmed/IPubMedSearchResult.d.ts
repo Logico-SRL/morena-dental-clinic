@@ -43,6 +43,7 @@ type IPubMedDetail = {
     PubmedArticleSet: {
         PubmedArticle: {
             MedlineCitation: {
+                PMID: { _text: '10476565' }
                 _attributes: {
                     Status: string,
                     Owner: string

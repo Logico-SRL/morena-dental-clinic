@@ -17,4 +17,5 @@ type IDbService = {
     mediaRepo: () => Promise<Repository<MediaEntity>>
     mediaSourceRepo: () => Promise<Repository<MediaSourceEntity>>
     tagsRepo: () => Promise<Repository<TagEntity>>
+    libraryRepo: () => Promise<Repository<LibraryEntity>>
 }

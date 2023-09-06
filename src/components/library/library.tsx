@@ -1,140 +1,101 @@
-import { useRouter } from "next/navigation";
-import { ChangeEventHandler, useMemo, useRef, useState } from "react";
-import { useLibrary } from "../../hooks/useLibrary";
-import { useTags } from "../../hooks/useTags";
+import { useState } from "react";
+import { useLibrary } from "../../hooks/useLIbrary";
 import UserControls from "../../userControls";
-import { useDebouncedCallback } from "../../utils/useDebouncedCallback";
-import { searchResulRenderer } from "./renderers/searchResultRenderer";
+import { AntdIcons } from "../../userControls/icons";
+import { SearchPubMedModal } from "../search/searchPubMedModal";
+import { TouchableRow } from "../userControls/touchableRow";
 
-type PropType = {}
+type PropType = {
 
-const minFullTextSearchLength = 4;
-const minTagTextSearchLength = 2;
+}
 
-export const Library: React.FunctionComponent<PropType> = ({ }) => {
+export const Library = ({ }: PropType) => {
 
+    const { libraries, removeFromLibrary } = useLibrary();
+    const [selItem, setSelItem] = useState<ILibrary>()
+    const [modalOpen, setModalOpen] = useState(false)
 
-    const router = useRouter();
-
-
-    const itemRenderer = (item: ISearchResult, index: number) => {
-        return searchResulRenderer[item.type](item as any, { router })
-    }
-    // const [form] = UserControls.Form.useForm();
-
-    const [inputValue, setInputValue] = useState('');
-    const [tagInputValue, setTagInputValue] = useState('');
-    const [searchResults, setSearchResults] = useState<ISearchResult[]>([])
-    const [tagSearchResults, setTagSearchResults] = useState<ITag[]>([])
-
-    const tagDataSource = useMemo(() => {
-        return tagSearchResults.map(t => ({ value: t.tag, text: t.tag }))
-    }, [tagSearchResults])
-
-    const { searchEntities } = useLibrary()
-    const { searchTags, getTag } = useTags()
-
-    const abortController = useRef<AbortController>()
-
-    const onFullTextInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-
-        const val = e.target.value;
-        setInputValue(val);
-        setTagInputValue('')
-
-        if (abortController.current) {
-            abortController.current.abort()
-        }
-
-        if (!val || val.length < minFullTextSearchLength) {
-            return setSearchResults([])
-        }
-
-        searchFullTextDebounced(val)
-
+    const onClick = (item: ILibrary) => {
+        setSelItem(item);
+        setModalOpen(true);
     }
 
-    const searchFullTextDebounced = useDebouncedCallback((val: string) => {
-        abortController.current = new AbortController();
-        searchEntities(val, abortController.current.signal).then(res => {
-            setSearchResults(res.data)
-        })
-    }, 200)
+    const onRemove = (item: ILibrary) => (e: React.MouseEvent) => {
 
-    const onTagInputChange = (val: string) => {
-
-        // const val = e.target.value;
-        setTagInputValue(val)
-        setInputValue('')
-
-        if (abortController.current) {
-            abortController.current.abort()
-        }
-
-        if (!val || val.length < minTagTextSearchLength) {
-            return setSearchResults([])
-        }
-
-        abortController.current = new AbortController();
-
-        searchTags(val, abortController.current.signal).then(res => {
-            setTagSearchResults(res.data)
+        e.stopPropagation();
+        e.preventDefault();
+        UserControls.Modal.confirm({
+            title: 'Confirmation',
+            content: 'Are you sure you want to remove selected article?',
+            onOk: async () => await removeFromLibrary(item)
         })
 
     }
 
-    const onTagSelected = (value: string) => {
-        if (!value) {
-            setSearchResults([])
-        }
-
-        if (abortController.current) {
-            abortController.current.abort()
-        }
-
-        abortController.current = new AbortController();
-        getTag(value, abortController.current.signal).then(res => {
-
-            const patsRes: IPatientSearchResult[] = res.data?.patients?.map(p => ({ ...p, type: 'patient' })) || []
-            const projsRes: IProjectSearchResult[] = res.data?.projects?.map(p => ({ ...p, type: 'project' })) || []
-            const visitsRes: IVisitSearchResult[] = res.data?.visits?.map(p => ({ ...p, type: 'visit' })) || []
-
-            const arr: ISearchResult[] = [];
-            patsRes.forEach(el => arr.push(el));
-            projsRes.forEach(el => arr.push(el));
-            visitsRes.forEach(el => arr.push(el));
-            setSearchResults(arr);
-        })
-    }
-
-    return <UserControls.Row gutter={20}>
-        <UserControls.Col xs={12}>
-            <UserControls.Form.Item
-                label='Full text search' >
-                <UserControls.Input placeholder={`min length ${minFullTextSearchLength} chars`}
-                    onChange={onFullTextInputChange}
-                    value={inputValue}
-                />
-            </UserControls.Form.Item>
-
-        </UserControls.Col>
-        <UserControls.Col xs={12}>
-            <UserControls.Form.Item label='Tag search'>
-                <UserControls.AutoComplete
-                    placeholder={`min length ${minTagTextSearchLength} chars`}
-                    options={tagDataSource}
-                    onSearch={onTagInputChange}
-                    onChange={onTagSelected}
-                />
-            </UserControls.Form.Item>
-
-        </UserControls.Col>
+    return <UserControls.Row>
         <UserControls.Col xs={24}>
             <UserControls.List
-                dataSource={searchResults}
-                renderItem={itemRenderer}
+                dataSource={libraries}
+                header={<Header />}
+                renderItem={renderItem({ onClick, onRemove })}
+            />
+
+            <SearchPubMedModal
+                open={selItem && modalOpen}
+                onCancel={() => setModalOpen(false)}
+                libraryItem={selItem}
             />
         </UserControls.Col>
-
     </UserControls.Row>
+}
+
+const Header = () => {
+    return <UserControls.Row>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography.Title level={5}>
+                id
+            </UserControls.Typography.Title>
+        </UserControls.Col>
+        <UserControls.Col xs={3}>
+            <UserControls.Typography.Title level={5}>
+                PubMed Id
+            </UserControls.Typography.Title>
+        </UserControls.Col>
+        <UserControls.Col xs={10}>
+            <UserControls.Typography.Title level={5}>
+                Title
+            </UserControls.Typography.Title>
+        </UserControls.Col>
+        {/* <UserControls.Col xs={6}>
+            <UserControls.Typography.Title level={5}>
+                Category
+            </UserControls.Typography.Title>
+        </UserControls.Col> */}
+    </UserControls.Row>
+}
+const renderItem = ({ onClick, onRemove }: { onClick: (item: ILibrary) => void, onRemove: (item: ILibrary) => (e: React.MouseEvent) => void }) => (item: ILibrary) => {
+    return <TouchableRow onClick={() => onClick(item)}>
+        <UserControls.Col xs={6}>
+            <UserControls.Typography>
+                {item.id}
+            </UserControls.Typography>
+        </UserControls.Col>
+        <UserControls.Col xs={3}>
+            <UserControls.Typography>
+                {item.pubMedId}
+            </UserControls.Typography>
+        </UserControls.Col>
+        <UserControls.Col xs={10}>
+            <UserControls.Typography>
+                {item.title}
+            </UserControls.Typography>
+        </UserControls.Col>
+        <UserControls.Col xs={4}>
+            in {(item.projects || []).length} progetti <br />
+            in {(item.macroProjects || []).length} macro progetti
+        </UserControls.Col>
+        <UserControls.Col xs={1}>
+            <UserControls.Button icon={<AntdIcons.DeleteOutlined />} onClick={onRemove(item)} />
+        </UserControls.Col>
+    </TouchableRow>
 }

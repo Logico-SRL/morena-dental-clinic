@@ -51,7 +51,8 @@ export class ProjectsService implements IProjectsService {
                     // },
                     tags: true,
 
-                }
+                },
+                libraries: true
             }
         });
         // console.info('ProjectsService find resp', resp);

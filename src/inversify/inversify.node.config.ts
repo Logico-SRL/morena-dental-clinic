@@ -29,10 +29,10 @@ import { DbService } from "../services/db/DbService";
 import { ExternalPatientsService } from "../services/externalPatients/ExternalPatientsService";
 import { FilePreviewService } from "../services/files/FilePreviewService";
 import { FilesService } from "../services/files/FilesService";
-import { LibraryService } from "../services/library/LibraryService";
 import { MediaService } from "../services/media/MediaService";
 import { PatientsService } from "../services/patients/PatientsService";
 import { ProjectsService } from "../services/projects/ProjectsService";
+import { SearchService } from "../services/search/SearchService";
 import { SettingsService } from "../services/settings/SettingsService";
 import { TagsService } from "../services/tags/TagsService";
 import { UnoDbService } from "../services/unoDb/UnoDbService";
@@ -42,7 +42,9 @@ import { FileDownloadController } from "../controllers/files/FileDownloadControl
 import { LoggerController } from "../controllers/logger/loggerController";
 import { MacroProjectController } from "../controllers/macroProjects/macroProjectController";
 import { MacroProjectsController } from "../controllers/macroProjects/macroProjectsController";
+import { SearchController } from "../controllers/search/searchController";
 import { TacViewerController } from "../controllers/tac/tacViewerController";
+import { LibraryService } from "../services/library/LibraryService";
 import { LoggerService } from "../services/logger/LoggerService";
 import { MacroProjectsService } from "../services/macroprojects/MacroProjectsService";
 import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
@@ -62,6 +64,7 @@ NodeIOCContainer.bind<ISettingsService>(IOCServiceTypes.SettingsService).to(Sett
 NodeIOCContainer.bind<IFilesService>(IOCServiceTypes.FilesService).to(FilesService).inSingletonScope();
 NodeIOCContainer.bind<IFilePreviewService>(IOCServiceTypes.FilesPreviewService).to(FilePreviewService).inSingletonScope();
 NodeIOCContainer.bind<ITagsService>(IOCServiceTypes.TagsService).to(TagsService).inSingletonScope();
+NodeIOCContainer.bind<ISearchService>(IOCServiceTypes.SearchService).to(SearchService).inSingletonScope();
 NodeIOCContainer.bind<ILibraryService>(IOCServiceTypes.LibraryService).to(LibraryService).inSingletonScope();
 NodeIOCContainer.bind<IUnoDbService>(IOCServiceTypes.UnoDbService).to(UnoDbService).inSingletonScope();
 NodeIOCContainer.bind<IAnagraficasService>(IOCServiceTypes.AnagraficasService).to(AnagraficasService).inSingletonScope();
@@ -73,6 +76,7 @@ NodeIOCContainer.bind<IApiController>(IOCControllerTypes.LoggerController).to(Lo
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientsController).to(PatientsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.PatientController).to(PatientController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectsController).to(ProjectsController);
+NodeIOCContainer.bind<IApiController>(IOCControllerTypes.SearchController).to(SearchController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.ProjectController).to(ProjectController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.MacroProjectsController).to(MacroProjectsController);
 NodeIOCContainer.bind<IApiController>(IOCControllerTypes.MacroProjectController).to(MacroProjectController);

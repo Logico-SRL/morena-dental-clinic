@@ -37,6 +37,13 @@ export const loggedInMenu = [{
     </Link>
 },
 {
+    key: '/search',
+    label: <Link href="/search" className={classnames.menuItem}>
+        <AntdIcons.SearchOutlined />
+        SEARCH
+    </Link>
+},
+{
     key: '/library',
     label: <Link href="/library" className={classnames.menuItem}>
         <AntdIcons.ContainerOutlined />

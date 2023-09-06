@@ -5,6 +5,7 @@ import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
 import { visitUtils } from "../../utils/visitUtils";
+import { LibraryInfo } from "../library/libraryInfo";
 import { PatientInfo } from "../patients/patientInfo";
 import { SectionHeader } from "../userControls/sectionHeader";
 import { VisitInfo } from "../visits/visitInfo";
@@ -144,7 +145,6 @@ export const ProjectWithVisits = ({ project }: PropType) => {
             </UserControls.Col>
 
             <UserControls.Col xs={24}>
-                {/* <SectionHeader title={`Project: ${project?.title || ''}`} links={<Links onClick={onAllProjectsClick} onEditClick={onEdit} />} /> */}
                 <SectionHeader title={'Visits'} links={VisitLinks} />
             </UserControls.Col>
             <UserControls.Col xs={24} style={{ paddingTop: 20 }}>
@@ -197,5 +197,12 @@ export const ProjectWithVisits = ({ project }: PropType) => {
                 <VisitInfo visit={visit} loading={loadingVisit} />
             </UserControls.Col>
         </UserControls.Row>
+
+        <UserControls.Col xs={24}>
+            <SectionHeader title={'Libraries'} links={[]} />
+        </UserControls.Col>
+        <LibraryInfo
+            libraries={project?.libraries || []}
+        />
     </>
 }

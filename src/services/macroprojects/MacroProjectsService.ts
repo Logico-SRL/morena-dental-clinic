@@ -39,7 +39,8 @@ export class MacroProjectsService implements IMacroProjectsService {
                 notes: true,
                 category: true,
                 subCategory: true,
-                projects: true
+                projects: true,
+                libraries: true
             }
         });
         // console.info('ProjectsService find resp', resp);

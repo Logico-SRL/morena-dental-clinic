@@ -3,6 +3,7 @@ import {
     AppUserEntity, MacroProjectEntity, MediaEntity, MediaSourceEntity, NoteEntity, PatientEntity,
     ProjectCategoryEntity, ProjectEntity, TagEntity, VisitEntity
 } from "../repository/entities";
+import { LibraryEntity } from "../repository/entities/library";
 
 
 export const dbConfig = {
@@ -24,7 +25,9 @@ export const dbConfig = {
         VisitEntity,
         MediaEntity,
         MediaSourceEntity,
-        TagEntity],
+        TagEntity,
+        LibraryEntity
+    ],
     options: {
         encrypt: false
     },
