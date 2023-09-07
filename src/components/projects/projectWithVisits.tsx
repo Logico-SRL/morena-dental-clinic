@@ -134,7 +134,16 @@ export const ProjectWithVisits = ({ project }: PropType) => {
 
     return <>
         <UserControls.Row>
-            <UserControls.Col xs={24} style={{ textAlign: 'right' }}>
+            <UserControls.Col xs={24} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <UserControls.Space direction="vertical">
+                    <UserControls.Typography.Title level={4}>
+                        {project?.title ?? ''}
+                    </UserControls.Typography.Title>
+                    <UserControls.Typography.Title level={5}>
+                        {project?.id ?? ''}
+                    </UserControls.Typography.Title>
+                </UserControls.Space>
+
                 <UserControls.Space>
                     <UserControls.Typography.Text>
                         New Project

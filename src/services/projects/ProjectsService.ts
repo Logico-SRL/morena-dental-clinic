@@ -52,7 +52,10 @@ export class ProjectsService implements IProjectsService {
                     tags: true,
 
                 },
-                libraries: true
+                libraries: {
+                    macroProjects: true,
+                    projects: true
+                }
             }
         });
         // console.info('ProjectsService find resp', resp);
