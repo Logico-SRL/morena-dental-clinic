@@ -88,33 +88,44 @@ export const useLibrary = () => {
     const addToProj = async (article: IPubMedDetail, proj: IProject) => {
 
         const libs = librariesStore.get();
-        const found = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+        let lib = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+        const found = !!lib;
 
-        const body = getLibraryFromArticle(article);
-        body.projects = found ? (found.projects || []).concat({ id: proj.id } as any) : [{ id: proj.id } as any]
+        if (!lib)
+            lib = getLibraryFromArticle(article);
 
-        const res = await httpService.post<ILibrary>(`/api/protected/library`, body, { signal: abortController.current?.signal })
+        lib.projects = (lib.projects ?? []).concat({ id: proj.id } as any)
+
+        const res = await httpService.post<ILibrary>(`/api/protected/library`, lib, { signal: abortController.current?.signal })
         const curr = librariesStore.get();
-        curr.push(res.data);
+
+        if (!found)
+            curr.push(res.data);
+
         librariesStore.set([...curr]);
-        return body;
+        return lib;
 
     }
 
     const addToMacroProj = async (article: IPubMedDetail, macroProj: IMacroProject) => {
 
         const libs = librariesStore.get();
-        const found = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+        let lib = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+        const found = !!lib;
 
-        const body = getLibraryFromArticle(article);
+        if (!lib) {
+            lib = getLibraryFromArticle(article);
+        }
 
-        body.macroProjects = found ? (found.macroProjects || []).concat({ id: macroProj.id } as any) : [{ id: macroProj.id } as any]
+        lib.macroProjects = (lib.macroProjects || []).concat({ id: macroProj.id } as any);
 
-        const res = await httpService.post<ILibrary>(`/api/protected/library`, body, { signal: abortController.current?.signal })
+        const res = await httpService.post<ILibrary>(`/api/protected/library`, lib, { signal: abortController.current?.signal })
         const curr = librariesStore.get();
-        curr.push(res.data);
+
+        if (!found)
+            curr.push(res.data);
         librariesStore.set([...curr]);
-        return body
+        return lib
 
     }
 

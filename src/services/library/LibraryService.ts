@@ -22,15 +22,35 @@ export class LibraryService implements ILibraryService {
             ]
         })
         return founds.map(found => repoLibraryToLibrary(found));
-
     }
+
+    private getOne = async (id: string) => {
+        const repo = await this.getRepo;
+        const found = await repo.findOne({
+            where: {
+                id
+            },
+
+            relations: [
+                'projects',
+                'macroProjects'
+            ]
+        })
+        if (!found)
+            throw new Error(`Library ${id} not found`);
+
+        return repoLibraryToLibrary(found);
+    }
+
 
     public add = async (item: ILibrary) => {
         const repo = await this.getRepo;
-        item.id = ulid();
+        if (!item.id)
+            item.id = ulid();
+
         const it = repo.create(item);
         repo.save(it);
-        return repoLibraryToLibrary(it);
+        return await this.getOne(item.id)
     }
 
     public remove = async (id: string) => {

@@ -10,7 +10,7 @@ export class LibraryEntity {
     @PrimaryColumn()
     id: string;
 
-    @Column()
+    @Column({ unique: true })
     pubMedId: string;
 
     @Column({ type: 'text' })

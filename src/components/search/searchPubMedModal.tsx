@@ -64,13 +64,15 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                         <UserControls.Typography.Title level={5}>
                                             PubMed Id
                                         </UserControls.Typography.Title>
-                                        <br />
                                         <UserControls.Typography>
                                             {artId}
                                         </UserControls.Typography>
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={12}>
+                                        <UserControls.Typography.Title level={5}>
+                                            Pubmed uri
+                                        </UserControls.Typography.Title>
                                         <a href={`https://pubmed.ncbi.nlm.nih.gov/${artId}/`} target={'_blank'}>
                                             {`https://pubmed.ncbi.nlm.nih.gov/${artId}/`}
                                         </a>
