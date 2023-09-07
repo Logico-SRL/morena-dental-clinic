@@ -41,7 +41,7 @@ export const Library = ({ }: PropType) => {
             />
 
             <SearchPubMedModal
-                open={selItem && modalOpen}
+                open={!!selItem && modalOpen}
                 onCancel={() => setModalOpen(false)}
                 libraryItem={selItem}
             />

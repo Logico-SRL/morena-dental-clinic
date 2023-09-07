@@ -37,4 +37,13 @@ export class LibraryController extends BaseController {
         return this.res.status(200).json({});
     }
 
+    PUT = async () => {
+        const item: ILibrary = this.req.body;
+        const ids = this.req.query['id'] as string[];
+        if (item && ids.length > 0) {
+            await this.libraryService.save(ids[0], item);
+        }
+        return this.res.status(200).json(item);
+    }
+
 }

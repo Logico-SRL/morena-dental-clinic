@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../inversify/iocTypes";
+import { repoLibraryToLibrary } from "../converters/repoLibraryToLibrary";
 
 @injectable()
 export class LibraryService implements ILibraryService {
@@ -14,12 +15,13 @@ export class LibraryService implements ILibraryService {
 
     public get = async () => {
         const repo = await this.getRepo;
-        return await repo.find({
+        const founds = await repo.find({
             relations: [
                 'projects',
                 'macroProjects'
             ]
         })
+        return founds.map(found => repoLibraryToLibrary(found));
 
     }
 
@@ -28,7 +30,7 @@ export class LibraryService implements ILibraryService {
         item.id = ulid();
         const it = repo.create(item);
         repo.save(it);
-        return it;
+        return repoLibraryToLibrary(it);
     }
 
     public remove = async (id: string) => {
@@ -36,6 +38,12 @@ export class LibraryService implements ILibraryService {
         repo.delete({
             'id': id
         })
+    }
+
+    public save = async (id: string, item: ILibrary) => {
+        const repo = await this.getRepo;
+        repo.update({ id }, item);
+        return item;
     }
 
 }

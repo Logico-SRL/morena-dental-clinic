@@ -1,5 +1,6 @@
 import { ButtonProps } from "antd";
 import { useRouter } from "next/router";
+import { useLibrary } from "../../hooks/useLIbrary";
 import { useProject } from "../../hooks/useProject";
 import { useVisit } from "../../hooks/useVisit";
 import UserControls from "../../userControls";
@@ -50,8 +51,9 @@ export const ProjectWithVisits = ({ project }: PropType) => {
     const { patient } = project || {};
 
     // const [selectedVisit, setSelectedVisit] = useState<IVisit>()
-    const { selectedVisit, setSelectedVisit, removeVisit } = useProject(project?.id || '')
+    const { selectedVisit, setSelectedVisit, removeVisit, reloadProj } = useProject(project?.id || '')
     const { deleteVisit, visit, loadingVisit } = useVisit(project?.id || '', selectedVisit?.id || '')
+    const { removeFromProj } = useLibrary()
 
     const onNewProjectClick = () => {
         push(`/projects/create`)
@@ -93,6 +95,13 @@ export const ProjectWithVisits = ({ project }: PropType) => {
                     setSelectedVisit(undefined);
                 }
             })
+        }
+    }
+
+    const removeLibFromProject = async (lib: ILibrary) => {
+        if (project) {
+            await removeFromProj(lib, project);
+            await reloadProj();
         }
     }
 
@@ -203,6 +212,7 @@ export const ProjectWithVisits = ({ project }: PropType) => {
         </UserControls.Col>
         <LibraryInfo
             libraries={project?.libraries || []}
+            remove={removeLibFromProject}
         />
     </>
 }

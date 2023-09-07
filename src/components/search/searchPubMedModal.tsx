@@ -30,6 +30,8 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
     },
         [pubMedId, open, libraryItem])
 
+    const artId = article?.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text ?? ''
+
     return (<UserControls.Modal
         open={open}
         onCancel={onCancel}
@@ -50,16 +52,25 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                         </UserControls.Typography>
                         :
                         <UserControls.Row style={{ textAlign: 'left' }}>
-                            <UserControls.Col xs={24}>
+                            <UserControls.Col xs={12}>
                                 <UserControls.Typography.Title level={5}>
                                     PubMed Id
                                 </UserControls.Typography.Title>
+                                <br />
+                                <UserControls.Typography>
+                                    {artId}
+                                </UserControls.Typography>
                             </UserControls.Col>
 
+                            <UserControls.Col xs={12}>
+                                <a href={`https://pubmed.ncbi.nlm.nih.gov/${artId}/`} target={'_blank'}>
+                                    {`https://pubmed.ncbi.nlm.nih.gov/${artId}/`}
+                                </a>
+                            </UserControls.Col>
+
+
                             <UserControls.Col xs={24}>
-                                <UserControls.Typography>
-                                    {article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text}
-                                </UserControls.Typography>
+
                             </UserControls.Col>
 
                             <UserControls.Col xs={24} style={{ marginTop: 30 }}>

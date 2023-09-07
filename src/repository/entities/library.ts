@@ -29,7 +29,7 @@ export class LibraryEntity {
     json?: any
 
     @ManyToMany(type => ProjectEntity, proj => proj.libraries)
-    projects?: MacroProjectEntity[]
+    projects?: ProjectEntity[]
 
     @ManyToMany(type => MacroProjectEntity, macro => macro.libraries)
     macroProjects?: MacroProjectEntity[]

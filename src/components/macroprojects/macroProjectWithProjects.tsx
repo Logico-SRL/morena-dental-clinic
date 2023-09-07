@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useMacroProject } from "../../hooks/useMacroProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
-import { LibraryInfo } from "../library/libraryInfo";
 import { SectionHeader } from "../userControls/sectionHeader";
 import classnames from './macroprojects.module.scss';
 import { AddNoteModal } from "./modals/addNoteModal";
@@ -162,12 +161,6 @@ export const MacroProjectWithProjects = ({ macroProject }: PropType) => {
                 onAdd={onProjectAdd}
                 macroproj={macroProject}
             />}
-            <UserControls.Col xs={24} style={{ marginTop: 30 }}>
-                <SectionHeader title={'Libraries'} links={[]} />
-            </UserControls.Col>
-            <LibraryInfo
-                libraries={macroProject?.libraries || []}
-            />
         </UserControls.Row>
     </>
 }

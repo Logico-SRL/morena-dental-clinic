@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { SplittedPage } from "../../components/layout/splittedPage";
+import { LibraryInfo } from "../../components/library/libraryInfo";
 import { EditMacroProject } from "../../components/macroprojects/editMacroProject";
 import { SearchOnlineModal } from "../../components/search/searchOnlineModal";
 import { useLibrary } from "../../hooks/useLIbrary";
@@ -29,11 +30,10 @@ const LeftTitle = ({ onList, onEditClick, inEdit, onPubmedClick }: { onList: () 
 }
 
 const RightTitle = () => {
-    return null;
 
-    // return <UserControls.Typography.Title level={4}>
-    //     SCREENING
-    // </UserControls.Typography.Title>
+    return <UserControls.Typography.Title level={4}>
+        MACROPROJECT LIBRARIES
+    </UserControls.Typography.Title>
 }
 
 
@@ -47,8 +47,13 @@ const Comp: PageComponent = () => {
     const { macroProject, saveMacroProject, loadingMacroProject, reloadMacroProj } = useMacroProject(projectId || '')
 
     const [inEdit, setInEdit] = useState(false);
-    const { addToMacroProj } = useLibrary()
+    const { addToMacroProj, removeFromMacroProj } = useLibrary()
     const [showPubmedModal, setShowPubmedModal] = useState(false);
+
+    const removeLibFromMacroProj = async (article: ILibrary) => {
+        await removeFromMacroProj(article, macroProject);
+        await reloadMacroProj();
+    }
 
     const onList = () => {
         push(`/macroprojects`)
@@ -70,13 +75,19 @@ const Comp: PageComponent = () => {
         }
     }
 
+
+
+
     return (<>
         <SplittedPage
             LeftTitle={<LeftTitle onList={onList} onEditClick={onEditClick} inEdit={inEdit} onPubmedClick={onPubmedClick} />}
             RightTitle={<RightTitle />}
             Left={<EditMacroProject project={macroProject} loadingProject={loadingMacroProject}
                 saveProject={saveMacroProject} inEdit={inEdit} setInEdit={setInEdit} />}
-        // Right={<VisitMedia projectId={projectId} />}
+            Right={<LibraryInfo
+                libraries={macroProject?.libraries || []}
+                remove={removeLibFromMacroProj}
+            />}
         />
         <SearchOnlineModal
             open={showPubmedModal}

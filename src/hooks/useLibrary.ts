@@ -87,8 +87,11 @@ export const useLibrary = () => {
 
     const addToProj = async (article: IPubMedDetail, proj: IProject) => {
 
+        const libs = librariesStore.get();
+        const found = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+
         const body = getLibraryFromArticle(article);
-        body.projects = [{ id: proj.id }]
+        body.projects = found ? (found.projects || []).concat({ id: proj.id } as any) : [{ id: proj.id } as any]
 
         const res = await httpService.post<ILibrary>(`/api/protected/library`, body, { signal: abortController.current?.signal })
         const curr = librariesStore.get();
@@ -100,8 +103,12 @@ export const useLibrary = () => {
 
     const addToMacroProj = async (article: IPubMedDetail, macroProj: IMacroProject) => {
 
+        const libs = librariesStore.get();
+        const found = libs.find(lib => lib.pubMedId === article.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text);
+
         const body = getLibraryFromArticle(article);
-        body.macroProjects = [{ id: macroProj.id }]
+
+        body.macroProjects = found ? (found.macroProjects || []).concat({ id: macroProj.id } as any) : [{ id: macroProj.id } as any]
 
         const res = await httpService.post<ILibrary>(`/api/protected/library`, body, { signal: abortController.current?.signal })
         const curr = librariesStore.get();
@@ -109,6 +116,36 @@ export const useLibrary = () => {
         librariesStore.set([...curr]);
         return body
 
+    }
+
+    const removeFromMacroProj = async (article: ILibrary, macroProj: IMacroProject) => {
+
+        macroProj.libraries = (macroProj.libraries || [])?.filter(l => l.id != article.id);
+        const res = await httpService.put<ILibrary>(`/api/protected/macroprojects/${macroProj.id}`, macroProj, { signal: abortController.current?.signal })
+
+        const libs = librariesStore.get();
+        const found = libs.find(lib => lib.pubMedId === article.pubMedId);
+
+        if (found) {
+
+            found.macroProjects = (found.macroProjects ?? []).filter(m => m.id != macroProj.id)
+            librariesStore.set([...libs]);
+        }
+    }
+
+    const removeFromProj = async (article: ILibrary, proj: IProject) => {
+
+        proj.libraries = (proj.libraries || [])?.filter(l => l.id != article.id);
+        const res = await httpService.put<ILibrary>(`/api/protected/projects/${proj.id}`, proj, { signal: abortController.current?.signal })
+
+        const libs = librariesStore.get();
+        const found = libs.find(lib => lib.pubMedId === article.pubMedId);
+
+        if (found) {
+
+            found.projects = (found.projects ?? []).filter(m => m.id != proj.id)
+            librariesStore.set([...libs]);
+        }
     }
 
     const removeFromLibrary = async (article: ILibrary) => {
@@ -121,5 +158,5 @@ export const useLibrary = () => {
     }
 
 
-    return { addToLibrary, removeFromLibrary, libraries, loadingLibraries, addToProj, addToMacroProj };
+    return { addToLibrary, removeFromLibrary, libraries, loadingLibraries, addToProj, addToMacroProj, removeFromMacroProj, removeFromProj };
 }
