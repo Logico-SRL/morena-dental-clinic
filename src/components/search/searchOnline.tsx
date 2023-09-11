@@ -1,5 +1,4 @@
-import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { usePubMed } from "../../hooks/usePubMed";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
@@ -17,10 +16,7 @@ const fetchTake = 50;
 export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) => {
 
     const [pageSize, setPageSize] = useState(paginationPageSize)
-    const router = useRouter();
     const { fetchArticles, fetchingArticles } = usePubMed();
-    const [isPending, startTransition] = useTransition();
-
     const [libraryModalOpen, setLibraryModalOpen] = useState(false);
     const [modalItem, setModalItem] = useState<IPubMedSummary>();
 
@@ -30,7 +26,7 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
     }
 
     const itemRenderer = (item: IPubMedSummary, index: number) => {
-        // return searchResulRenderer[item.type](item as any, { router })
+
         return <TouchableRow onClick={() => onClick(item)}>
             <UserControls.Col xs={4}>
                 {item.uid}
@@ -41,22 +37,6 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
         </TouchableRow>;
     }
 
-    // const [searchResult, setSearchResult] = useState<IPubMedResponse>({
-    //     search: {
-    //         count: '0',
-    //         retmax: '0',
-    //         retstart: '0',
-    //         idlist: [],
-    //         translationset: [],
-    //         translationstack: [],
-    //         querytranslation: '',
-    //     },
-    //     summary: {
-    //         uids: [] as any
-    //     }
-    // })
-
-
     type PaginationType = {
         [page: number]: IPubMedSummary[]
     }
@@ -65,15 +45,6 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
 
     const [totalCount, setTotalCount] = useState(0)
     const [currPage, setCurrPage] = useState(1)
-
-    // useEffect(() => {
-
-    //     setItems(currPage, pageSize, searchResult );
-
-    // }, [searchResult])
-
-
-
 
     const resetPagination = (newSize: number, pageNum: number, pagination: PaginationType) => {
 
@@ -106,61 +77,46 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
         const resp = await fetchArticles(term, fetchTake)
         setTotalCount(+resp.search.count)
         setItems(currPage, pageSize, resp);
-        // setSearchResult(resp)
     };
 
-    // const [currentPage, setCurrentPage] = useState(1);
+    const searchTerm = () => form.getFieldValue('term');
 
     const fetchNewItems = async (page: number, pageSize: number) => {
         if (!pagination[page]) {
-            const term = form.getFieldValue('term');
+
             const restartingFrom = (page - 1) * pageSize;
-            const data = await fetchArticles(term, fetchTake, restartingFrom);
+            const data = await fetchArticles(searchTerm(), fetchTake, restartingFrom);
             setItems(page, pageSize, data);
         }
     }
 
     const setItems = async (page: number, pageSize: number, data: IPubMedResponse) => {
         const retItems = data.summary.uids.map(uid => data.summary[uid])
-        const pag: PaginationType = { ...pagination }
-        let pageNum = page;
-        let it = retItems.splice(0, Math.min(pageSize, retItems.length))
 
-        while (it.length > 0) {
-            pag[pageNum] = it;
-            it = retItems.splice(0, Math.min(pageSize, retItems.length))
-            pageNum++;
+        if (retItems.length == 0) {
+            const pag: PaginationType = { 0: [] }
+            setCurrPage(0)
+            setPagination(pag);
+        } else {
+
+            const pag: PaginationType = { ...pagination }
+            let pageNum = page;
+
+            let it = retItems.splice(0, Math.min(pageSize, retItems.length))
+
+            while (it.length > 0) {
+                pag[pageNum] = it;
+                it = retItems.splice(0, Math.min(pageSize, retItems.length))
+                pageNum++;
+            }
+
+            setPagination(pag);
         }
-
-        setPagination(pag);
     }
 
     const onPageChange = async (page: number, pageSize: number) => {
         setCurrPage(page)
         fetchNewItems(page, pageSize)
-        // if (pagination.items[page]) {
-        //     setPagination(p => ({
-        //         currPage: page,
-        //         items: p.items
-        //     }))
-        // } else {
-        //     const term = form.getFieldValue('term');
-        //     const restartingFrom = (page - 1) * pageSize;
-        //     const data = await fetchArticles(term, fetchTake, restartingFrom);
-        //     const retItems = data.summary.uids.map(uid => data.summary[uid])
-        //     const pag: PaginationType = { currPage: page, items: { ...pagination.items } }
-        //     let pageNum = page;
-        //     let it = retItems.splice(0, Math.min(pageSize, retItems.length))
-
-        //     while (it.length > 0) {
-        //         pag.items[pageNum] = it;
-        //         it = retItems.splice(0, Math.min(pageSize, retItems.length))
-        //         pageNum++;
-        //     }
-
-        //     setPagination(pag);
-        // }
-
     }
 
     const onPaginationChange = (curr: number, size: number) => {
@@ -168,8 +124,8 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
         resetPagination(size, currPage, pagination)
     }
 
-    const onItemLink = (item: IPubMedDetail) => {
-        onSaveItem && onSaveItem(item);
+    const onItemLink = async (item: IPubMedDetail) => {
+        onSaveItem && await onSaveItem(item);
         setLibraryModalOpen(false)
     }
 
@@ -203,6 +159,7 @@ export const SearchOnline: React.FunctionComponent<PropType> = ({ onSaveItem }) 
             </UserControls.Col>
         </UserControls.Row>
         <SearchPubMedModal
+            term={searchTerm()}
             open={libraryModalOpen}
             onCancel={() => setLibraryModalOpen(false)}
             pubMedId={modalItem?.uid ?? ''}

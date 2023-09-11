@@ -4,7 +4,7 @@ type IPubMedSearchResultResponse = {
 }
 
 type IPubMedSummaryResultResponse = {
-    header: IPubMedResultHeader,
+    header?: IPubMedResultHeader,
     result: IPubMedSummaryResult
 }
 
@@ -14,7 +14,11 @@ type IPubMedDetailResultResponse = any;
 //     result: IPubMedDetailResult
 // }
 
-type IPubMedResponse = { search: IPubMedSearchResult } & { summary: IPubMedSummaryResult };
+type IPubMedResponse = {
+    search: IPubMedSearchResult
+} & {
+    summary: IPubMedSummaryResult
+};
 
 type IPubMedResultHeader = {
     type: string,

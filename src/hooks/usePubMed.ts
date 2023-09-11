@@ -39,6 +39,7 @@ export const usePubMed = () => {
         try {
 
             ret = await pubMedService.search(term, take, retstart, abortController.current.signal);
+            console.info('ret', ret)
 
         } catch (ex: any) {
             logger.error('usePubMeds fetchArticles ex', ex)

@@ -48,8 +48,8 @@ export class LibraryService implements ILibraryService {
         if (!item.id)
             item.id = ulid();
 
-        const it = repo.create(item);
-        repo.save(it);
+        const it = await repo.create(item);
+        await repo.save(it);
         return await this.getOne(item.id)
     }
 

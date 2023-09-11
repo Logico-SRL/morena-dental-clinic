@@ -1,6 +1,6 @@
 import { Divider, Spin } from "antd"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { usePubMed } from "../../hooks/usePubMed"
 import UserControls from "../../userControls"
 import { SectionHeader } from "../userControls/sectionHeader"
@@ -11,10 +11,11 @@ type propType = {
     onCancel: () => void,
     pubMedId?: string,
     libraryItem?: ILibrary,
-    onSaveItem?: (item: IPubMedDetail) => void
+    onSaveItem?: (item: IPubMedDetail) => void,
+    term?: string
 }
 
-export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, libraryItem }: propType) => {
+export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, libraryItem, term }: propType) => {
 
     const { fetchArticle, fetchingArticle } = usePubMed();
     const [article, setArticle] = useState<IPubMedDetail | null>(null)
@@ -36,6 +37,19 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
     const artId = article?.PubmedArticleSet.PubmedArticle.MedlineCitation.PMID._text ?? ''
 
     const isFromLibrary = !!libraryItem
+
+    const withTerm = useCallback<any>((val: string | undefined) => {
+        if (!val)
+            return '';
+        if (!term)
+            return val;
+
+        if (Array.isArray(val))
+            return val.map(v => withTerm(v))
+        return val.replace(new RegExp(term, 'gi'), function (match) {
+            return `<b>${match}</b >`
+        })
+    }, [term])
 
     return (<UserControls.Modal
         open={open}
@@ -75,8 +89,8 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                         </UserControls.Typography.Title>
                                         <a href={`https://pubmed.ncbi.nlm.nih.gov/${artId}/`} target={'_blank'}>
                                             {`https://pubmed.ncbi.nlm.nih.gov/${artId}/`}
-                                        </a>
-                                    </UserControls.Col>
+                                        </a >
+                                    </UserControls.Col >
 
 
                                     <UserControls.Col xs={24}>
@@ -90,9 +104,7 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={24}>
-                                        <UserControls.Typography>
-                                            {article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.ArticleTitle._text}
-                                        </UserControls.Typography>
+                                        <UserControls.Typography dangerouslySetInnerHTML={{ __html: withTerm(article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.ArticleTitle._text) }} />
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={24} style={{ marginTop: 30 }}>
@@ -102,10 +114,10 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={24}>
-                                        <UserControls.Typography>
-                                            {([] as any).concat(article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.AuthorList.Author)
-                                                .map((a: any) => `${a.LastName?._text ?? ''} ${a.ForeName?._text ?? ''}`).join(', ')}
-                                        </UserControls.Typography>
+                                        <UserControls.Typography dangerouslySetInnerHTML={{
+                                            __html: withTerm(([] as any).concat(article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.AuthorList.Author)
+                                                .map((a: any) => `${a.LastName?._text ?? ''} ${a.ForeName?._text ?? ''}`).join(', '))
+                                        }} />
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={24} style={{ marginTop: 30 }}>
@@ -115,17 +127,15 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                     </UserControls.Col>
 
                                     <UserControls.Col xs={24}>
-                                        <UserControls.Typography>
-                                            {article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.Abstract?.AbstractText._text}
-                                        </UserControls.Typography>
+                                        <UserControls.Typography dangerouslySetInnerHTML={{ __html: withTerm(article.PubmedArticleSet.PubmedArticle.MedlineCitation.Article.Abstract?.AbstractText._text) }} />
                                     </UserControls.Col>
-                                </UserControls.Row>
-                            </UserControls.Col>
+                                </UserControls.Row >
+                            </UserControls.Col >
                             <UserControls.Col xs={isFromLibrary ? 10 : 0}>
                                 <SectionHeader title="Projects" links={[]} />
 
                                 {libraryItem && (libraryItem?.projects ?? [])?.map(proj => (
-                                    <TouchableRow onClick={() => push(`/projects/${proj.id}`)}>
+                                    <TouchableRow onClick={() => { onCancel(); push(`/projects/${proj.id}`) }}>
                                         <UserControls.Col xs={24}>
                                             <UserControls.Typography>
                                                 {proj.id} - {proj.title}
@@ -138,7 +148,7 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                 <SectionHeader title="MacroProjects" links={[]} />
 
                                 {libraryItem && (libraryItem?.macroProjects ?? [])?.map(macroProj => (
-                                    <TouchableRow onClick={() => push(`/macroprojects/${macroProj.id}`)}>
+                                    <TouchableRow onClick={() => { onCancel(); push(`/macroprojects/${macroProj.id}`) }}>
                                         <UserControls.Col xs={24}>
                                             <UserControls.Typography>
                                                 {macroProj.id} - {macroProj.title}
@@ -148,11 +158,11 @@ export const SearchPubMedModal = ({ open, onCancel, pubMedId, onSaveItem, librar
                                 ))}
                                 <Divider />
                             </UserControls.Col>
-                        </UserControls.Row>
+                        </UserControls.Row >
                 }
 
-            </UserControls.Col>
-        </UserControls.Row>
-    </UserControls.Modal>)
+            </UserControls.Col >
+        </UserControls.Row >
+    </UserControls.Modal >)
 
 }

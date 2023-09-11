@@ -17,7 +17,7 @@ export class PubMedWebService implements IPubMedWebService {
 
     search = async (term: string, take: number, retstart: number, signal: AbortSignal) => {
         const params = new URLSearchParams();
-        params.append('db', 'pmc')
+        params.append('db', 'pubmed')
         params.append('retmode', 'json')
         params.append('retstart', retstart.toString())
         params.append('retmax', take.toString())
@@ -34,7 +34,18 @@ export class PubMedWebService implements IPubMedWebService {
         // return {...resp.data.esearchresult, ...summResp.data;
     }
 
-    getSummary = async (ids: string[], take: number, signal: AbortSignal) => {
+    getSummary = async (ids: string[], take: number, signal: AbortSignal): Promise<AxiosResponse<IPubMedSummaryResultResponse>> => {
+
+        if (ids.length === 0) {
+            return {
+                data: {
+                    result: {
+                        uids: []
+                    }
+                }
+            } as any
+        }
+
         const params = new URLSearchParams();
         params.append('db', 'pubmed');
         params.append('retmode', 'json')
