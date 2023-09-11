@@ -1,5 +1,4 @@
 import { inject, injectable } from "inversify";
-import { UnoAnagraficaEntity } from "src/repository/unoEntities/index"
 import type { IAnagraficaImportService } from "src/services/uno/import/IAnagraficaImportService";
 import { IOCServiceTypes } from "../../../inversify/iocTypes";
 import { BaseController } from "../../baseController";
@@ -19,7 +18,7 @@ export class AnagraficaImportController extends BaseController {
     }
 
     POST = async () => {
-        const anagrafiche = this.req.body as UnoAnagraficaEntity[];
+        const anagrafiche = this.req.body as UnoAnagrafica[];
         const result = await this.anagraficaImportService.importData(anagrafiche);
         return this.res.status(200).json(result)
     }

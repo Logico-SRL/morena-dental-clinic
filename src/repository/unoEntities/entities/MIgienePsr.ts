@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MIgieneTestata } from "./MIgieneTestata";
-import { TabAnamnesi } from "./TabAnamnesi";
+import { MIgieneTestata, TabAnamnesi } from ".";
 
 @Index("IX_M-IGIENE-PSR", ["idTestata", "idQuesito"], { unique: true })
 @Index("PK_M-IGIENE-PSR", ["id"], { unique: true })
@@ -28,14 +27,14 @@ export class MIgienePsr {
   @Column("nvarchar", { name: "Valore", nullable: true, length: 2 })
   valore: string | null;
 
-  // @ManyToOne(
-  //   () => MIgieneTestata,
-  //   (mIgieneTestata) => mIgieneTestata.mIgienePsrs
-  // )
-  // @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
-  // idTestata2: MIgieneTestata;
+  @ManyToOne(
+    () => MIgieneTestata,
+    (mIgieneTestata) => mIgieneTestata.mIgienePsrs
+  )
+  @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
+  idTestata2: MIgieneTestata;
 
-  // @ManyToOne(() => TabAnamnesi, (tabAnamnesi) => tabAnamnesi.mIgienePsrs)
-  // @JoinColumn([{ name: "IdQuesito", referencedColumnName: "id" }])
-  // idQuesito2: TabAnamnesi;
+  @ManyToOne(() => TabAnamnesi, (tabAnamnesi) => tabAnamnesi.mIgienePsrs)
+  @JoinColumn([{ name: "IdQuesito", referencedColumnName: "id" }])
+  idQuesito2: TabAnamnesi;
 }

@@ -3,9 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AutcomMessaggi } from "./AutcomMessaggi";
+import { AutcomMessaggi } from ".";
 
 @Index("PK_AUTO-ACTIONS", ["id"], { unique: true })
 @Entity("AUTCOM-ACTIONS", { schema: "dbo" })
@@ -37,9 +37,9 @@ export class AutcomActions {
   @Column("int", { name: "TemplateId", default: () => "(0)" })
   templateId: number;
 
-  // @OneToMany(
-  //   () => AutcomMessaggi,
-  //   (autcomMessaggi) => autcomMessaggi.parentAction
-  // )
-  // autcomMessaggis: AutcomMessaggi[];
+  @OneToMany(
+    () => AutcomMessaggi,
+    (autcomMessaggi) => autcomMessaggi.parentAction
+  )
+  autcomMessaggis: AutcomMessaggi[];
 }

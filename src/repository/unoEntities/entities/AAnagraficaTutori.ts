@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica } from ".";
 
 @Index("IX_A-ANAGRAFICA-TUTORI", ["idAnagrafica", "idTutore"], {})
 @Index("PK_A-INDIRIZZI-TUTORI", ["id"], { unique: true })
@@ -27,14 +27,14 @@ export class AAnagraficaTutori {
   @Column("ntext", { name: "Nota", nullable: true })
   nota: string | null;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.aAnagraficaTutoris)
-  // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.aAnagraficaTutoris)
+  @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
-  // @ManyToOne(
-  //   () => AAnagrafica,
-  //   (aAnagrafica) => aAnagrafica.aAnagraficaTutoris2
-  // )
-  // @JoinColumn([{ name: "IdTutore", referencedColumnName: "id" }])
-  // idTutore2: AAnagrafica;
+  @ManyToOne(
+    () => AAnagrafica,
+    (aAnagrafica) => aAnagrafica.aAnagraficaTutoris2
+  )
+  @JoinColumn([{ name: "IdTutore", referencedColumnName: "id" }])
+  idTutore2: AAnagrafica;
 }

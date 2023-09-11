@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { APazientiAnamnesi } from "./APazientiAnamnesi";
-import { TabAnamnesi } from "./TabAnamnesi";
+import { APazientiAnamnesi, TabAnamnesi } from ".";
 
 @Index("PK_A-PAZIENTI-ANAMNESI", ["id"], { unique: true })
 @Entity("A-PAZIENTI-ANAMNESI-RIGHE", { schema: "dbo" })
@@ -21,17 +20,17 @@ export class APazientiAnamnesiRighe {
   @Column("nvarchar", { name: "Valore", nullable: true, length: 10 })
   valore: string | null;
 
-  // @ManyToOne(
-  //   () => APazientiAnamnesi,
-  //   (aPazientiAnamnesi) => aPazientiAnamnesi.aPazientiAnamnesiRighes
-  // )
-  // @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
-  // idTestata: APazientiAnamnesi;
+  @ManyToOne(
+    () => APazientiAnamnesi,
+    (aPazientiAnamnesi) => aPazientiAnamnesi.aPazientiAnamnesiRighes
+  )
+  @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
+  idTestata: APazientiAnamnesi;
 
-  // @ManyToOne(
-  //   () => TabAnamnesi,
-  //   (tabAnamnesi) => tabAnamnesi.aPazientiAnamnesiRighes
-  // )
-  // @JoinColumn([{ name: "IdQuesito", referencedColumnName: "id" }])
-  // idQuesito: TabAnamnesi;
+  @ManyToOne(
+    () => TabAnamnesi,
+    (tabAnamnesi) => tabAnamnesi.aPazientiAnamnesiRighes
+  )
+  @JoinColumn([{ name: "IdQuesito", referencedColumnName: "id" }])
+  idQuesito: TabAnamnesi;
 }

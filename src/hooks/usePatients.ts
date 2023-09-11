@@ -107,7 +107,7 @@ export const usePatients = () => {
 
     const searchExternalAnagrafica = async (search: IUnoAnagraficaSearchParams) => {
         const pars = new URLSearchParams(search)
-        return httpService.get<UnoAnagraficaEntity[]>(`/api/protected/uno/anagrafica?${pars.toString()}`)
+        return httpService.get<UnoAnagrafica[]>(`/api/protected/uno/anagrafica?${pars.toString()}`)
             .then(res => res.data)
             .catch(err => {
                 logger.error('usePatients searchExternalAnagrafica err', err);
@@ -116,6 +116,15 @@ export const usePatients = () => {
     }
 
     const importExternalAnagrafica = async (users: AAnagrafica[]) => {
+        return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
+            .then(res => res.data)
+            .catch(err => {
+                logger.error('usePatients importExternalAnagrafica err', err);
+                throw err;
+            })
+    }
+
+    const fetchROAnagraficaData = async (userData: AAnagrafica[]) => {
         return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
             .then(res => res.data)
             .catch(err => {

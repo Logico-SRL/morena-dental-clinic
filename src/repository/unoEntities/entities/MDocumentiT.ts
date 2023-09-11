@@ -5,10 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MDocumentiR } from "./MDocumentiR";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica, MDocumentiR } from ".";
 
 @Index("IX_M-DOCUMENTI-T", ["idAnagrafica", "progetto", "tipo"], {
   unique: true,
@@ -31,10 +30,10 @@ export class MDocumentiT {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(-1)" })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => MDocumentiR, (mDocumentiR) => mDocumentiR.idTestata2)
-  // mDocumentiRs: MDocumentiR[];
+  @OneToMany(() => MDocumentiR, (mDocumentiR) => mDocumentiR.idTestata2)
+  mDocumentiRs: MDocumentiR[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mDocumentiTs)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mDocumentiTs)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 }

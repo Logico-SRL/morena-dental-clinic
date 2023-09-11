@@ -27,10 +27,10 @@ export class SmsMessaggiStatus {
   @Column("nchar", { name: "vStato", nullable: true, length: 5 })
   vStato: string | null;
 
-  // @ManyToOne(
-  //   () => SmsMessaggi,
-  //   (smsMessaggi) => smsMessaggi.smsMessaggiStatuses
-  // )
-  // @JoinColumn([{ name: "IDMsg", referencedColumnName: "id" }])
-  // idMsg2: SmsMessaggi;
+  @ManyToOne(
+    () => SmsMessaggi,
+    (smsMessaggi) => smsMessaggi.smsMessaggiStatuses
+  )
+  @JoinColumn([{ name: "IDMsg", referencedColumnName: "id" }])
+  idMsg2: SmsMessaggi;
 }

@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabListini } from "./TabListini";
-import { TabPrestazioni } from "./TabPrestazioni";
+import { TabListini, TabPrestazioni } from ".";
 
 @Index(
   "IX_TAB-LISTINIRIGHE",
@@ -65,14 +64,14 @@ export class TabListiniRighe {
   @Column("nvarchar", { name: "Codice2", nullable: true, length: 10 })
   codice2: string | null;
 
-  // @ManyToOne(() => TabListini, (tabListini) => tabListini.tabListiniRighes)
-  // @JoinColumn([{ name: "IDListino", referencedColumnName: "id" }])
-  // idListino2: TabListini;
+  @ManyToOne(() => TabListini, (tabListini) => tabListini.tabListiniRighes)
+  @JoinColumn([{ name: "IDListino", referencedColumnName: "id" }])
+  idListino2: TabListini;
 
-  // @ManyToOne(
-  //   () => TabPrestazioni,
-  //   (tabPrestazioni) => tabPrestazioni.tabListiniRighes
-  // )
-  // @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
-  // idPrestazione2: TabPrestazioni;
+  @ManyToOne(
+    () => TabPrestazioni,
+    (tabPrestazioni) => tabPrestazioni.tabListiniRighes
+  )
+  @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
+  idPrestazione2: TabPrestazioni;
 }

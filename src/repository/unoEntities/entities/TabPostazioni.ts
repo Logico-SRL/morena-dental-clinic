@@ -49,6 +49,6 @@ export class TabPostazioni {
   @Column("bit", { name: "NoAgenda", default: () => "(0)" })
   noAgenda: boolean;
 
-  // @OneToMany(() => AgImpegni, (agImpegni) => agImpegni.idPostazione2)
-  // agImpegnis: AgImpegni[];
+  @OneToMany(() => AgImpegni, (agImpegni) => agImpegni.idPostazione2)
+  agImpegnis: AgImpegni[];
 }

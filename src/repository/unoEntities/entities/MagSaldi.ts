@@ -67,11 +67,11 @@ export class MagSaldi {
   @Column("int", { name: "Refill", default: () => "(0)" })
   refill: number;
 
-  // @ManyToOne(() => MagAnagrafica, (magAnagrafica) => magAnagrafica.magSaldis)
-  // @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
-  // idArticolo2: MagAnagrafica;
+  @ManyToOne(() => MagAnagrafica, (magAnagrafica) => magAnagrafica.magSaldis)
+  @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
+  idArticolo2: MagAnagrafica;
 
-  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magSaldis)
-  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  // idSociet: TabSocieta;
+  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magSaldis)
+  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  idSociet: TabSocieta;
 }

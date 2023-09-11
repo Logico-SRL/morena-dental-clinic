@@ -1,11 +1,5 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
-import { AgImpegni } from './AgImpegni'
-import { MIgieneTestata } from './MIgieneTestata'
-import { MOrtoTestata } from './MOrtoTestata'
-import { MPerioTestata } from './MPerioTestata'
-import { AAnagrafica } from './AAnagrafica'
-import { TabOperatoriPerc } from './TabOperatoriPerc'
-
+import { Column, Entity, Index, OneToMany } from "typeorm";
+import { MIgieneTestata, MOrtoTestata, MPerioTestata, TabOperatoriPerc } from '.';
 
 @Index("TAB-OPERATORI_PK", ["id",], { unique: true })
 @Entity("TAB-OPERATORI", { schema: "dbo" })
@@ -45,33 +39,32 @@ export class TabOperatori {
     noScip: boolean;
 
     // @OneToMany(() => AgImpegni, agImpegni => agImpegni.idOperatore3)
-
-
     // agImpegnis: AgImpegni[];
 
-    // @OneToMany(() => MIgieneTestata, mIgieneTestata => mIgieneTestata.idOperatore)
+    @OneToMany(() => MIgieneTestata, mIgieneTestata => mIgieneTestata.idOperatore)
 
 
-    // mIgieneTestatas: MIgieneTestata[];
+    mIgieneTestatas: MIgieneTestata[];
 
-    // @OneToMany(() => MOrtoTestata, mOrtoTestata => mOrtoTestata.idOperatore)
-
-
-    // mOrtoTestatas: MOrtoTestata[];
-
-    // @OneToMany(() => MPerioTestata, mPerioTestata => mPerioTestata.idOperatore)
+    @OneToMany(() => MOrtoTestata, mOrtoTestata => mOrtoTestata.idOperatore)
 
 
-    // mPerioTestatas: MPerioTestata[];
+    mOrtoTestatas: MOrtoTestata[];
 
-    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>AAnagrafica,aAnagrafica=>aAnagrafica.tabOperatori)
-    // QUI PROBLEMA typeorm-model-generator // @JoinColumn([{ name: "ID", referencedColumnName: "id" },
-    // QUI PROBLEMA typeorm-model-generator // ])
-    // QUI PROBLEMA typeorm-model-generator // :AAnagrafica;
-
-    // @OneToMany(() => TabOperatoriPerc, tabOperatoriPerc => tabOperatoriPerc.idOperatore2)
+    @OneToMany(() => MPerioTestata, mPerioTestata => mPerioTestata.idOperatore)
 
 
-    // tabOperatoriPercs: TabOperatoriPerc[];
+    mPerioTestatas: MPerioTestata[];
+
+    // @OneToOne(()=>AAnagrafica,aAnagrafica=>aAnagrafica.tabOperatori)
+    // @JoinColumn([{ name: "ID", referencedColumnName: "id" },
+    // ])
+
+    // :AAnagrafica;
+
+    @OneToMany(() => TabOperatoriPerc, tabOperatoriPerc => tabOperatoriPerc.idOperatore2)
+
+
+    tabOperatoriPercs: TabOperatoriPerc[];
 
 }

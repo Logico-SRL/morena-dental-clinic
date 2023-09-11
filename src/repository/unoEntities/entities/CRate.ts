@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica } from ".";
 
 @Index("PK_C-RATE", ["id"], { unique: true })
 @Entity("C-RATE", { schema: "dbo" })
@@ -59,7 +59,7 @@ export class CRate {
   @Column("bit", { name: "ForzaChiusura", nullable: true })
   forzaChiusura: boolean | null;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.cRates)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.cRates)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica: AAnagrafica;
 }

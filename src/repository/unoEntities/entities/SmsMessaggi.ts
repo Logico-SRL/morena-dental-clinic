@@ -49,13 +49,13 @@ export class SmsMessaggi {
   @Column("nvarchar", { name: "SentBy", nullable: true, length: 50 })
   sentBy: string | null;
 
-  // @ManyToOne(() => SmsGruppi, (smsGruppi) => smsGruppi.smsMessaggis)
-  // @JoinColumn([{ name: "IDGrp", referencedColumnName: "id" }])
-  // idGrp: SmsGruppi;
+  @ManyToOne(() => SmsGruppi, (smsGruppi) => smsGruppi.smsMessaggis)
+  @JoinColumn([{ name: "IDGrp", referencedColumnName: "id" }])
+  idGrp: SmsGruppi;
 
-  // @OneToMany(
-  //   () => SmsMessaggiStatus,
-  //   (smsMessaggiStatus) => smsMessaggiStatus.idMsg2
-  // )
-  // smsMessaggiStatuses: SmsMessaggiStatus[];
+  @OneToMany(
+    () => SmsMessaggiStatus,
+    (smsMessaggiStatus) => smsMessaggiStatus.idMsg2
+  )
+  smsMessaggiStatuses: SmsMessaggiStatus[];
 }

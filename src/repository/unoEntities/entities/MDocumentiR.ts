@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MDocumentiT } from "./MDocumentiT";
+import { MDocumentiT } from ".";
 
 @Index("IX_M-DOCUMENTI-R", ["idTestata", "nrRiga"], {})
 @Index("PK_M-DOCUMENTI-R", ["id"], { unique: true })
@@ -72,7 +72,7 @@ export class MDocumentiR {
   @Column("datetime", { name: "DataStatusCS", nullable: true })
   dataStatusCs: Date | null;
 
-  // @ManyToOne(() => MDocumentiT, (mDocumentiT) => mDocumentiT.mDocumentiRs)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MDocumentiT;
+  @ManyToOne(() => MDocumentiT, (mDocumentiT) => mDocumentiT.mDocumentiRs)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MDocumentiT;
 }

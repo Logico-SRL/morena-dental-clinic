@@ -14,15 +14,15 @@ export class TabDenti {
   @Column("nchar", { name: "Cod", nullable: true, length: 2 })
   cod: string | null;
 
-  // @OneToMany(
-  //   () => MCureRigheDenti,
-  //   (mCureRigheDenti) => mCureRigheDenti.idDente2
-  // )
-  // mCureRigheDentis: MCureRigheDenti[];
+  @OneToMany(
+    () => MCureRigheDenti,
+    (mCureRigheDenti) => mCureRigheDenti.idDente2
+  )
+  mCureRigheDentis: MCureRigheDenti[];
 
-  // @OneToMany(
-  //   () => MSituazioneDente,
-  //   (mSituazioneDente) => mSituazioneDente.idDente2
-  // )
-  // mSituazioneDentes: MSituazioneDente[];
+  @OneToMany(
+    () => MSituazioneDente,
+    (mSituazioneDente) => mSituazioneDente.idDente2
+  )
+  mSituazioneDentes: MSituazioneDente[];
 }

@@ -28,6 +28,6 @@ export class TabEsami {
   @Column("bit", { name: "StatoRecord", nullable: true })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => APazientiEsami, (aPazientiEsami) => aPazientiEsami.idEsame2)
-  // aPazientiEsamis: APazientiEsami[];
+  @OneToMany(() => APazientiEsami, (aPazientiEsami) => aPazientiEsami.idEsame2)
+  aPazientiEsamis: APazientiEsami[];
 }

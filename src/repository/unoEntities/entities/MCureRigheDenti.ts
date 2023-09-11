@@ -22,11 +22,11 @@ export class MCureRigheDenti {
   @Column("smallint", { name: "IDDente" })
   idDente: number;
 
-  // @ManyToOne(() => MCureRighe, (mCureRighe) => mCureRighe.mCureRigheDentis)
-  // @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
-  // idCureRighe2: MCureRighe;
+  @ManyToOne(() => MCureRighe, (mCureRighe) => mCureRighe.mCureRigheDentis)
+  @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
+  idCureRighe2: MCureRighe;
 
-  // @ManyToOne(() => TabDenti, (tabDenti) => tabDenti.mCureRigheDentis)
-  // @JoinColumn([{ name: "IDDente", referencedColumnName: "id" }])
-  // idDente2: TabDenti;
+  @ManyToOne(() => TabDenti, (tabDenti) => tabDenti.mCureRigheDentis)
+  @JoinColumn([{ name: "IDDente", referencedColumnName: "id" }])
+  idDente2: TabDenti;
 }

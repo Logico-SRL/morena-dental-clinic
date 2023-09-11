@@ -47,7 +47,7 @@ export class CScadenzario {
   @Column("int", { name: "IDRiferimentoFattura", nullable: true })
   idRiferimentoFattura: number | null;
 
-  // @ManyToOne(() => CPrimanota, (cPrimanota) => cPrimanota.cScadenzarios)
-  // @JoinColumn([{ name: "IDPrimaNota", referencedColumnName: "id" }])
-  // idPrimaNota: CPrimanota;
+  @ManyToOne(() => CPrimanota, (cPrimanota) => cPrimanota.cScadenzarios)
+  @JoinColumn([{ name: "IDPrimaNota", referencedColumnName: "id" }])
+  idPrimaNota: CPrimanota;
 }

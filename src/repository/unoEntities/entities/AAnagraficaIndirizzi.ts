@@ -4,12 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-// import { AAnagrafica } from "./AAnagrafica";
-// import { TabComuni } from "./TabComuni";
-import { UnoAnagraficaEntity } from "..";
-import { UnoTabComuniEntity } from '..'
+import { AAnagrafica, TabComuni } from ".";
 
 @Index("IX_A-ANAGRAFICA-INDIRIZZI", ["idAnagrafica"], {})
 @Index("PK_A-ANAGRAFICA-INDIRIZZI", ["id"], { unique: true })
@@ -34,16 +31,16 @@ export class AAnagraficaIndirizzi {
   provincia: string | null;
 
   @ManyToOne(
-    () => UnoAnagraficaEntity,
+    () => AAnagrafica,
     (aAnagrafica) => aAnagrafica.aAnagraficaIndirizzis
   )
   @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  idAnagrafica2: UnoAnagraficaEntity;
+  idAnagrafica2: AAnagrafica;
 
-  @ManyToOne(() => UnoTabComuniEntity, (tabComuni) => tabComuni.aAnagraficaIndirizzis, {
+  @ManyToOne(() => TabComuni, (tabComuni) => tabComuni.aAnagraficaIndirizzis, {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "IDComune", referencedColumnName: "id" }])
-  idComune: UnoTabComuniEntity;
+  idComune: TabComuni;
 }

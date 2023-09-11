@@ -3,9 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabListiniRighe } from "./TabListiniRighe";
+import { TabListiniRighe } from ".";
 
 @Index("IX_TAB-LISTINI", ["descrizione"], {})
 @Index("PK_TAB-LISTINI", ["id"], { unique: true })
@@ -26,9 +26,9 @@ export class TabListini {
   @Column("bit", { name: "StatoRecord" })
   statoRecord: boolean;
 
-  // @OneToMany(
-  //   () => TabListiniRighe,
-  //   (tabListiniRighe) => tabListiniRighe.idListino2
-  // )
-  // tabListiniRighes: TabListiniRighe[];
+  @OneToMany(
+    () => TabListiniRighe,
+    (tabListiniRighe) => tabListiniRighe.idListino2
+  )
+  tabListiniRighes: TabListiniRighe[];
 }

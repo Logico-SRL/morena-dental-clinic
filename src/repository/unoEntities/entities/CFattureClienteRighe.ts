@@ -50,25 +50,25 @@ export class CFattureClienteRighe {
   })
   sconto: number | null;
 
-  // @Column("bit", { name: "FlagNoRA", nullable: true })
-  // flagNoRa: boolean | null;
+  @Column("bit", { name: "FlagNoRA", nullable: true })
+  flagNoRa: boolean | null;
 
-  // @Column("money", { name: "ImportoEnte", nullable: true })
-  // importoEnte: number | null;
+  @Column("money", { name: "ImportoEnte", nullable: true })
+  importoEnte: number | null;
 
-  // @Column("nvarchar", { name: "FeNatura", nullable: true, length: 4 })
-  // feNatura: string | null;
+  @Column("nvarchar", { name: "FeNatura", nullable: true, length: 4 })
+  feNatura: string | null;
 
-  // @Column("nvarchar", { name: "FeRifNorma", nullable: true, length: 100 })
-  // feRifNorma: string | null;
+  @Column("nvarchar", { name: "FeRifNorma", nullable: true, length: 100 })
+  feRifNorma: string | null;
 
-  // @Column("nvarchar", { name: "TipoSpesaTS", nullable: true, length: 2 })
-  // tipoSpesaTs: string | null;
+  @Column("nvarchar", { name: "TipoSpesaTS", nullable: true, length: 2 })
+  tipoSpesaTs: string | null;
 
-  // @ManyToOne(
-  //   () => CFattureCliente,
-  //   (cFattureCliente) => cFattureCliente.cFattureClienteRighes
-  // )
-  // @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
-  // idFattura2: CFattureCliente;
+  @ManyToOne(
+    () => CFattureCliente,
+    (cFattureCliente) => cFattureCliente.cFattureClienteRighes
+  )
+  @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
+  idFattura2: CFattureCliente;
 }

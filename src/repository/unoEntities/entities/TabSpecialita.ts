@@ -3,10 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabOperatoriPerc } from "./TabOperatoriPerc";
-import { TabPrestazioni } from "./TabPrestazioni";
+import { TabOperatoriPerc, TabPrestazioni } from ".";
 
 @Index("PK_TAB-SPECIALITA", ["id"], { unique: true })
 @Entity("TAB-SPECIALITA", { schema: "dbo" })
@@ -29,15 +28,15 @@ export class TabSpecialita {
   @Column("smallint", { name: "IDstandard", nullable: true })
   iDstandard: number | null;
 
-  // @OneToMany(
-  //   () => TabOperatoriPerc,
-  //   (tabOperatoriPerc) => tabOperatoriPerc.idSpecialit_2
-  // )
-  // tabOperatoriPercs: TabOperatoriPerc[];
+  @OneToMany(
+    () => TabOperatoriPerc,
+    (tabOperatoriPerc) => tabOperatoriPerc.idSpecialit_2
+  )
+  tabOperatoriPercs: TabOperatoriPerc[];
 
-  // @OneToMany(
-  //   () => TabPrestazioni,
-  //   (tabPrestazioni) => tabPrestazioni.idSpecialit_2
-  // )
-  // tabPrestazionis: TabPrestazioni[];
+  @OneToMany(
+    () => TabPrestazioni,
+    (tabPrestazioni) => tabPrestazioni.idSpecialit_2
+  )
+  tabPrestazionis: TabPrestazioni[];
 }

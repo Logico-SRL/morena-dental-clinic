@@ -26,7 +26,7 @@ export class IEgaimgInforendering {
   @Column("ntext", { name: "Valore", nullable: true })
   valore: string | null;
 
-  // @ManyToOne(() => IEga, (iEga) => iEga.iEgaimgInforenderings)
-  // @JoinColumn([{ name: "IDEGAIMG", referencedColumnName: "id" }])
-  // idegaimg: IEga;
+  @ManyToOne(() => IEga, (iEga) => iEga.iEgaimgInforenderings)
+  @JoinColumn([{ name: "IDEGAIMG", referencedColumnName: "id" }])
+  idegaimg: IEga;
 }

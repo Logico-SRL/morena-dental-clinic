@@ -23,10 +23,10 @@ export class IDisegnoPuntoelemento {
   @Column("real", { name: "Y", precision: 24 })
   y: number;
 
-  // @ManyToOne(
-  //   () => IDisegnoElemento,
-  //   (iDisegnoElemento) => iDisegnoElemento.iDisegnoPuntoelementos
-  // )
-  // @JoinColumn([{ name: "IDElemento", referencedColumnName: "id" }])
-  // idElemento: IDisegnoElemento;
+  @ManyToOne(
+    () => IDisegnoElemento,
+    (iDisegnoElemento) => iDisegnoElemento.iDisegnoPuntoelementos
+  )
+  @JoinColumn([{ name: "IDElemento", referencedColumnName: "id" }])
+  idElemento: IDisegnoElemento;
 }

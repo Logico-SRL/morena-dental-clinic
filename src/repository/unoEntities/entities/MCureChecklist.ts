@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureTestata } from "./MCureTestata";
-import { TabChecklist } from "./TabChecklist";
+import { MCureTestata, TabChecklist } from ".";
 
 @Index("IX_M-CURE-CHECKLIST", ["idTestata", "idCheck"], { unique: true })
 @Index("PK_M-CURE-CHECKLIST", ["id"], { unique: true })
@@ -28,11 +27,11 @@ export class MCureChecklist {
   @Column("ntext", { name: "Nota", nullable: true })
   nota: string | null;
 
-  // @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureChecklists)
-  // @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
-  // idTestata2: MCureTestata;
+  @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureChecklists)
+  @JoinColumn([{ name: "IdTestata", referencedColumnName: "id" }])
+  idTestata2: MCureTestata;
 
-  // @ManyToOne(() => TabChecklist, (tabChecklist) => tabChecklist.mCureChecklists)
-  // @JoinColumn([{ name: "IdCheck", referencedColumnName: "id" }])
-  // idCheck2: TabChecklist;
+  @ManyToOne(() => TabChecklist, (tabChecklist) => tabChecklist.mCureChecklists)
+  @JoinColumn([{ name: "IdCheck", referencedColumnName: "id" }])
+  idCheck2: TabChecklist;
 }

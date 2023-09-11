@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { CFattureCliente } from "./CFattureCliente";
-import { AAnagrafica } from "./AAnagrafica";
 
 @Index("IX_C-INCASSI-OPERATORI", ["idOperatore", "idFattura"], {})
 @Index("PK_C-INCASSI-OPERATORI", ["id"], { unique: true })
@@ -28,12 +27,12 @@ export class CIncassiOperatori {
   @Column("nvarchar", { name: "Commento", nullable: true, length: 150 })
   commento: string | null;
 
-  // @ManyToOne(
-  //   () => CFattureCliente,
-  //   (cFattureCliente) => cFattureCliente.cIncassiOperatoris
-  // )
-  // @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
-  // idFattura2: CFattureCliente;
+  @ManyToOne(
+    () => CFattureCliente,
+    (cFattureCliente) => cFattureCliente.cIncassiOperatoris
+  )
+  @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
+  idFattura2: CFattureCliente;
 
   // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.cIncassiOperatoris)
   // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])

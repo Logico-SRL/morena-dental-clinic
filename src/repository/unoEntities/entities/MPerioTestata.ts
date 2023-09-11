@@ -5,12 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MPerioRighe } from "./MPerioRighe";
-import { AAnagrafica } from "./AAnagrafica";
-import { TabPerioSequenze } from "./TabPerioSequenze";
-import { TabOperatori } from "./TabOperatori";
+import { AAnagrafica, MPerioRighe, TabOperatori, TabPerioSequenze } from ".";
 
 @Index("IX_M-PERIO-TESTATA", ["idAnagrafica", "dataRilevazioni"], {})
 @Index("PK_M-PERIO-TESTATA", ["id"], { unique: true })
@@ -37,21 +34,21 @@ export class MPerioTestata {
   @Column("datetime", { name: "Timestamp", nullable: true })
   timestamp: Date | null;
 
-  // @OneToMany(() => MPerioRighe, (mPerioRighe) => mPerioRighe.idTestata2)
-  // mPerioRighes: MPerioRighe[];
+  @OneToMany(() => MPerioRighe, (mPerioRighe) => mPerioRighe.idTestata2)
+  mPerioRighes: MPerioRighe[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mPerioTestatas)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mPerioTestatas)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
-  // @ManyToOne(
-  //   () => TabPerioSequenze,
-  //   (tabPerioSequenze) => tabPerioSequenze.mPerioTestatas
-  // )
-  // @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
-  // idSequenza: TabPerioSequenze;
+  @ManyToOne(
+    () => TabPerioSequenze,
+    (tabPerioSequenze) => tabPerioSequenze.mPerioTestatas
+  )
+  @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
+  idSequenza: TabPerioSequenze;
 
-  // @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mPerioTestatas)
-  // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
-  // idOperatore: TabOperatori;
+  @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mPerioTestatas)
+  @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
+  idOperatore: TabOperatori;
 }

@@ -5,10 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
-import { APazientiAnamnesiRighe } from "./APazientiAnamnesiRighe";
+import { AAnagrafica, APazientiAnamnesiRighe } from ".";
 
 @Index("PK_A-PAZIENTI-ANAMNESI_", ["id"], { unique: true })
 @Entity("A-PAZIENTI-ANAMNESI", { schema: "dbo" })
@@ -28,13 +27,13 @@ export class APazientiAnamnesi {
   @Column("smallint", { name: "codiceASA", nullable: true })
   codiceAsa: number | null;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.aPazientiAnamnesis)
-  // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.aPazientiAnamnesis)
+  @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica: AAnagrafica;
 
-  // @OneToMany(
-  //   () => APazientiAnamnesiRighe,
-  //   (aPazientiAnamnesiRighe) => aPazientiAnamnesiRighe.idTestata
-  // )
-  // aPazientiAnamnesiRighes: APazientiAnamnesiRighe[];
+  @OneToMany(
+    () => APazientiAnamnesiRighe,
+    (aPazientiAnamnesiRighe) => aPazientiAnamnesiRighe.idTestata
+  )
+  aPazientiAnamnesiRighes: APazientiAnamnesiRighe[];
 }

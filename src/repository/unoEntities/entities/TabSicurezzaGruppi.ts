@@ -5,10 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabSocieta } from "./TabSocieta";
-import { TabSicurezzaUtenti } from "./TabSicurezzaUtenti";
+import { TabSicurezzaUtenti, TabSocieta } from ".";
 
 @Index("PK_TAB-SICUREZZA-GRUPPI", ["id"], { unique: true })
 @Entity("TAB-SICUREZZA-GRUPPI", { schema: "dbo" })
@@ -28,13 +27,13 @@ export class TabSicurezzaGruppi {
   @Column("bit", { name: "StatoRecord", nullable: true })
   statoRecord: boolean | null;
 
-  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.tabSicurezzaGruppis)
-  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  // idSociet: TabSocieta;
+  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.tabSicurezzaGruppis)
+  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  idSociet: TabSocieta;
 
-  // @OneToMany(
-  //   () => TabSicurezzaUtenti,
-  //   (tabSicurezzaUtenti) => tabSicurezzaUtenti.idGruppo
-  // )
-  // tabSicurezzaUtentis: TabSicurezzaUtenti[];
+  @OneToMany(
+    () => TabSicurezzaUtenti,
+    (tabSicurezzaUtenti) => tabSicurezzaUtenti.idGruppo
+  )
+  tabSicurezzaUtentis: TabSicurezzaUtenti[];
 }

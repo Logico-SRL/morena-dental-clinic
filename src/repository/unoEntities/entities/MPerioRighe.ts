@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MPerioTestata } from "./MPerioTestata";
-import { TabPerioRilevazioni } from "./TabPerioRilevazioni";
+import { MPerioTestata, TabPerioRilevazioni } from ".";
 
 @Index("IX_M-PERIO-RIGHE", ["idTestata", "idRilevazione"], {})
 @Index("PK_M-PERIO-RIGHE", ["id"], { unique: true })
@@ -25,14 +24,14 @@ export class MPerioRighe {
   @Column("int", { name: "Valore" })
   valore: number;
 
-  // @ManyToOne(() => MPerioTestata, (mPerioTestata) => mPerioTestata.mPerioRighes)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MPerioTestata;
+  @ManyToOne(() => MPerioTestata, (mPerioTestata) => mPerioTestata.mPerioRighes)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MPerioTestata;
 
-  // @ManyToOne(
-  //   () => TabPerioRilevazioni,
-  //   (tabPerioRilevazioni) => tabPerioRilevazioni.mPerioRighes
-  // )
-  // @JoinColumn([{ name: "IDRilevazione", referencedColumnName: "id" }])
-  // idRilevazione2: TabPerioRilevazioni;
+  @ManyToOne(
+    () => TabPerioRilevazioni,
+    (tabPerioRilevazioni) => tabPerioRilevazioni.mPerioRighes
+  )
+  @JoinColumn([{ name: "IDRilevazione", referencedColumnName: "id" }])
+  idRilevazione2: TabPerioRilevazioni;
 }

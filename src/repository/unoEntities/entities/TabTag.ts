@@ -22,6 +22,6 @@ export class TabTag {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(1)" })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => APazientiTag, (aPazientiTag) => aPazientiTag.idtag2)
-  // aPazientiTags: APazientiTag[];
+  @OneToMany(() => APazientiTag, (aPazientiTag) => aPazientiTag.idtag2)
+  aPazientiTags: APazientiTag[];
 }

@@ -3,9 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagraficaIndirizzi } from "./AAnagraficaIndirizzi";
+import { AAnagraficaIndirizzi } from ".";
 
 @Index("IX_TAB-COMUNI", ["descrizione", "provincia", "regione", "nazione"], {
   unique: true,

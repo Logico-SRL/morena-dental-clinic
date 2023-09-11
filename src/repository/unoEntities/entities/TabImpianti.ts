@@ -3,9 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MImpiantiSituazione } from "./MImpiantiSituazione";
+import { MImpiantiSituazione } from ".";
 
 @Index("IdInterno", ["tipo", "idInterno"], {})
 @Index("TAB-IMPIANTI_PK", ["id"], { unique: true })
@@ -45,9 +45,9 @@ export class TabImpianti {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(1)" })
   statoRecord: boolean | null;
 
-  // @OneToMany(
-  //   () => MImpiantiSituazione,
-  //   (mImpiantiSituazione) => mImpiantiSituazione.idImpianto2
-  // )
-  // mImpiantiSituaziones: MImpiantiSituazione[];
+  @OneToMany(
+    () => MImpiantiSituazione,
+    (mImpiantiSituazione) => mImpiantiSituazione.idImpianto2
+  )
+  mImpiantiSituaziones: MImpiantiSituazione[];
 }

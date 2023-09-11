@@ -58,17 +58,17 @@ export class AutcomMessaggi {
   @Column("smallint", { name: "ReplyMode", default: () => "(0)" })
   replyMode: number;
 
-  // @ManyToOne(
-  //   () => AutcomActions,
-  //   (autcomActions) => autcomActions.autcomMessaggis
-  // )
-  // @JoinColumn([{ name: "ParentActionId", referencedColumnName: "id" }])
-  // parentAction: AutcomActions;
+  @ManyToOne(
+    () => AutcomActions,
+    (autcomActions) => autcomActions.autcomMessaggis
+  )
+  @JoinColumn([{ name: "ParentActionId", referencedColumnName: "id" }])
+  parentAction: AutcomActions;
 
-  // @ManyToOne(
-  //   () => AutcomRisposte,
-  //   (autcomRisposte) => autcomRisposte.autcomMessaggis
-  // )
-  // @JoinColumn([{ name: "ReplyId", referencedColumnName: "id" }])
-  // reply: AutcomRisposte;
+  @ManyToOne(
+    () => AutcomRisposte,
+    (autcomRisposte) => autcomRisposte.autcomMessaggis
+  )
+  @JoinColumn([{ name: "ReplyId", referencedColumnName: "id" }])
+  reply: AutcomRisposte;
 }

@@ -4,11 +4,10 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MSterilizzazione } from "./MSterilizzazione";
-import { TabTraydef } from "./TabTraydef";
-import { MCureTestata } from "./MCureTestata";
+
+import { MCureTestata, MSterilizzazione, TabTraydef } from ".";
 
 @Index("IX_M-STERILIZZAZIONE-TRAY", ["idCiclo", "idTray", "idTestata"], {})
 @Index("PK_M_TRAYMAG", ["id"], { unique: true })
@@ -41,21 +40,21 @@ export class MSterilizzazioneTray {
   @Column("datetime", { name: "UtilizzatoInData", nullable: true })
   utilizzatoInData: Date | null;
 
-  // @ManyToOne(
-  //   () => MSterilizzazione,
-  //   (mSterilizzazione) => mSterilizzazione.mSterilizzazioneTrays
-  // )
-  // @JoinColumn([{ name: "IDCiclo", referencedColumnName: "id" }])
-  // idCiclo2: MSterilizzazione;
+  @ManyToOne(
+    () => MSterilizzazione,
+    (mSterilizzazione) => mSterilizzazione.mSterilizzazioneTrays
+  )
+  @JoinColumn([{ name: "IDCiclo", referencedColumnName: "id" }])
+  idCiclo2: MSterilizzazione;
 
-  // @ManyToOne(() => TabTraydef, (tabTraydef) => tabTraydef.mSterilizzazioneTrays)
-  // @JoinColumn([{ name: "IDTray", referencedColumnName: "id" }])
-  // idTray2: TabTraydef;
+  @ManyToOne(() => TabTraydef, (tabTraydef) => tabTraydef.mSterilizzazioneTrays)
+  @JoinColumn([{ name: "IDTray", referencedColumnName: "id" }])
+  idTray2: TabTraydef;
 
-  // @ManyToOne(
-  //   () => MCureTestata,
-  //   (mCureTestata) => mCureTestata.mSterilizzazioneTrays
-  // )
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MCureTestata;
+  @ManyToOne(
+    () => MCureTestata,
+    (mCureTestata) => mCureTestata.mSterilizzazioneTrays
+  )
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MCureTestata;
 }

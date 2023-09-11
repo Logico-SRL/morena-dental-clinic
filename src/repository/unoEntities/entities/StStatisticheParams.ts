@@ -33,11 +33,11 @@ export class StStatisticheParams {
   @Column("ntext", { name: "Sql", nullable: true })
   sql: string | null;
 
-  // @ManyToOne(
-  //   () => StStatistiche,
-  //   (stStatistiche) => stStatistiche.stStatisticheParams,
-  //   { onDelete: "CASCADE", onUpdate: "CASCADE" }
-  // )
-  // @JoinColumn([{ name: "IDStatistica", referencedColumnName: "id" }])
-  // idStatistica2: StStatistiche;
+  @ManyToOne(
+    () => StStatistiche,
+    (stStatistiche) => stStatistiche.stStatisticheParams,
+    { onDelete: "CASCADE", onUpdate: "CASCADE" }
+  )
+  @JoinColumn([{ name: "IDStatistica", referencedColumnName: "id" }])
+  idStatistica2: StStatistiche;
 }

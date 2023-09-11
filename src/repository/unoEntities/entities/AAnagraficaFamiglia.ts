@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { UnoAnagraficaEntity } from "..";
+import { AAnagrafica } from ".";
 
 @Index("IX_A-INDIRIZZIA-INDIRIZZI-FAMIGLIA", ["id1"], {})
 @Index("IX_A-INDIRIZZIA-INDIRIZZI-FAMIGLIA1", ["id2"], {})
@@ -32,16 +32,16 @@ export class AAnagraficaFamiglia {
   nota: string | null;
 
   @ManyToOne(
-    () => UnoAnagraficaEntity,
+    () => AAnagrafica,
     (aAnagrafica) => aAnagrafica.aAnagraficaFamiglias
   )
   @JoinColumn([{ name: "ID1", referencedColumnName: "id" }])
-  id3: UnoAnagraficaEntity;
+  id3: AAnagrafica;
 
   @ManyToOne(
-    () => UnoAnagraficaEntity,
+    () => AAnagrafica,
     (aAnagrafica) => aAnagrafica.aAnagraficaFamiglias2
   )
   @JoinColumn([{ name: "ID2", referencedColumnName: "id" }])
-  id4: UnoAnagraficaEntity;
+  id4: AAnagrafica;
 }

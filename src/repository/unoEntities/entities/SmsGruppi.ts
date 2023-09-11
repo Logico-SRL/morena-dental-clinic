@@ -31,6 +31,6 @@ export class SmsGruppi {
   @Column("int", { name: "IdAnagrafica", default: () => "(0)" })
   idAnagrafica: number;
 
-  // @OneToMany(() => SmsMessaggi, (smsMessaggi) => smsMessaggi.idGrp)
-  // smsMessaggis: SmsMessaggi[];
+  @OneToMany(() => SmsMessaggi, (smsMessaggi) => smsMessaggi.idGrp)
+  smsMessaggis: SmsMessaggi[];
 }

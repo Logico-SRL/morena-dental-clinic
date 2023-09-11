@@ -28,16 +28,16 @@ export class IDisegnoElemento {
   @Column("ntext", { name: "Testo", nullable: true })
   testo: string | null;
 
-  // @ManyToOne(
-  //   () => IDisegnoComplessivo,
-  //   (iDisegnoComplessivo) => iDisegnoComplessivo.iDisegnoElementos
-  // )
-  // @JoinColumn([{ name: "IDComplessivo", referencedColumnName: "id" }])
-  // idComplessivo: IDisegnoComplessivo;
+  @ManyToOne(
+    () => IDisegnoComplessivo,
+    (iDisegnoComplessivo) => iDisegnoComplessivo.iDisegnoElementos
+  )
+  @JoinColumn([{ name: "IDComplessivo", referencedColumnName: "id" }])
+  idComplessivo: IDisegnoComplessivo;
 
-  // @OneToMany(
-  //   () => IDisegnoPuntoelemento,
-  //   (iDisegnoPuntoelemento) => iDisegnoPuntoelemento.idElemento
-  // )
-  // iDisegnoPuntoelementos: IDisegnoPuntoelemento[];
+  @OneToMany(
+    () => IDisegnoPuntoelemento,
+    (iDisegnoPuntoelemento) => iDisegnoPuntoelemento.idElemento
+  )
+  iDisegnoPuntoelementos: IDisegnoPuntoelemento[];
 }

@@ -1,13 +1,10 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  Index, PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureRighe } from "./MCureRighe";
-import { MCureSedute } from "./MCureSedute";
+// import { MCureRighe } from "./MCureRighe";
+// import { MCureSedute } from "./MCureSedute";
 
 @Index("PK_M-CURE-PIANO", ["id"], { unique: true })
 @Entity("M-CURE-PIANO", { schema: "dbo" })

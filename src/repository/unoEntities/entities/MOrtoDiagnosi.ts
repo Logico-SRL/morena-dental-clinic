@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MOrtoTestata } from "./MOrtoTestata";
+import { MOrtoTestata } from ".";
 
 @Index("IX_M-ORTO-DIAGNOSI", ["idTestata"], {})
 @Index("PK_M-ORTO-DIAGNOSI", ["id"], { unique: true })
@@ -36,7 +36,7 @@ export class MOrtoDiagnosi {
   @Column("bit", { name: "StatoRecord", nullable: true })
   statoRecord: boolean | null;
 
-  // @ManyToOne(() => MOrtoTestata, (mOrtoTestata) => mOrtoTestata.mOrtoDiagnosis)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MOrtoTestata;
+  @ManyToOne(() => MOrtoTestata, (mOrtoTestata) => mOrtoTestata.mOrtoDiagnosis)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MOrtoTestata;
 }

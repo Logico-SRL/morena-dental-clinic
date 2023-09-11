@@ -3,10 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { MagAnagraficaAltrifor } from "./MagAnagraficaAltrifor";
-import { MagInventario } from "./MagInventario";
 import { MagMovimenti } from "./MagMovimenti";
 import { MagOfferte } from "./MagOfferte";
 import { MagOrdiniRighe } from "./MagOrdiniRighe";
@@ -67,27 +66,27 @@ export class MagAnagrafica {
   @Column("int", { name: "IDFornitore", nullable: true })
   idFornitore: number | null;
 
-  // @OneToMany(
-  //   () => MagAnagraficaAltrifor,
-  //   (magAnagraficaAltrifor) => magAnagraficaAltrifor.idArticolo2
-  // )
-  // magAnagraficaAltrifors: MagAnagraficaAltrifor[];
+  @OneToMany(
+    () => MagAnagraficaAltrifor,
+    (magAnagraficaAltrifor) => magAnagraficaAltrifor.idArticolo2
+  )
+  magAnagraficaAltrifors: MagAnagraficaAltrifor[];
 
   // @OneToMany(() => MagInventario, (magInventario) => magInventario.idArticolo)
   // magInventarios: MagInventario[];
 
-  // @OneToMany(() => MagMovimenti, (magMovimenti) => magMovimenti.idArticolo2)
-  // magMovimentis: MagMovimenti[];
+  @OneToMany(() => MagMovimenti, (magMovimenti) => magMovimenti.idArticolo2)
+  magMovimentis: MagMovimenti[];
 
-  // @OneToMany(() => MagOfferte, (magOfferte) => magOfferte.idArticolo2)
-  // magOffertes: MagOfferte[];
+  @OneToMany(() => MagOfferte, (magOfferte) => magOfferte.idArticolo2)
+  magOffertes: MagOfferte[];
 
-  // @OneToMany(
-  //   () => MagOrdiniRighe,
-  //   (magOrdiniRighe) => magOrdiniRighe.idArticolo2
-  // )
-  // magOrdiniRighes: MagOrdiniRighe[];
+  @OneToMany(
+    () => MagOrdiniRighe,
+    (magOrdiniRighe) => magOrdiniRighe.idArticolo2
+  )
+  magOrdiniRighes: MagOrdiniRighe[];
 
-  // @OneToMany(() => MagSaldi, (magSaldi) => magSaldi.idArticolo2)
-  // magSaldis: MagSaldi[];
+  @OneToMany(() => MagSaldi, (magSaldi) => magSaldi.idArticolo2)
+  magSaldis: MagSaldi[];
 }

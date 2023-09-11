@@ -1,12 +1,5 @@
 import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
-import { AAnagrafica } from './AAnagrafica'
-import { APazientiDisponibilita } from './APazientiDisponibilita'
-import { APazientiEsami } from './APazientiEsami'
-import { APazientiMedici } from './APazientiMedici'
-import { APazientiMemo } from './APazientiMemo'
-import { APazientiRichiamiConfig } from './APazientiRichiamiConfig'
-import { APazientiTag } from './APazientiTag'
-
+import { AAnagrafica, APazientiDisponibilita, APazientiEsami, APazientiMedici, APazientiMemo, APazientiRichiamiConfig, APazientiTag } from '.';
 
 @Index("PK_A-PAZIENTI", ["id",], { unique: true })
 @Entity("A-PAZIENTI", { schema: "dbo" })
@@ -60,40 +53,38 @@ export class APazienti {
     @Column("nvarchar", { name: "GUID", nullable: true, length: 50 })
     guid: string | null;
 
-    // @OneToOne(()=>AAnagrafica,aAnagrafica=>aAnagrafica.aPazienti)
-    // @JoinColumn([{ name: "ID", referencedColumnName: "id" },
-    // ])
+    @OneToOne(() => AAnagrafica, aAnagrafica => aAnagrafica.aPazienti)
+    @JoinColumn([{ name: "ID", referencedColumnName: "id" }])
+    aAnagrafica: AAnagrafica;
 
-    // :AAnagrafica;
-
-    // @OneToMany(() => APazientiDisponibilita, aPazientiDisponibilita => aPazientiDisponibilita.idAnagrafica2)
+    @OneToMany(() => APazientiDisponibilita, aPazientiDisponibilita => aPazientiDisponibilita.idAnagrafica2)
 
 
-    // aPazientiDisponibilitas: APazientiDisponibilita[];
+    aPazientiDisponibilitas: APazientiDisponibilita[];
 
-    // @OneToMany(() => APazientiEsami, aPazientiEsami => aPazientiEsami.idAnagrafica2)
-
-
-    // aPazientiEsamis: APazientiEsami[];
-
-    // @OneToMany(() => APazientiMedici, aPazientiMedici => aPazientiMedici.idAnagrafica2)
+    @OneToMany(() => APazientiEsami, aPazientiEsami => aPazientiEsami.idAnagrafica2)
 
 
-    // aPazientiMedicis: APazientiMedici[];
+    aPazientiEsamis: APazientiEsami[];
 
-    // @OneToMany(() => APazientiMemo, aPazientiMemo => aPazientiMemo.idAnagrafica2)
-
-
-    // aPazientiMemos: APazientiMemo[];
-
-    // @OneToMany(() => APazientiRichiamiConfig, aPazientiRichiamiConfig => aPazientiRichiamiConfig.idAnagrafica2)
+    @OneToMany(() => APazientiMedici, aPazientiMedici => aPazientiMedici.idAnagrafica2)
 
 
-    // aPazientiRichiamiConfigs: APazientiRichiamiConfig[];
+    aPazientiMedicis: APazientiMedici[];
 
-    // @OneToMany(() => APazientiTag, aPazientiTag => aPazientiTag.idAnagrafica2)
+    @OneToMany(() => APazientiMemo, aPazientiMemo => aPazientiMemo.idAnagrafica2)
 
 
-    // aPazientiTags: APazientiTag[];
+    aPazientiMemos: APazientiMemo[];
+
+    @OneToMany(() => APazientiRichiamiConfig, aPazientiRichiamiConfig => aPazientiRichiamiConfig.idAnagrafica2)
+
+
+    aPazientiRichiamiConfigs: APazientiRichiamiConfig[];
+
+    @OneToMany(() => APazientiTag, aPazientiTag => aPazientiTag.idAnagrafica2)
+
+
+    aPazientiTags: APazientiTag[];
 
 }

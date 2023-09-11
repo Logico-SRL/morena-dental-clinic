@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica } from ".";
 
 @Index("PK_M-RICHIAMI", ["id"], { unique: true })
 @Entity("M-RICHIAMI", { schema: "dbo" })
@@ -77,7 +77,7 @@ export class MRichiami {
   @Column("nvarchar", { name: "OLBReqId", nullable: true, length: 40 })
   olbReqId: string | null;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mRichiamis)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mRichiamis)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica: AAnagrafica;
 }

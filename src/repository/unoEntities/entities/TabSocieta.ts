@@ -5,14 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MagInventario } from "./MagInventario";
-import { MagMovimenti } from "./MagMovimenti";
-import { MagOrdini } from "./MagOrdini";
-import { MagSaldi } from "./MagSaldi";
-import { TabSicurezzaGruppi } from "./TabSicurezzaGruppi";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica, TabSicurezzaGruppi } from ".";
 
 @Index("PK_TAB-SOCIETA", ["id"], { unique: true })
 @Entity("TAB-SOCIETA", { schema: "dbo" })
@@ -71,17 +66,17 @@ export class TabSocieta {
   // @OneToMany(() => MagSaldi, (magSaldi) => magSaldi.idSociet)
   // magSaldis: MagSaldi[];
 
-  // @OneToMany(
-  //   () => TabSicurezzaGruppi,
-  //   (tabSicurezzaGruppi) => tabSicurezzaGruppi.idSociet
-  // )
-  // tabSicurezzaGruppis: TabSicurezzaGruppi[];
+  @OneToMany(
+    () => TabSicurezzaGruppi,
+    (tabSicurezzaGruppi) => tabSicurezzaGruppi.idSociet
+  )
+  tabSicurezzaGruppis: TabSicurezzaGruppi[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.tabSocietas)
-  // @JoinColumn([{ name: "IdSedeOperativa", referencedColumnName: "id" }])
-  // idSedeOperativa: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.tabSocietas)
+  @JoinColumn([{ name: "IdSedeOperativa", referencedColumnName: "id" }])
+  idSedeOperativa: AAnagrafica;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.tabSocietas2)
-  // @JoinColumn([{ name: "IdSedeLegale", referencedColumnName: "id" }])
-  // idSedeLegale: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.tabSocietas2)
+  @JoinColumn([{ name: "IdSedeLegale", referencedColumnName: "id" }])
+  idSedeLegale: AAnagrafica;
 }

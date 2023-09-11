@@ -57,9 +57,9 @@ export class StStatistiche {
   @Column("bit", { name: "StatoRecord", default: () => "(0)" })
   statoRecord: boolean;
 
-  // @OneToMany(
-  //   () => StStatisticheParams,
-  //   (stStatisticheParams) => stStatisticheParams.idStatistica2
-  // )
-  // stStatisticheParams: StStatisticheParams[];
+  @OneToMany(
+    () => StStatisticheParams,
+    (stStatisticheParams) => stStatisticheParams.idStatistica2
+  )
+  stStatisticheParams: StStatisticheParams[];
 }

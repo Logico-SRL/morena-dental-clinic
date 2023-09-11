@@ -35,7 +35,7 @@ export class MagOfferte {
   @Column("bit", { name: "StatoRecord", default: () => "(0)" })
   statoRecord: boolean;
 
-  // @ManyToOne(() => MagAnagrafica, (magAnagrafica) => magAnagrafica.magOffertes)
-  // @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
-  // idArticolo2: MagAnagrafica;
+  @ManyToOne(() => MagAnagrafica, (magAnagrafica) => magAnagrafica.magOffertes)
+  @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
+  idArticolo2: MagAnagrafica;
 }

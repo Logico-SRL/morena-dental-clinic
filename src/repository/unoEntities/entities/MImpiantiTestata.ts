@@ -5,11 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MImpiantiFasi } from "./MImpiantiFasi";
-import { MImpiantiSituazione } from "./MImpiantiSituazione";
-import { AAnagrafica } from "./AAnagrafica";
+import { AAnagrafica, MImpiantiFasi, MImpiantiSituazione } from ".";
 
 @Index("M-IMPIANTI-TESTATA_PK", ["id"], { unique: true })
 @Index("Paziente", ["idAnagrafica", "idInterno"], {})
@@ -45,20 +43,20 @@ export class MImpiantiTestata {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(1)" })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => MImpiantiFasi, (mImpiantiFasi) => mImpiantiFasi.idTestata2)
-  // mImpiantiFasis: MImpiantiFasi[];
+  @OneToMany(() => MImpiantiFasi, (mImpiantiFasi) => mImpiantiFasi.idTestata2)
+  mImpiantiFasis: MImpiantiFasi[];
 
-  // @OneToMany(
-  //   () => MImpiantiSituazione,
-  //   (mImpiantiSituazione) => mImpiantiSituazione.idTestata2
-  // )
-  // mImpiantiSituaziones: MImpiantiSituazione[];
+  @OneToMany(
+    () => MImpiantiSituazione,
+    (mImpiantiSituazione) => mImpiantiSituazione.idTestata2
+  )
+  mImpiantiSituaziones: MImpiantiSituazione[];
 
-  // @ManyToOne(
-  //   () => AAnagrafica,
-  //   (aAnagrafica) => aAnagrafica.mImpiantiTestatas,
-  //   { onDelete: "CASCADE", onUpdate: "CASCADE" }
-  // )
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(
+    () => AAnagrafica,
+    (aAnagrafica) => aAnagrafica.mImpiantiTestatas,
+    { onDelete: "CASCADE", onUpdate: "CASCADE" }
+  )
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 }

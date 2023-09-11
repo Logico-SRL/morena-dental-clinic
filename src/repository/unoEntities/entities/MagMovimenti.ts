@@ -73,14 +73,14 @@ export class MagMovimenti {
   @Column("bit", { name: "NoInventario", default: () => "(0)" })
   noInventario: boolean;
 
-  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magMovimentis)
-  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  // idSociet: TabSocieta;
+  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magMovimentis)
+  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  idSociet: TabSocieta;
 
-  // @ManyToOne(
-  //   () => MagAnagrafica,
-  //   (magAnagrafica) => magAnagrafica.magMovimentis
-  // )
-  // @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
-  // idArticolo2: MagAnagrafica;
+  @ManyToOne(
+    () => MagAnagrafica,
+    (magAnagrafica) => magAnagrafica.magMovimentis
+  )
+  @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
+  idArticolo2: MagAnagrafica;
 }

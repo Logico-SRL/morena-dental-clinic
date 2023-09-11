@@ -37,9 +37,9 @@ export class CLibrettiFatture {
   @Column("bit", { name: "AutoFatture", default: () => "(0)" })
   autoFatture: boolean;
 
-  // @OneToMany(
-  //   () => CFattureCliente,
-  //   (cFattureCliente) => cFattureCliente.idLibretto2
-  // )
-  // cFattureClientes: CFattureCliente[];
+  @OneToMany(
+    () => CFattureCliente,
+    (cFattureCliente) => cFattureCliente.idLibretto2
+  )
+  cFattureClientes: CFattureCliente[];
 }

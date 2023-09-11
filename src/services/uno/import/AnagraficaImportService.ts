@@ -1,8 +1,6 @@
 import { inject, injectable } from "inversify";
 import { PatientEntity } from "src/repository/entities";
-import { UnoAnagraficaEntity } from "src/repository/unoEntities/index"
-import { DbService } from "src/services/db/DbService";
-import { Like, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../../inversify/iocTypes";
 import { IAnagraficaImportService } from "./IAnagraficaImportService";
@@ -14,7 +12,7 @@ export class AnagraficaImportService implements IAnagraficaImportService {
     private readonly DbService: IDbService;
 
     private get getRepo() { return this.DbService.patientsRepo() as Promise<Repository<PatientEntity>> }
-    private get getRepoUno() { return this.UnoDbService.anagraficaRepo() as Promise<Repository<UnoAnagraficaEntity>> }
+    private get getRepoUno() { return this.UnoDbService.anagraficaRepo() as Promise<Repository<UnoAnagrafica>> }
 
     constructor(
         @inject(IOCServiceTypes.UnoDbService) UnoDbService: IUnoDbService,
@@ -23,7 +21,7 @@ export class AnagraficaImportService implements IAnagraficaImportService {
         this.DbService = dbService;
     }
 
-    importData = async (importParams: UnoAnagraficaEntity[]) => {
+    importData = async (importParams: UnoAnagrafica[]) => {
 
         const repo = await this.getRepo;
         const repoUno = await this.getRepoUno;

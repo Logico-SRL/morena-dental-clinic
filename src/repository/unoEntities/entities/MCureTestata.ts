@@ -1,19 +1,11 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  Index, OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureAllegati } from "./MCureAllegati";
-import { MCureChecklist } from "./MCureChecklist";
-import { MCureRighe } from "./MCureRighe";
-import { MCureSedute } from "./MCureSedute";
-import { AAnagrafica } from "./AAnagrafica";
-import { MPrescrizioni } from "./MPrescrizioni";
-import { MSterilizzazioneTray } from "./MSterilizzazioneTray";
+import { MCureAllegati, MCureChecklist, MCureRighe, MCureSedute, MPrescrizioni, MSterilizzazioneTray } from ".";
+
 
 @Index("IX_M-CURE-TESTATA", ["idAnagrafica"], {})
 @Index("PK_M-CURE-TESTATA", ["id"], { unique: true })
@@ -100,31 +92,31 @@ export class MCureTestata {
   @Column("datetime", { name: "Updated", nullable: true })
   updated: Date | null;
 
-  // @OneToMany(() => MCureAllegati, (mCureAllegati) => mCureAllegati.idTestata2)
-  // mCureAllegatis: MCureAllegati[];
+  @OneToMany(() => MCureAllegati, (mCureAllegati) => mCureAllegati.idTestata2)
+  mCureAllegatis: MCureAllegati[];
 
-  // @OneToMany(
-  //   () => MCureChecklist,
-  //   (mCureChecklist) => mCureChecklist.idTestata2
-  // )
-  // mCureChecklists: MCureChecklist[];
+  @OneToMany(
+    () => MCureChecklist,
+    (mCureChecklist) => mCureChecklist.idTestata2
+  )
+  mCureChecklists: MCureChecklist[];
 
-  // @OneToMany(() => MCureRighe, (mCureRighe) => mCureRighe.idTestata2)
-  // mCureRighes: MCureRighe[];
+  @OneToMany(() => MCureRighe, (mCureRighe) => mCureRighe.idTestata2)
+  mCureRighes: MCureRighe[];
 
-  // @OneToMany(() => MCureSedute, (mCureSedute) => mCureSedute.idTestata2)
-  // mCureSedutes: MCureSedute[];
+  @OneToMany(() => MCureSedute, (mCureSedute) => mCureSedute.idTestata2)
+  mCureSedutes: MCureSedute[];
 
   // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mCureTestatas)
   // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
   // idAnagrafica2: AAnagrafica;
 
-  // @OneToMany(() => MPrescrizioni, (mPrescrizioni) => mPrescrizioni.idTestata)
-  // mPrescrizionis: MPrescrizioni[];
+  @OneToMany(() => MPrescrizioni, (mPrescrizioni) => mPrescrizioni.idTestata)
+  mPrescrizionis: MPrescrizioni[];
 
-  // @OneToMany(
-  //   () => MSterilizzazioneTray,
-  //   (mSterilizzazioneTray) => mSterilizzazioneTray.idTestata2
-  // )
-  // mSterilizzazioneTrays: MSterilizzazioneTray[];
+  @OneToMany(
+    () => MSterilizzazioneTray,
+    (mSterilizzazioneTray) => mSterilizzazioneTray.idTestata2
+  )
+  mSterilizzazioneTrays: MSterilizzazioneTray[];
 }

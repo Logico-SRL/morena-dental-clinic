@@ -34,10 +34,10 @@ export class CFattureStudisettore {
   @Column("money", { name: "Importo", nullable: true, default: () => "(0)" })
   importo: number | null;
 
-  // @ManyToOne(
-  //   () => CFattureFornitore,
-  //   (cFattureFornitore) => cFattureFornitore.cFattureStudisettores
-  // )
-  // @JoinColumn([{ name: "IdFattura", referencedColumnName: "id" }])
-  // idFattura2: CFattureFornitore;
+  @ManyToOne(
+    () => CFattureFornitore,
+    (cFattureFornitore) => cFattureFornitore.cFattureStudisettores
+  )
+  @JoinColumn([{ name: "IdFattura", referencedColumnName: "id" }])
+  idFattura2: CFattureFornitore;
 }

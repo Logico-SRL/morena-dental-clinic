@@ -1,12 +1,8 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  Index, PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
 
 @Index("C-SITUAZIONECONTABILE_IX", ["idAnagrafica"], {})
 @Index("C-SITUAZIONECONTABILE_PK", ["id"], { unique: true })

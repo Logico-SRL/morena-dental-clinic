@@ -5,13 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MIgienePsr } from "./MIgienePsr";
-import { MIgieneRighe } from "./MIgieneRighe";
-import { AAnagrafica } from "./AAnagrafica";
-import { TabPerioSequenze } from "./TabPerioSequenze";
-import { TabOperatori } from "./TabOperatori";
+import { AAnagrafica, MIgienePsr, MIgieneRighe, TabOperatori, TabPerioSequenze } from ".";
 
 @Index("IX_M-IGIENE-TESTATA", ["idAnagrafica", "dataRilevazioni"], {})
 @Index("PK_M-IGIENE-TESTATA", ["id"], { unique: true })
@@ -38,24 +34,24 @@ export class MIgieneTestata {
   @Column("datetime", { name: "TimeStamp", nullable: true })
   timeStamp: Date | null;
 
-  // @OneToMany(() => MIgienePsr, (mIgienePsr) => mIgienePsr.idTestata2)
-  // mIgienePsrs: MIgienePsr[];
+  @OneToMany(() => MIgienePsr, (mIgienePsr) => mIgienePsr.idTestata2)
+  mIgienePsrs: MIgienePsr[];
 
-  // @OneToMany(() => MIgieneRighe, (mIgieneRighe) => mIgieneRighe.idTestata2)
-  // mIgieneRighes: MIgieneRighe[];
+  @OneToMany(() => MIgieneRighe, (mIgieneRighe) => mIgieneRighe.idTestata2)
+  mIgieneRighes: MIgieneRighe[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mIgieneTestatas)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mIgieneTestatas)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
-  // @ManyToOne(
-  //   () => TabPerioSequenze,
-  //   (tabPerioSequenze) => tabPerioSequenze.mIgieneTestatas
-  // )
-  // @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
-  // idSequenza: TabPerioSequenze;
+  @ManyToOne(
+    () => TabPerioSequenze,
+    (tabPerioSequenze) => tabPerioSequenze.mIgieneTestatas
+  )
+  @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
+  idSequenza: TabPerioSequenze;
 
-  // @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mIgieneTestatas)
-  // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
-  // idOperatore: TabOperatori;
+  @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mIgieneTestatas)
+  @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
+  idOperatore: TabOperatori;
 }

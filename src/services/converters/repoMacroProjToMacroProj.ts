@@ -1,9 +1,10 @@
 import { repoProjToProj } from ".";
-import { defaultProject } from "../defaultValues";
+import { defaultMacroProject } from "../defaultValues/defaultMacroProject";
+import { repoLibraryToLibrary } from "./repoLibraryToLibrary";
 import { repoNoteToNote } from "./repoNoteToNote";
 
 export const repoMacroProjToMacroProj = (p: MacroProjectEntity): IMacroProject => {
-    const def = defaultProject();
+    const def = defaultMacroProject();
     return {
         ...def,
         ...p,
@@ -11,5 +12,6 @@ export const repoMacroProjToMacroProj = (p: MacroProjectEntity): IMacroProject =
         subCategory: p.subCategory,
         projects: (p.projects || []).map(t => repoProjToProj(t)),
         notes: (p.notes || []).map(t => repoNoteToNote(t)),
+        libraries: (p.libraries || []).map(l => repoLibraryToLibrary(l)),
     }
 }

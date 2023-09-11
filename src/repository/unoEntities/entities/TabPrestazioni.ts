@@ -5,14 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureRighe } from "./MCureRighe";
-import { TabListiniRighe } from "./TabListiniRighe";
-import { TabSpecialita } from "./TabSpecialita";
-import { TabPrestazioniFasioperative } from "./TabPrestazioniFasioperative";
-import { TabPrestazioniGrafico } from "./TabPrestazioniGrafico";
-import { TabPrestazioniNotecliniche } from "./TabPrestazioniNotecliniche";
+import { MCureRighe, TabListiniRighe, TabPrestazioniFasioperative, TabPrestazioniGrafico, TabPrestazioniNotecliniche, TabSpecialita } from ".";
+
 
 @Index("IX_AM-PRESTAZIONI", ["idSpecialit", "ordinamento"], {})
 @Index("IX2_AM-PRESTAZIONI", ["codice"], {})
@@ -62,37 +58,37 @@ export class TabPrestazioni {
   @Column("int", { name: "IDMultiMedia", nullable: true })
   idMultiMedia: number | null;
 
-  // @OneToMany(() => MCureRighe, (mCureRighe) => mCureRighe.idPrestazione)
-  // mCureRighes: MCureRighe[];
+  @OneToMany(() => MCureRighe, (mCureRighe) => mCureRighe.idPrestazione)
+  mCureRighes: MCureRighe[];
 
-  // @OneToMany(
-  //   () => TabListiniRighe,
-  //   (tabListiniRighe) => tabListiniRighe.idPrestazione2
-  // )
-  // tabListiniRighes: TabListiniRighe[];
+  @OneToMany(
+    () => TabListiniRighe,
+    (tabListiniRighe) => tabListiniRighe.idPrestazione2
+  )
+  tabListiniRighes: TabListiniRighe[];
 
-  // @ManyToOne(
-  //   () => TabSpecialita,
-  //   (tabSpecialita) => tabSpecialita.tabPrestazionis
-  // )
-  // @JoinColumn([{ name: "IDSpecialità", referencedColumnName: "id" }])
-  // idSpecialit_2: TabSpecialita;
+  @ManyToOne(
+    () => TabSpecialita,
+    (tabSpecialita) => tabSpecialita.tabPrestazionis
+  )
+  @JoinColumn([{ name: "IDSpecialità", referencedColumnName: "id" }])
+  idSpecialit_2: TabSpecialita;
 
-  // @OneToMany(
-  //   () => TabPrestazioniFasioperative,
-  //   (tabPrestazioniFasioperative) => tabPrestazioniFasioperative.idPrestazione2
-  // )
-  // tabPrestazioniFasioperatives: TabPrestazioniFasioperative[];
+  @OneToMany(
+    () => TabPrestazioniFasioperative,
+    (tabPrestazioniFasioperative) => tabPrestazioniFasioperative.idPrestazione2
+  )
+  tabPrestazioniFasioperatives: TabPrestazioniFasioperative[];
 
-  // @OneToMany(
-  //   () => TabPrestazioniGrafico,
-  //   (tabPrestazioniGrafico) => tabPrestazioniGrafico.idPrestazione2
-  // )
-  // tabPrestazioniGraficos: TabPrestazioniGrafico[];
+  @OneToMany(
+    () => TabPrestazioniGrafico,
+    (tabPrestazioniGrafico) => tabPrestazioniGrafico.idPrestazione2
+  )
+  tabPrestazioniGraficos: TabPrestazioniGrafico[];
 
-  // @OneToMany(
-  //   () => TabPrestazioniNotecliniche,
-  //   (tabPrestazioniNotecliniche) => tabPrestazioniNotecliniche.idPrestazione2
-  // )
-  // tabPrestazioniNotecliniches: TabPrestazioniNotecliniche[];
+  @OneToMany(
+    () => TabPrestazioniNotecliniche,
+    (tabPrestazioniNotecliniche) => tabPrestazioniNotecliniche.idPrestazione2
+  )
+  tabPrestazioniNotecliniches: TabPrestazioniNotecliniche[];
 }

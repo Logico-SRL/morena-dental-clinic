@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-// import { AAnagrafica } from "./AAnagrafica";
-import { UnoAnagraficaEntity } from "..";
+import { AAnagrafica } from ".";
 
 @Index("IX_A-INDIRIZZIA-INDIRIZZI-RECAPITI", ["idAnagrafica"], {})
 @Index("PK_A-INDIRIZZI-RECAPITI", ["id"], { unique: true })
@@ -31,10 +30,10 @@ export class AAnagraficaRecapiti {
   @Column("nvarchar", { name: "SCIPTag", nullable: true, length: 10 })
   scipTag: string | null;
 
-  // @ManyToOne(
-  //   () => UnoAnagraficaEntity,
-  //   (aAnagrafica) => aAnagrafica.aAnagraficaRecapitis
-  // )
-  // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: UnoAnagraficaEntity;
+  @ManyToOne(
+    () => AAnagrafica,
+    (aAnagrafica) => aAnagrafica.aAnagraficaRecapitis
+  )
+  @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 }

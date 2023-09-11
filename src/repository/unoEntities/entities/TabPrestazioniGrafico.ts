@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabPrestazioni } from "./TabPrestazioni";
+import { TabPrestazioni } from ".";
 
 @Index(
   "IX_TAB-PRESTAZIONI-PROPRIETA",
@@ -61,10 +61,10 @@ export class TabPrestazioniGrafico {
   @Column("nvarchar", { name: "Img", nullable: true, length: 40 })
   img: string | null;
 
-  // @ManyToOne(
-  //   () => TabPrestazioni,
-  //   (tabPrestazioni) => tabPrestazioni.tabPrestazioniGraficos
-  // )
-  // @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
-  // idPrestazione2: TabPrestazioni;
+  @ManyToOne(
+    () => TabPrestazioni,
+    (tabPrestazioni) => tabPrestazioni.tabPrestazioniGraficos
+  )
+  @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
+  idPrestazione2: TabPrestazioni;
 }

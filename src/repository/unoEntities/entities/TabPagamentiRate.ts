@@ -20,10 +20,10 @@ export class TabPagamentiRate {
   @Column("smallint", { name: "percFattura" })
   percFattura: number;
 
-  // @ManyToOne(
-  //   () => TabPagamenti,
-  //   (tabPagamenti) => tabPagamenti.tabPagamentiRates
-  // )
-  // @JoinColumn([{ name: "IDPagamento", referencedColumnName: "id" }])
-  // idPagamento: TabPagamenti;
+  @ManyToOne(
+    () => TabPagamenti,
+    (tabPagamenti) => tabPagamenti.tabPagamentiRates
+  )
+  @JoinColumn([{ name: "IDPagamento", referencedColumnName: "id" }])
+  idPagamento: TabPagamenti;
 }

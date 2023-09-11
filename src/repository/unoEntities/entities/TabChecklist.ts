@@ -3,9 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureChecklist } from "./MCureChecklist";
+import { MCureChecklist } from ".";
 
 @Index("IX_TAB-CHECKLIST", ["tipo", "ord", "descrizione", "id"], {
   unique: true,
@@ -28,6 +28,6 @@ export class TabChecklist {
   @Column("bit", { name: "StatoRecord", default: () => "(1)" })
   statoRecord: boolean;
 
-  // @OneToMany(() => MCureChecklist, (mCureChecklist) => mCureChecklist.idCheck2)
-  // mCureChecklists: MCureChecklist[];
+  @OneToMany(() => MCureChecklist, (mCureChecklist) => mCureChecklist.idCheck2)
+  mCureChecklists: MCureChecklist[];
 }

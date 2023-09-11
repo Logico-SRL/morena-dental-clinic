@@ -1,5 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { AgImpegni } from "./AgImpegni";
+import { Column, Entity, Index } from "typeorm";
 
 @Index("PK_AG-RICORRENZE", ["id"], { unique: true })
 @Entity("AG-RICORRENZE", { schema: "dbo" })

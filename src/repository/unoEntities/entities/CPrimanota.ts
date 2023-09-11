@@ -106,6 +106,6 @@ export class CPrimanota {
   @Column("smallint", { name: "IDr2", nullable: true })
   iDr2: number | null;
 
-  // @OneToMany(() => CScadenzario, (cScadenzario) => cScadenzario.idPrimaNota)
-  // cScadenzarios: CScadenzario[];
+  @OneToMany(() => CScadenzario, (cScadenzario) => cScadenzario.idPrimaNota)
+  cScadenzarios: CScadenzario[];
 }

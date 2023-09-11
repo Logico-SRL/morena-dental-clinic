@@ -4,7 +4,6 @@ import { repoPatientToPatient } from "src/services/converters";
 import { IsNull, MoreThanOrEqual, Not, Repository } from "typeorm";
 import { ulid } from "ulid";
 import { IOCServiceTypes } from "../../../inversify/iocTypes";
-import { UnoAgImpegni, UnoAnagraficaEntity, UnoTabPostazioni } from '../../../repository/unoEntities/index';
 import { Sorter } from "../../../utils/sorter";
 import { IImpegniService } from "./IImpegniService";
 
@@ -16,7 +15,7 @@ export class ImpegniService implements IImpegniService {
     private readonly loggerServ: ILogger;
 
     private get getRepoImpegni() { return this.UnoDbService.impegniRepo() as Promise<Repository<UnoAgImpegni>> }
-    private get getRepoAnagrafica() { return this.UnoDbService.anagraficaRepo() as Promise<Repository<UnoAnagraficaEntity>> }
+    private get getRepoAnagrafica() { return this.UnoDbService.anagraficaRepo() as Promise<Repository<UnoAnagrafica>> }
     private get getRepoPostazioni() { return this.UnoDbService.postazioniRepo() as Promise<Repository<UnoTabPostazioni>> }
     private get getRepoPatients() { return this.DbService.patientsRepo() as Promise<Repository<PatientEntity>> }
 

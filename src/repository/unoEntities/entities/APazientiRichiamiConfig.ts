@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { APazienti } from "./APazienti";
+import { APazienti } from ".";
 
 @Index("IX_A-PAZIENTI-RICHIAMI-CONFIG", ["idAnagrafica", "tipoRichiamo"], {
   unique: true,
@@ -30,7 +30,7 @@ export class APazientiRichiamiConfig {
   })
   ggRichiamo: number | null;
 
-  // @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiRichiamiConfigs)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: APazienti;
+  @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiRichiamiConfigs)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: APazienti;
 }

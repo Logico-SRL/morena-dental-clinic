@@ -64,12 +64,12 @@ export class TabAnamnesi {
   @Column("nvarchar", { name: "Cod", nullable: true, length: 3 })
   cod: string | null;
 
-  // @OneToMany(
-  //   () => APazientiAnamnesiRighe,
-  //   (aPazientiAnamnesiRighe) => aPazientiAnamnesiRighe.idQuesito
-  // )
-  // aPazientiAnamnesiRighes: APazientiAnamnesiRighe[];
+  @OneToMany(
+    () => APazientiAnamnesiRighe,
+    (aPazientiAnamnesiRighe) => aPazientiAnamnesiRighe.idQuesito
+  )
+  aPazientiAnamnesiRighes: APazientiAnamnesiRighe[];
 
-  // @OneToMany(() => MIgienePsr, (mIgienePsr) => mIgienePsr.idQuesito2)
-  // mIgienePsrs: MIgienePsr[];
+  @OneToMany(() => MIgienePsr, (mIgienePsr) => mIgienePsr.idQuesito2)
+  mIgienePsrs: MIgienePsr[];
 }

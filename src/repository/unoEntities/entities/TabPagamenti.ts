@@ -41,9 +41,9 @@ export class TabPagamenti {
   @Column("bit", { name: "StatoRecord" })
   statoRecord: boolean;
 
-  // @OneToMany(
-  //   () => TabPagamentiRate,
-  //   (tabPagamentiRate) => tabPagamentiRate.idPagamento
-  // )
-  // tabPagamentiRates: TabPagamentiRate[];
+  @OneToMany(
+    () => TabPagamentiRate,
+    (tabPagamentiRate) => tabPagamentiRate.idPagamento
+  )
+  tabPagamentiRates: TabPagamentiRate[];
 }

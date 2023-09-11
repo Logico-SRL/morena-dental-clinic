@@ -1,9 +1,5 @@
 import { processEnv } from "../processEnv";
-import {
-    UnoAAnagraficaFamigliaEntity,
-    UnoAAnagraficaIndirizziEntity, UnoAgImpegni, UnoAnagraficaEntity, UnoTabComuniEntity, UnoTabPostazioni
-} from "../repository/unoEntities";
-
+import { UnoModelEntities } from "../repository/unoEntities";
 
 export const unoDbConfig = {
     type: processEnv().unoDb.type as 'mssql',
@@ -14,15 +10,9 @@ export const unoDbConfig = {
     port: processEnv().unoDb.port,
     synchronize: false,
     logging: false,
-    entities: [
-        UnoAnagraficaEntity,
-        UnoAAnagraficaFamigliaEntity,
-        UnoAAnagraficaIndirizziEntity,
-        UnoTabComuniEntity,
-        UnoAgImpegni,
-        UnoTabPostazioni
-    ],
+    entities: UnoModelEntities,
     options: {
-        encrypt: false
+        encrypt: false,
+        readOnlyIntent: true
     },
 };

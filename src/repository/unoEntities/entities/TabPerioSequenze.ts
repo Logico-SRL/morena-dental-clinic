@@ -3,11 +3,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MIgieneTestata } from "./MIgieneTestata";
-import { MPerioTestata } from "./MPerioTestata";
-import { TabPerioRilevazioni } from "./TabPerioRilevazioni";
+import { MIgieneTestata, MPerioTestata, TabPerioRilevazioni } from ".";
 
 @Index("PK_M-PERIO-SEQUENZE", ["id"], { unique: true })
 @Entity("TAB-PERIO-SEQUENZE", { schema: "dbo" })
@@ -30,18 +28,18 @@ export class TabPerioSequenze {
   @Column("smallint", { name: "Tipo", nullable: true })
   tipo: number | null;
 
-  // @OneToMany(
-  //   () => MIgieneTestata,
-  //   (mIgieneTestata) => mIgieneTestata.idSequenza
-  // )
-  // mIgieneTestatas: MIgieneTestata[];
+  @OneToMany(
+    () => MIgieneTestata,
+    (mIgieneTestata) => mIgieneTestata.idSequenza
+  )
+  mIgieneTestatas: MIgieneTestata[];
 
-  // @OneToMany(() => MPerioTestata, (mPerioTestata) => mPerioTestata.idSequenza)
-  // mPerioTestatas: MPerioTestata[];
+  @OneToMany(() => MPerioTestata, (mPerioTestata) => mPerioTestata.idSequenza)
+  mPerioTestatas: MPerioTestata[];
 
-  // @OneToMany(
-  //   () => TabPerioRilevazioni,
-  //   (tabPerioRilevazioni) => tabPerioRilevazioni.idSequenza
-  // )
-  // tabPerioRilevazionis: TabPerioRilevazioni[];
+  @OneToMany(
+    () => TabPerioRilevazioni,
+    (tabPerioRilevazioni) => tabPerioRilevazioni.idSequenza
+  )
+  tabPerioRilevazionis: TabPerioRilevazioni[];
 }

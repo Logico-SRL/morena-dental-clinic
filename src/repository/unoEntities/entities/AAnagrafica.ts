@@ -1,6 +1,9 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { AAnagraficaFamiglia } from './AAnagraficaFamiglia';
-import { AAnagraficaIndirizzi } from './AAnagraficaIndirizzi';
+import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+    AAnagraficaFamiglia, AAnagraficaIndirizzi, AAnagraficaRecapiti, AAnagraficaTutori, AgImpegni, APazienti, APazientiAnamnesi, APazientiMedici, APostit,
+    CRate, MDiarioAnnotazioni, MDocumentiT,
+    MIgieneTestata, MImpiantiTestata, MOrtoTestata, MPerioTestata, MRichiami, MSituazioneDente, TabSocieta
+} from '.';
 
 
 @Index("A-INDIRIZZI_PK", ["id",], { unique: true })
@@ -107,35 +110,35 @@ export class AAnagrafica {
     @OneToMany(() => AAnagraficaIndirizzi, aAnagraficaIndirizzi => aAnagraficaIndirizzi.idAnagrafica2)
     aAnagraficaIndirizzis: AAnagraficaIndirizzi[];
 
-    // @OneToMany(() => AAnagraficaRecapiti, aAnagraficaRecapiti => aAnagraficaRecapiti.idAnagrafica2)
-    // aAnagraficaRecapitis: AAnagraficaRecapiti[];
+    @OneToMany(() => AAnagraficaRecapiti, aAnagraficaRecapiti => aAnagraficaRecapiti.idAnagrafica2)
+    aAnagraficaRecapitis: AAnagraficaRecapiti[];
 
-    // @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idAnagrafica2)
-    // aAnagraficaTutoris: AAnagraficaTutori[];
+    @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idAnagrafica2)
+    aAnagraficaTutoris: AAnagraficaTutori[];
 
-    // @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idTutore2)
-    // aAnagraficaTutoris2: AAnagraficaTutori[];
+    @OneToMany(() => AAnagraficaTutori, aAnagraficaTutori => aAnagraficaTutori.idTutore2)
+    aAnagraficaTutoris2: AAnagraficaTutori[];
 
-    // @OneToMany(() => AgImpegni, agImpegni => agImpegni.idAnagrafica2)
-    // agImpegnis: AgImpegni[];
+    @OneToMany(() => AgImpegni, agImpegni => agImpegni.idAnagrafica2)
+    agImpegnis: AgImpegni[];
 
-    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>APazienti,aPazienti=>aPazienti.)
-    // QUI PROBLEMA typeorm-model-generator // aPazienti:APazienti;
+    @OneToOne(() => APazienti, aPazienti => aPazienti.aAnagrafica)
+    aPazienti: APazienti;
 
-    // @OneToMany(() => APazientiAnamnesi, aPazientiAnamnesi => aPazientiAnamnesi.idAnagrafica)
-    // aPazientiAnamnesis: APazientiAnamnesi[];
+    @OneToMany(() => APazientiAnamnesi, aPazientiAnamnesi => aPazientiAnamnesi.idAnagrafica)
+    aPazientiAnamnesis: APazientiAnamnesi[];
 
-    // @OneToMany(() => APazientiMedici, aPazientiMedici => aPazientiMedici.idMedico2)
-    // aPazientiMedicis: APazientiMedici[];
+    @OneToMany(() => APazientiMedici, aPazientiMedici => aPazientiMedici.idMedico2)
+    aPazientiMedicis: APazientiMedici[];
 
-    // @OneToMany(() => APostit, aPostit => aPostit.idAnagrafica2)
-    // aPostits: APostit[];
+    @OneToMany(() => APostit, aPostit => aPostit.idAnagrafica2)
+    aPostits: APostit[];
 
     // @OneToMany(() => CIncassiOperatori, cIncassiOperatori => cIncassiOperatori.idOperatore2)
     // cIncassiOperatoris: CIncassiOperatori[];
 
-    // @OneToMany(() => CRate, cRate => cRate.idAnagrafica)
-    // cRates: CRate[];
+    @OneToMany(() => CRate, cRate => cRate.idAnagrafica)
+    cRates: CRate[];
 
     // @OneToMany(() => CSituazionecontabile, cSituazionecontabile => cSituazionecontabile.idAnagrafica2)
     // cSituazionecontabiles: CSituazionecontabile[];
@@ -155,37 +158,37 @@ export class AAnagrafica {
     // @OneToMany(() => MCureTestata, mCureTestata => mCureTestata.idAnagrafica2)
     // mCureTestatas: MCureTestata[];
 
-    // @OneToMany(() => MDiarioAnnotazioni, mDiarioAnnotazioni => mDiarioAnnotazioni.idAnagrafica2)
-    // mDiarioAnnotazionis: MDiarioAnnotazioni[];
+    @OneToMany(() => MDiarioAnnotazioni, mDiarioAnnotazioni => mDiarioAnnotazioni.idAnagrafica2)
+    mDiarioAnnotazionis: MDiarioAnnotazioni[];
 
-    // @OneToMany(() => MDocumentiT, mDocumentiT => mDocumentiT.idAnagrafica2)
-    // mDocumentiTs: MDocumentiT[];
+    @OneToMany(() => MDocumentiT, mDocumentiT => mDocumentiT.idAnagrafica2)
+    mDocumentiTs: MDocumentiT[];
 
-    // @OneToMany(() => MIgieneTestata, mIgieneTestata => mIgieneTestata.idAnagrafica2)
-    // mIgieneTestatas: MIgieneTestata[];
+    @OneToMany(() => MIgieneTestata, mIgieneTestata => mIgieneTestata.idAnagrafica2)
+    mIgieneTestatas: MIgieneTestata[];
 
-    // @OneToMany(() => MImpiantiTestata, mImpiantiTestata => mImpiantiTestata.idAnagrafica2)
-    // mImpiantiTestatas: MImpiantiTestata[];
+    @OneToMany(() => MImpiantiTestata, mImpiantiTestata => mImpiantiTestata.idAnagrafica2)
+    mImpiantiTestatas: MImpiantiTestata[];
 
-    // @OneToMany(() => MOrtoTestata, mOrtoTestata => mOrtoTestata.idAnagrafica2)
-    // mOrtoTestatas: MOrtoTestata[];
+    @OneToMany(() => MOrtoTestata, mOrtoTestata => mOrtoTestata.idAnagrafica2)
+    mOrtoTestatas: MOrtoTestata[];
 
-    // @OneToMany(() => MPerioTestata, mPerioTestata => mPerioTestata.idAnagrafica2)
-    // mPerioTestatas: MPerioTestata[];
+    @OneToMany(() => MPerioTestata, mPerioTestata => mPerioTestata.idAnagrafica2)
+    mPerioTestatas: MPerioTestata[];
 
-    // @OneToMany(() => MRichiami, mRichiami => mRichiami.idAnagrafica)
-    // mRichiamis: MRichiami[];
+    @OneToMany(() => MRichiami, mRichiami => mRichiami.idAnagrafica)
+    mRichiamis: MRichiami[];
 
-    // @OneToMany(() => MSituazioneDente, mSituazioneDente => mSituazioneDente.idAnagrafica2)
-    // mSituazioneDentes: MSituazioneDente[];
+    @OneToMany(() => MSituazioneDente, mSituazioneDente => mSituazioneDente.idAnagrafica2)
+    mSituazioneDentes: MSituazioneDente[];
 
-    // QUI PROBLEMA typeorm-model-generator // @OneToOne(()=>TabOperatori,tabOperatori=>tabOperatori.)
-    // QUI PROBLEMA typeorm-model-generator // tabOperatori:TabOperatori;
+    // @OneToOne(() => TabOperatori, tabOperatori => tabOperatori.)
+    // tabOperatori: TabOperatori;
 
-    // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeOperativa)
-    // tabSocietas: TabSocieta[];
+    @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeOperativa)
+    tabSocietas: TabSocieta[];
 
-    // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeLegale)
-    // tabSocietas2: TabSocieta[];
+    @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeLegale)
+    tabSocietas2: TabSocieta[];
 
 }

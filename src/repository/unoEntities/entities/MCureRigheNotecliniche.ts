@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureRighe } from "./MCureRighe";
+import { MCureRighe } from ".";
 
 @Index("IX_M-CURE-RIGHE-NOTECLINICHE", ["idCureRighe"], {})
 @Index("PK_M-CURE-RIGHE-NOTECLINICHE", ["id"], { unique: true })
@@ -30,10 +30,10 @@ export class MCureRigheNotecliniche {
   @Column("bit", { name: "StatoRecord", default: () => "(0)" })
   statoRecord: boolean;
 
-  // @ManyToOne(
-  //   () => MCureRighe,
-  //   (mCureRighe) => mCureRighe.mCureRigheNotecliniches
-  // )
-  // @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
-  // idCureRighe2: MCureRighe;
+  @ManyToOne(
+    () => MCureRighe,
+    (mCureRighe) => mCureRighe.mCureRigheNotecliniches
+  )
+  @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
+  idCureRighe2: MCureRighe;
 }

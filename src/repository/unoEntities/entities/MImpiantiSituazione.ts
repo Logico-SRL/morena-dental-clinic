@@ -5,11 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MImpiantiAnnotazioni } from "./MImpiantiAnnotazioni";
-import { MImpiantiTestata } from "./MImpiantiTestata";
-import { TabImpianti } from "./TabImpianti";
+import { MImpiantiAnnotazioni, MImpiantiTestata, TabImpianti } from ".";
 
 @Index("M-IMPIANTI-SITUAZIONE_PK", ["id"], { unique: true })
 @Index(
@@ -58,25 +56,25 @@ export class MImpiantiSituazione {
   @Column("smallint", { name: "IdInterno", default: () => "(0)" })
   idInterno: number;
 
-  // @OneToMany(
-  //   () => MImpiantiAnnotazioni,
-  //   (mImpiantiAnnotazioni) => mImpiantiAnnotazioni.idSituazione2
-  // )
-  // mImpiantiAnnotazionis: MImpiantiAnnotazioni[];
+  @OneToMany(
+    () => MImpiantiAnnotazioni,
+    (mImpiantiAnnotazioni) => mImpiantiAnnotazioni.idSituazione2
+  )
+  mImpiantiAnnotazionis: MImpiantiAnnotazioni[];
 
-  // @ManyToOne(
-  //   () => MImpiantiTestata,
-  //   (mImpiantiTestata) => mImpiantiTestata.mImpiantiSituaziones,
-  //   { onDelete: "CASCADE", onUpdate: "CASCADE" }
-  // )
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MImpiantiTestata;
+  @ManyToOne(
+    () => MImpiantiTestata,
+    (mImpiantiTestata) => mImpiantiTestata.mImpiantiSituaziones,
+    { onDelete: "CASCADE", onUpdate: "CASCADE" }
+  )
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MImpiantiTestata;
 
-  // @ManyToOne(
-  //   () => TabImpianti,
-  //   (tabImpianti) => tabImpianti.mImpiantiSituaziones,
-  //   { onUpdate: "CASCADE" }
-  // )
-  // @JoinColumn([{ name: "IDImpianto", referencedColumnName: "id" }])
-  // idImpianto2: TabImpianti;
+  @ManyToOne(
+    () => TabImpianti,
+    (tabImpianti) => tabImpianti.mImpiantiSituaziones,
+    { onUpdate: "CASCADE" }
+  )
+  @JoinColumn([{ name: "IDImpianto", referencedColumnName: "id" }])
+  idImpianto2: TabImpianti;
 }

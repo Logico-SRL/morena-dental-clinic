@@ -5,14 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MOrtoCef } from "./MOrtoCef";
-import { MOrtoDiagnosi } from "./MOrtoDiagnosi";
-import { MOrtoFormula } from "./MOrtoFormula";
-import { MOrtoProblemiesami } from "./MOrtoProblemiesami";
-import { AAnagrafica } from "./AAnagrafica";
-import { TabOperatori } from "./TabOperatori";
+import { AAnagrafica, MOrtoCef, MOrtoDiagnosi, MOrtoFormula, MOrtoProblemiesami, TabOperatori } from ".";
 
 @Index("IX_M-ORTO-TESTATA", ["idAnagrafica", "dataInizio"], {})
 @Index("PK_M-ORTO-TESTATA", ["id"], { unique: true })
@@ -93,26 +88,26 @@ export class MOrtoTestata {
   @Column("bit", { name: "StatoRecord", nullable: true })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => MOrtoCef, (mOrtoCef) => mOrtoCef.idTestata2)
-  // mOrtoCefs: MOrtoCef[];
+  @OneToMany(() => MOrtoCef, (mOrtoCef) => mOrtoCef.idTestata2)
+  mOrtoCefs: MOrtoCef[];
 
-  // @OneToMany(() => MOrtoDiagnosi, (mOrtoDiagnosi) => mOrtoDiagnosi.idTestata2)
-  // mOrtoDiagnosis: MOrtoDiagnosi[];
+  @OneToMany(() => MOrtoDiagnosi, (mOrtoDiagnosi) => mOrtoDiagnosi.idTestata2)
+  mOrtoDiagnosis: MOrtoDiagnosi[];
 
-  // @OneToMany(() => MOrtoFormula, (mOrtoFormula) => mOrtoFormula.idTestata2)
-  // mOrtoFormulas: MOrtoFormula[];
+  @OneToMany(() => MOrtoFormula, (mOrtoFormula) => mOrtoFormula.idTestata2)
+  mOrtoFormulas: MOrtoFormula[];
 
-  // @OneToMany(
-  //   () => MOrtoProblemiesami,
-  //   (mOrtoProblemiesami) => mOrtoProblemiesami.idTestata2
-  // )
-  // mOrtoProblemiesamis: MOrtoProblemiesami[];
+  @OneToMany(
+    () => MOrtoProblemiesami,
+    (mOrtoProblemiesami) => mOrtoProblemiesami.idTestata2
+  )
+  mOrtoProblemiesamis: MOrtoProblemiesami[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mOrtoTestatas)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mOrtoTestatas)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
-  // @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mOrtoTestatas)
-  // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
-  // idOperatore: TabOperatori;
+  @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.mOrtoTestatas)
+  @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
+  idOperatore: TabOperatori;
 }

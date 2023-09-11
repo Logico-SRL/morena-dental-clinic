@@ -5,13 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MCurePiano } from "./MCurePiano";
-import { MCureTestata } from "./MCureTestata";
-import { TabPrestazioni } from "./TabPrestazioni";
-import { MCureRigheDenti } from "./MCureRigheDenti";
-import { MCureRigheNotecliniche } from "./MCureRigheNotecliniche";
+import { MCureRigheDenti, MCureRigheNotecliniche, MCureTestata, TabPrestazioni } from ".";
+
 
 @Index("IX_C-CURE-RIGHE", ["idTestata"], {})
 @Index("PK_M-CURE-RIGHE", ["id"], { unique: true })
@@ -112,26 +109,23 @@ export class MCureRighe {
   // @OneToMany(() => MCurePiano, (mCurePiano) => mCurePiano.idCureRighe)
   // mCurePianos: MCurePiano[];
 
-  // @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureRighes)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MCureTestata;
+  @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureRighes)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MCureTestata;
 
-  // @ManyToOne(
-  //   () => TabPrestazioni,
-  //   (tabPrestazioni) => tabPrestazioni.mCureRighes
-  // )
-  // @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
-  // idPrestazione: TabPrestazioni;
+  @ManyToOne(() => TabPrestazioni, (tabPrestazioni) => tabPrestazioni.mCureRighes)
+  @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
+  idPrestazione: TabPrestazioni;
 
-  // @OneToMany(
-  //   () => MCureRigheDenti,
-  //   (mCureRigheDenti) => mCureRigheDenti.idCureRighe2
-  // )
-  // mCureRigheDentis: MCureRigheDenti[];
+  @OneToMany(
+    () => MCureRigheDenti,
+    (mCureRigheDenti) => mCureRigheDenti.idCureRighe2
+  )
+  mCureRigheDentis: MCureRigheDenti[];
 
-  // @OneToMany(
-  //   () => MCureRigheNotecliniche,
-  //   (mCureRigheNotecliniche) => mCureRigheNotecliniche.idCureRighe2
-  // )
-  // mCureRigheNotecliniches: MCureRigheNotecliniche[];
+  @OneToMany(
+    () => MCureRigheNotecliniche,
+    (mCureRigheNotecliniche) => mCureRigheNotecliniche.idCureRighe2
+  )
+  mCureRigheNotecliniches: MCureRigheNotecliniche[];
 }

@@ -1,12 +1,8 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  Index, PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
 
 @Index("IX_I-EGAIMG-INFORX", ["idPaziente"], {})
 @Index("IX_I-EGAIMG-INFORX_1", ["anno", "progressivo"], { unique: true })

@@ -41,9 +41,9 @@ export class IDisegnoSpecie {
   @Column("nvarchar", { name: "TitoloParamAux3", nullable: true, length: 50 })
   titoloParamAux3: string | null;
 
-  // @OneToMany(
-  //   () => IDisegnoComplessivo,
-  //   (iDisegnoComplessivo) => iDisegnoComplessivo.idSpecie
-  // )
-  // iDisegnoComplessivos: IDisegnoComplessivo[];
+  @OneToMany(
+    () => IDisegnoComplessivo,
+    (iDisegnoComplessivo) => iDisegnoComplessivo.idSpecie
+  )
+  iDisegnoComplessivos: IDisegnoComplessivo[];
 }

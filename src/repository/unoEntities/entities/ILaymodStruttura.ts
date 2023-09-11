@@ -41,7 +41,7 @@ export class ILaymodStruttura {
   @Column("smallint", { name: "AcqIndex", nullable: true })
   acqIndex: number | null;
 
-  // @ManyToOne(() => ILaymodNome, (iLaymodNome) => iLaymodNome.iLaymodStrutturas)
-  // @JoinColumn([{ name: "IDModello", referencedColumnName: "id" }])
-  // idModello: ILaymodNome;
+  @ManyToOne(() => ILaymodNome, (iLaymodNome) => iLaymodNome.iLaymodStrutturas)
+  @JoinColumn([{ name: "IDModello", referencedColumnName: "id" }])
+  idModello: ILaymodNome;
 }

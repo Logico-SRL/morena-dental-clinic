@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabOperatori } from "./TabOperatori";
-import { TabSpecialita } from "./TabSpecialita";
+import { TabOperatori, TabSpecialita } from ".";
 
 @Index("IX_TAB-OPERATORI-PERC", ["tipo", "idOperatore", "idSpecialit"], {
   unique: true,
@@ -33,17 +32,17 @@ export class TabOperatoriPerc {
   @Column("smallmoney", { name: "PercMin", default: () => "(0)" })
   percMin: number;
 
-  // @ManyToOne(
-  //   () => TabOperatori,
-  //   (tabOperatori) => tabOperatori.tabOperatoriPercs
-  // )
-  // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
-  // idOperatore2: TabOperatori;
+  @ManyToOne(
+    () => TabOperatori,
+    (tabOperatori) => tabOperatori.tabOperatoriPercs
+  )
+  @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
+  idOperatore2: TabOperatori;
 
-  // @ManyToOne(
-  //   () => TabSpecialita,
-  //   (tabSpecialita) => tabSpecialita.tabOperatoriPercs
-  // )
-  // @JoinColumn([{ name: "IDSpecialità", referencedColumnName: "id" }])
-  // idSpecialit_2: TabSpecialita;
+  @ManyToOne(
+    () => TabSpecialita,
+    (tabSpecialita) => tabSpecialita.tabOperatoriPercs
+  )
+  @JoinColumn([{ name: "IDSpecialità", referencedColumnName: "id" }])
+  idSpecialit_2: TabSpecialita;
 }

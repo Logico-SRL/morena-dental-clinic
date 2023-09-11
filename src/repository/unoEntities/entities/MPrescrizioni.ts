@@ -58,7 +58,7 @@ export class MPrescrizioni {
   @Column("bit", { name: "StatoRecord", default: () => "(0)" })
   statoRecord: boolean;
 
-  // @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mPrescrizionis)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata: MCureTestata;
+  @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mPrescrizionis)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata: MCureTestata;
 }

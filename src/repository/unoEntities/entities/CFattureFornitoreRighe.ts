@@ -26,10 +26,10 @@ export class CFattureFornitoreRighe {
   @Column("nvarchar", { name: "CodEsenzione", nullable: true, length: 5 })
   codEsenzione: string | null;
 
-  // @ManyToOne(
-  //   () => CFattureFornitore,
-  //   (cFattureFornitore) => cFattureFornitore.cFattureFornitoreRighes
-  // )
-  // @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
-  // idFattura2: CFattureFornitore;
+  @ManyToOne(
+    () => CFattureFornitore,
+    (cFattureFornitore) => cFattureFornitore.cFattureFornitoreRighes
+  )
+  @JoinColumn([{ name: "IDFattura", referencedColumnName: "id" }])
+  idFattura2: CFattureFornitore;
 }

@@ -4,9 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { APazienti } from "./APazienti";
+import { APazienti } from ".";
 
 @Index("IX_A-PAZIENTI-DISPONIBILITA", ["idAnagrafica", "giorno"], {})
 @Index("PK_A-PAZIENTI-DISPONIBILITA", ["id"], { unique: true })
@@ -27,7 +27,7 @@ export class APazientiDisponibilita {
   @Column("time", { name: "OraFine", nullable: true })
   oraFine: Date | null;
 
-  // @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiDisponibilitas)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: APazienti;
+  @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiDisponibilitas)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: APazienti;
 }

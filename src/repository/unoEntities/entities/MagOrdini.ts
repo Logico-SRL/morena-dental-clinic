@@ -51,14 +51,14 @@ export class MagOrdini {
   @Column("int", { name: "IDRiferimentoFornitore", nullable: true })
   idRiferimentoFornitore: number | null;
 
-  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magOrdinis)
-  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  // idSociet: TabSocieta;
+  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magOrdinis)
+  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  idSociet: TabSocieta;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.magOrdinis)
-  // @JoinColumn([{ name: "IDFornitore", referencedColumnName: "id" }])
-  // idFornitore2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.magOrdinis)
+  @JoinColumn([{ name: "IDFornitore", referencedColumnName: "id" }])
+  idFornitore2: AAnagrafica;
 
-  // @OneToMany(() => MagOrdiniRighe, (magOrdiniRighe) => magOrdiniRighe.idOrdine2)
-  // magOrdiniRighes: MagOrdiniRighe[];
+  @OneToMany(() => MagOrdiniRighe, (magOrdiniRighe) => magOrdiniRighe.idOrdine2)
+  magOrdiniRighes: MagOrdiniRighe[];
 }

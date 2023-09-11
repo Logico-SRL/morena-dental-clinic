@@ -5,11 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
-import { ILaymodNome } from "./ILaymodNome";
 import { IEgaimgInforendering } from "./IEgaimgInforendering";
+import { ILaymodNome } from "./ILaymodNome";
 
 @Index("IX_I-EGA", ["idPaziente", "ordinamento", "infoClsDataRif"], {})
 @Index("PK_I-EGA", ["id"], { unique: true })
@@ -92,13 +91,13 @@ export class IEga {
   // @JoinColumn([{ name: "IDPaziente", referencedColumnName: "id" }])
   // idPaziente2: AAnagrafica;
 
-  // @ManyToOne(() => ILaymodNome, (iLaymodNome) => iLaymodNome.iEgas)
-  // @JoinColumn([{ name: "IDModelloGruppo", referencedColumnName: "id" }])
-  // idModelloGruppo: ILaymodNome;
+  @ManyToOne(() => ILaymodNome, (iLaymodNome) => iLaymodNome.iEgas)
+  @JoinColumn([{ name: "IDModelloGruppo", referencedColumnName: "id" }])
+  idModelloGruppo: ILaymodNome;
 
-  // @OneToMany(
-  //   () => IEgaimgInforendering,
-  //   (iEgaimgInforendering) => iEgaimgInforendering.idegaimg
-  // )
-  // iEgaimgInforenderings: IEgaimgInforendering[];
+  @OneToMany(
+    () => IEgaimgInforendering,
+    (iEgaimgInforendering) => iEgaimgInforendering.idegaimg
+  )
+  iEgaimgInforenderings: IEgaimgInforendering[];
 }

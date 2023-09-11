@@ -25,12 +25,12 @@ export class ILaymodNome {
   @Column("int", { name: "TipoRecord", nullable: true })
   tipoRecord: number | null;
 
-  // @OneToMany(() => IEga, (iEga) => iEga.idModelloGruppo)
-  // iEgas: IEga[];
+  @OneToMany(() => IEga, (iEga) => iEga.idModelloGruppo)
+  iEgas: IEga[];
 
-  // @OneToMany(
-  //   () => ILaymodStruttura,
-  //   (iLaymodStruttura) => iLaymodStruttura.idModello
-  // )
-  // iLaymodStrutturas: ILaymodStruttura[];
+  @OneToMany(
+    () => ILaymodStruttura,
+    (iLaymodStruttura) => iLaymodStruttura.idModello
+  )
+  iLaymodStrutturas: ILaymodStruttura[];
 }

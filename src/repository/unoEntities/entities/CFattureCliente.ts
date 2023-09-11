@@ -197,22 +197,22 @@ export class CFattureCliente {
   @Column("datetime", { name: "RifFatturaFData", nullable: true })
   rifFatturaFData: Date | null;
 
-  // @ManyToOne(
-  //   () => CLibrettiFatture,
-  //   (cLibrettiFatture) => cLibrettiFatture.cFattureClientes
-  // )
-  // @JoinColumn([{ name: "IDLibretto", referencedColumnName: "id" }])
-  // idLibretto2: CLibrettiFatture;
+  @ManyToOne(
+    () => CLibrettiFatture,
+    (cLibrettiFatture) => cLibrettiFatture.cFattureClientes
+  )
+  @JoinColumn([{ name: "IDLibretto", referencedColumnName: "id" }])
+  idLibretto2: CLibrettiFatture;
 
-  // @OneToMany(
-  //   () => CFattureClienteRighe,
-  //   (cFattureClienteRighe) => cFattureClienteRighe.idFattura2
-  // )
-  // cFattureClienteRighes: CFattureClienteRighe[];
+  @OneToMany(
+    () => CFattureClienteRighe,
+    (cFattureClienteRighe) => cFattureClienteRighe.idFattura2
+  )
+  cFattureClienteRighes: CFattureClienteRighe[];
 
-  // @OneToMany(
-  //   () => CIncassiOperatori,
-  //   (cIncassiOperatori) => cIncassiOperatori.idFattura2
-  // )
-  // cIncassiOperatoris: CIncassiOperatori[];
+  @OneToMany(
+    () => CIncassiOperatori,
+    (cIncassiOperatori) => cIncassiOperatori.idFattura2
+  )
+  cIncassiOperatoris: CIncassiOperatori[];
 }

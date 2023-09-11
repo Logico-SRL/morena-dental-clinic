@@ -94,16 +94,16 @@ export class IDisegnoComplessivo {
   @Column("smallint", { name: "Hide", nullable: true, default: () => "(4)" })
   hide: number | null;
 
-  // @ManyToOne(
-  //   () => IDisegnoSpecie,
-  //   (iDisegnoSpecie) => iDisegnoSpecie.iDisegnoComplessivos
-  // )
-  // @JoinColumn([{ name: "IDSpecie", referencedColumnName: "id" }])
-  // idSpecie: IDisegnoSpecie;
+  @ManyToOne(
+    () => IDisegnoSpecie,
+    (iDisegnoSpecie) => iDisegnoSpecie.iDisegnoComplessivos
+  )
+  @JoinColumn([{ name: "IDSpecie", referencedColumnName: "id" }])
+  idSpecie: IDisegnoSpecie;
 
-  // @OneToMany(
-  //   () => IDisegnoElemento,
-  //   (iDisegnoElemento) => iDisegnoElemento.idComplessivo
-  // )
-  // iDisegnoElementos: IDisegnoElemento[];
+  @OneToMany(
+    () => IDisegnoElemento,
+    (iDisegnoElemento) => iDisegnoElemento.idComplessivo
+  )
+  iDisegnoElementos: IDisegnoElemento[];
 }

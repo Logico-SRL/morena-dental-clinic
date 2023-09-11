@@ -1,12 +1,8 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  Index, PrimaryGeneratedColumn
 } from "typeorm";
-import { MagInventario } from "./MagInventario";
 
 @Index("PK_MAG-INVENTARIO-STRATI", ["id"], { unique: true })
 @Entity("MAG-INVENTARIO-STRATI", { schema: "dbo" })

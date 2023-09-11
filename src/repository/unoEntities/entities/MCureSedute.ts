@@ -87,10 +87,10 @@ export class MCureSedute {
   @Column("smallint", { name: "DurataSeduta", nullable: true })
   durataSeduta: number | null;
 
-  // @OneToMany(() => MCurePiano, (mCurePiano) => mCurePiano.idSeduta)
-  // mCurePianos: MCurePiano[];
+  @OneToMany(() => MCurePiano, (mCurePiano) => mCurePiano.idSeduta)
+  mCurePianos: MCurePiano[];
 
-  // @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureSedutes)
-  // @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
-  // idTestata2: MCureTestata;
+  @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureSedutes)
+  @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])
+  idTestata2: MCureTestata;
 }

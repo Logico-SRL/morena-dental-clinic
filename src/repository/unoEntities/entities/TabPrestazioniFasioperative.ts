@@ -46,10 +46,10 @@ export class TabPrestazioniFasioperative {
   @Column("bit", { name: "StatoRecord", nullable: true, default: () => "(1)" })
   statoRecord: boolean | null;
 
-  // @ManyToOne(
-  //   () => TabPrestazioni,
-  //   (tabPrestazioni) => tabPrestazioni.tabPrestazioniFasioperatives
-  // )
-  // @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
-  // idPrestazione2: TabPrestazioni;
+  @ManyToOne(
+    () => TabPrestazioni,
+    (tabPrestazioni) => tabPrestazioni.tabPrestazioniFasioperatives
+  )
+  @JoinColumn([{ name: "IDPrestazione", referencedColumnName: "id" }])
+  idPrestazione2: TabPrestazioni;
 }

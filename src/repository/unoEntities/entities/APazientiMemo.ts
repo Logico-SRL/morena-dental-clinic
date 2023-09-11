@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { APazienti } from "./APazienti";
-import { TabMemo } from "./TabMemo";
+import { APazienti, TabMemo } from ".";
 
 @Index("IX_A-PAZIENTI-MEMO", ["idAnagrafica", "idMemo"], {})
 @Index("PK_A-PAZIENTI-MEMO", ["id"], { unique: true })
@@ -28,11 +27,11 @@ export class APazientiMemo {
   @Column("ntext", { name: "Nota", nullable: true })
   nota: string | null;
 
-  // @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiMemos)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: APazienti;
+  @ManyToOne(() => APazienti, (aPazienti) => aPazienti.aPazientiMemos)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: APazienti;
 
-  // @ManyToOne(() => TabMemo, (tabMemo) => tabMemo.aPazientiMemos)
-  // @JoinColumn([{ name: "IDMemo", referencedColumnName: "id" }])
-  // idMemo2: TabMemo;
+  @ManyToOne(() => TabMemo, (tabMemo) => tabMemo.aPazientiMemos)
+  @JoinColumn([{ name: "IDMemo", referencedColumnName: "id" }])
+  idMemo2: TabMemo;
 }

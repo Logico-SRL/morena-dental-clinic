@@ -25,6 +25,6 @@ export class TabMemo {
   @Column("bit", { name: "StatoRecord", nullable: true })
   statoRecord: boolean | null;
 
-  // @OneToMany(() => APazientiMemo, (aPazientiMemo) => aPazientiMemo.idMemo2)
-  // aPazientiMemos: APazientiMemo[];
+  @OneToMany(() => APazientiMemo, (aPazientiMemo) => aPazientiMemo.idMemo2)
+  aPazientiMemos: APazientiMemo[];
 }

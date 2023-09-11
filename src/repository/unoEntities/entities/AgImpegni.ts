@@ -3,14 +3,11 @@ import {
   Entity,
   Index,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  ManyToOne, PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
-import { TabOperatori } from "./TabOperatori";
-import { TabPostazioni } from "./TabPostazioni";
-import { AgRicorrenze } from "./AgRicorrenze";
+
+import { AAnagrafica, TabPostazioni } from ".";
+
 
 @Index("IX_AG-IMPEGNI", ["idAnagrafica", "dataOra"], {})
 @Index("IX_AG-IMPEGNI_1", ["idOperatore", "dataOra"], {})
@@ -111,17 +108,17 @@ export class AgImpegni {
   @Column("bit", { name: "VideoConf", default: () => "(0)" })
   videoConf: boolean;
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.agImpegnis)
-  // @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.agImpegnis)
+  @JoinColumn([{ name: "IdAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
   // @ManyToOne(() => TabOperatori, (tabOperatori) => tabOperatori.agImpegnis)
   // @JoinColumn([{ name: "IDOperatore", referencedColumnName: "id" }])
   // idOperatore3: TabOperatori;
 
-  // @ManyToOne(() => TabPostazioni, (tabPostazioni) => tabPostazioni.agImpegnis)
-  // @JoinColumn([{ name: "IdPostazione", referencedColumnName: "id" }])
-  // idPostazione2: TabPostazioni;
+  @ManyToOne(() => TabPostazioni, (tabPostazioni) => tabPostazioni.agImpegnis)
+  @JoinColumn([{ name: "IdPostazione", referencedColumnName: "id" }])
+  idPostazione2: TabPostazioni;
 
   // @OneToMany(() => AgRicorrenze, (agRicorrenze) => agRicorrenze.idImpegno)
   // agRicorrenzes: AgRicorrenze[];

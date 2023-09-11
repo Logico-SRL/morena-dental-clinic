@@ -42,9 +42,9 @@ export class MSterilizzazione {
   @Column("ntext", { name: "Nota", nullable: true })
   nota: string | null;
 
-  // @OneToMany(
-  //   () => MSterilizzazioneTray,
-  //   (mSterilizzazioneTray) => mSterilizzazioneTray.idCiclo2
-  // )
-  // mSterilizzazioneTrays: MSterilizzazioneTray[];
+  @OneToMany(
+    () => MSterilizzazioneTray,
+    (mSterilizzazioneTray) => mSterilizzazioneTray.idCiclo2
+  )
+  mSterilizzazioneTrays: MSterilizzazioneTray[];
 }

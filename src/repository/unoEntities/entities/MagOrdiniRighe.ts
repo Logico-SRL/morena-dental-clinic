@@ -49,14 +49,14 @@ export class MagOrdiniRighe {
   @Column("bit", { name: "StatoRecord", default: () => "(0)" })
   statoRecord: boolean;
 
-  // @ManyToOne(() => MagOrdini, (magOrdini) => magOrdini.magOrdiniRighes)
-  // @JoinColumn([{ name: "IDOrdine", referencedColumnName: "id" }])
-  // idOrdine2: MagOrdini;
+  @ManyToOne(() => MagOrdini, (magOrdini) => magOrdini.magOrdiniRighes)
+  @JoinColumn([{ name: "IDOrdine", referencedColumnName: "id" }])
+  idOrdine2: MagOrdini;
 
-  // @ManyToOne(
-  //   () => MagAnagrafica,
-  //   (magAnagrafica) => magAnagrafica.magOrdiniRighes
-  // )
-  // @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
-  // idArticolo2: MagAnagrafica;
+  @ManyToOne(
+    () => MagAnagrafica,
+    (magAnagrafica) => magAnagrafica.magOrdiniRighes
+  )
+  @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
+  idArticolo2: MagAnagrafica;
 }

@@ -5,11 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { MIgieneRighe } from "./MIgieneRighe";
-import { MPerioRighe } from "./MPerioRighe";
-import { TabPerioSequenze } from "./TabPerioSequenze";
+import { MIgieneRighe, MPerioRighe, TabPerioSequenze } from ".";
 
 @Index("PK_M-PERIO-RILEVAZIONI", ["id"], { unique: true })
 @Entity("TAB-PERIO-RILEVAZIONI", { schema: "dbo" })
@@ -29,16 +27,16 @@ export class TabPerioRilevazioni {
   @Column("int", { name: "Ordine" })
   ordine: number;
 
-  // @OneToMany(() => MIgieneRighe, (mIgieneRighe) => mIgieneRighe.idRilevazione2)
-  // mIgieneRighes: MIgieneRighe[];
+  @OneToMany(() => MIgieneRighe, (mIgieneRighe) => mIgieneRighe.idRilevazione2)
+  mIgieneRighes: MIgieneRighe[];
 
-  // @OneToMany(() => MPerioRighe, (mPerioRighe) => mPerioRighe.idRilevazione2)
-  // mPerioRighes: MPerioRighe[];
+  @OneToMany(() => MPerioRighe, (mPerioRighe) => mPerioRighe.idRilevazione2)
+  mPerioRighes: MPerioRighe[];
 
-  // @ManyToOne(
-  //   () => TabPerioSequenze,
-  //   (tabPerioSequenze) => tabPerioSequenze.tabPerioRilevazionis
-  // )
-  // @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
-  // idSequenza: TabPerioSequenze;
+  @ManyToOne(
+    () => TabPerioSequenze,
+    (tabPerioSequenze) => tabPerioSequenze.tabPerioRilevazionis
+  )
+  @JoinColumn([{ name: "IDSequenza", referencedColumnName: "id" }])
+  idSequenza: TabPerioSequenze;
 }

@@ -4,9 +4,8 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { AAnagrafica } from "./AAnagrafica";
 import { MagAnagrafica } from "./MagAnagrafica";
 
 @Index("IX_MAG-ANAGRAFICA-ALTRIFOR", ["idFornitore", "idArticolo"], {
@@ -48,10 +47,10 @@ export class MagAnagraficaAltrifor {
   // @JoinColumn([{ name: "IDFornitore", referencedColumnName: "id" }])
   // idFornitore2: AAnagrafica;
 
-  // @ManyToOne(
-  //   () => MagAnagrafica,
-  //   (magAnagrafica) => magAnagrafica.magAnagraficaAltrifors
-  // )
-  // @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
-  // idArticolo2: MagAnagrafica;
+  @ManyToOne(
+    () => MagAnagrafica,
+    (magAnagrafica) => magAnagrafica.magAnagraficaAltrifors
+  )
+  @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
+  idArticolo2: MagAnagrafica;
 }

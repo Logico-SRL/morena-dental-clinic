@@ -74,15 +74,15 @@ export class CFattureFornitore {
   @Column("money", { name: "AbbuonoBollo", nullable: true })
   abbuonoBollo: number | null;
 
-  // @OneToMany(
-  //   () => CFattureFornitoreRighe,
-  //   (cFattureFornitoreRighe) => cFattureFornitoreRighe.idFattura2
-  // )
-  // cFattureFornitoreRighes: CFattureFornitoreRighe[];
+  @OneToMany(
+    () => CFattureFornitoreRighe,
+    (cFattureFornitoreRighe) => cFattureFornitoreRighe.idFattura2
+  )
+  cFattureFornitoreRighes: CFattureFornitoreRighe[];
 
-  // @OneToMany(
-  //   () => CFattureStudisettore,
-  //   (cFattureStudisettore) => cFattureStudisettore.idFattura2
-  // )
-  // cFattureStudisettores: CFattureStudisettore[];
+  @OneToMany(
+    () => CFattureStudisettore,
+    (cFattureStudisettore) => cFattureStudisettore.idFattura2
+  )
+  cFattureStudisettores: CFattureStudisettore[];
 }

@@ -23,9 +23,9 @@ export class TabTraydef {
   @Column("ntext", { name: "Nota", nullable: true })
   nota: string | null;
 
-  // @OneToMany(
-  //   () => MSterilizzazioneTray,
-  //   (mSterilizzazioneTray) => mSterilizzazioneTray.idTray2
-  // )
-  // mSterilizzazioneTrays: MSterilizzazioneTray[];
+  @OneToMany(
+    () => MSterilizzazioneTray,
+    (mSterilizzazioneTray) => mSterilizzazioneTray.idTray2
+  )
+  mSterilizzazioneTrays: MSterilizzazioneTray[];
 }
