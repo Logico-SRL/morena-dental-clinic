@@ -44,6 +44,7 @@ import { MacroProjectController } from "../controllers/macroProjects/macroProjec
 import { MacroProjectsController } from "../controllers/macroProjects/macroProjectsController";
 import { SearchController } from "../controllers/search/searchController";
 import { TacViewerController } from "../controllers/tac/tacViewerController";
+import { CacheService } from "../services/cache/CacheService";
 import { LibraryService } from "../services/library/LibraryService";
 import { LoggerService } from "../services/logger/LoggerService";
 import { MacroProjectsService } from "../services/macroprojects/MacroProjectsService";
@@ -51,6 +52,7 @@ import { IOCControllerTypes, IOCServiceTypes } from "./iocTypes";
 
 const NodeIOCContainer = new Container();
 
+NodeIOCContainer.bind<ICacheService>(IOCServiceTypes.CacheService).to(CacheService).inSingletonScope();
 NodeIOCContainer.bind<ILogger>(IOCServiceTypes.LoggerService).to(LoggerService).inSingletonScope();
 NodeIOCContainer.bind<IDbService>(IOCServiceTypes.DbService).to(DbService).inSingletonScope();
 NodeIOCContainer.bind<IPatientsService>(IOCServiceTypes.PatientsService).to(PatientsService).inSingletonScope();

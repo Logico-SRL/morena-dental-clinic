@@ -1,4 +1,5 @@
 const IOCServiceTypes = {
+    CacheService: Symbol.for("CacheService"),
     LoggerService: Symbol.for("LoggerService"),
     DbService: Symbol.for("DbService"),
     PatientsService: Symbol.for("PatientsService"),

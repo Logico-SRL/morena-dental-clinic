@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureRigheDenti, MCureRigheNotecliniche, MCureTestata, TabPrestazioni } from ".";
+import { MCurePiano, MCureRigheDenti, MCureRigheNotecliniche, MCureTestata, TabPrestazioni } from ".";
 
 
 @Index("IX_C-CURE-RIGHE", ["idTestata"], {})
@@ -106,8 +106,8 @@ export class MCureRighe {
   @Column("bit", { name: "Rifacimento", nullable: true })
   rifacimento: boolean | null;
 
-  // @OneToMany(() => MCurePiano, (mCurePiano) => mCurePiano.idCureRighe)
-  // mCurePianos: MCurePiano[];
+  @OneToMany(() => MCurePiano, (mCurePiano) => mCurePiano.idCureRighe)
+  mCurePianos: MCurePiano[];
 
   @ManyToOne(() => MCureTestata, (mCureTestata) => mCureTestata.mCureRighes)
   @JoinColumn([{ name: "IDTestata", referencedColumnName: "id" }])

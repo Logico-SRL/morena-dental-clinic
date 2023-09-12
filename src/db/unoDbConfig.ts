@@ -9,7 +9,7 @@ export const unoDbConfig = {
     database: processEnv().unoDb.database,
     port: processEnv().unoDb.port,
     synchronize: false,
-    logging: false,
+    logging: processEnv().currentEnvName === 'development',
     entities: UnoModelEntities,
     options: {
         encrypt: false,

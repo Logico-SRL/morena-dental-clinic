@@ -1,10 +1,15 @@
+import { useRouter } from 'next/router';
 import { genders } from "../../configurations/genders";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
+import { TouchableRow } from '../userControls/touchableRow';
 
 export const PatientInfo = ({ patient }: { patient: IPatient | undefined }) => {
-    return <UserControls.Row>
-        <UserControls.Col xs={3}>
+
+    const { push } = useRouter();
+
+    return <TouchableRow onClick={() => { patient && push(`/patients/${patient.id}`) }}>
+        <UserControls.Col xs={3} style={{ justifyContent: 'center', display: 'flex' }}>
             <UserControls.Avatar icon={<AntdIcons.UserOutlined />} />
         </UserControls.Col>
         <UserControls.Col xs={21}>
@@ -57,5 +62,5 @@ export const PatientInfo = ({ patient }: { patient: IPatient | undefined }) => {
                 </UserControls.Col>
             </UserControls.Row>
         </UserControls.Col>
-    </UserControls.Row>
+    </TouchableRow>
 }

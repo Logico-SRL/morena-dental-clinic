@@ -4,6 +4,7 @@ import Button from "./components/button";
 import Card from "./components/card";
 import Checkbox from "./components/checkbox";
 import Col from "./components/col";
+import Collapse from "./components/collapse";
 import Content from "./components/content";
 import DatePicker from "./components/datePicker";
 import Divider from "./components/divider";
@@ -46,6 +47,7 @@ const UserControls = {
     Sider,
     Row,
     Col,
+    Collapse,
     Divider,
     List,
     Card,

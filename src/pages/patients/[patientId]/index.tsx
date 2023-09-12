@@ -11,7 +11,7 @@ const PatientsPage: PageComponent = ({ }) => {
     const { query } = useRouter()
     const { patientId } = query as { patientId: string }
 
-    const { patient, loadingPatient } = usePatient(patientId);
+    const { patient, loadingPatient, unoAnagrafica } = usePatient(patientId);
 
     const LeftTitle = () => {
 
@@ -27,7 +27,7 @@ const PatientsPage: PageComponent = ({ }) => {
     return (<SplittedPage
         LeftTitle={<LeftTitle />}
         RightTitle={<RightTitle />}
-        Left={<Patient patient={patient} loadingPatient={loadingPatient} />}
+        Left={<Patient patient={patient} loadingPatient={loadingPatient} unoAnagrafica={unoAnagrafica} />}
         Right={<Right projects={patient?.projects || []} loading={loadingPatient} />}
 
     />)

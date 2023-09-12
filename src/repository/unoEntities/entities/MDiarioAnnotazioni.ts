@@ -36,10 +36,7 @@ export class MDiarioAnnotazioni {
   @Column("int", { name: "Colore", nullable: true })
   colore: number | null;
 
-  @ManyToOne(
-    () => AAnagrafica,
-    (aAnagrafica) => aAnagrafica.mDiarioAnnotazionis
-  )
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mDiarioAnnotazionis)
   @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
   idAnagrafica2: AAnagrafica;
 }

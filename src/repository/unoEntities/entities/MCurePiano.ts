@@ -1,8 +1,9 @@
 import {
   Column,
   Entity,
-  Index, PrimaryGeneratedColumn
+  Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn
 } from "typeorm";
+import { MCureRighe, MCureSedute } from ".";
 // import { MCureRighe } from "./MCureRighe";
 // import { MCureSedute } from "./MCureSedute";
 
@@ -73,11 +74,11 @@ export class MCurePiano {
   @Column("datetime", { name: "Updated", nullable: true })
   updated: Date | null;
 
-  // @ManyToOne(() => MCureRighe, (mCureRighe) => mCureRighe.mCurePianos)
-  // @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
-  // idCureRighe: MCureRighe;
+  @ManyToOne(() => MCureRighe, (mCureRighe) => mCureRighe.mCurePianos)
+  @JoinColumn([{ name: "IDCureRighe", referencedColumnName: "id" }])
+  idCureRighe: MCureRighe;
 
-  // @ManyToOne(() => MCureSedute, (mCureSedute) => mCureSedute.mCurePianos)
-  // @JoinColumn([{ name: "IDSeduta", referencedColumnName: "id" }])
-  // idSeduta: MCureSedute;
+  @ManyToOne(() => MCureSedute, (mCureSedute) => mCureSedute.mCurePianos)
+  @JoinColumn([{ name: "IDSeduta", referencedColumnName: "id" }])
+  idSeduta: MCureSedute;
 }

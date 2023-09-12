@@ -7,6 +7,7 @@ import { defaultPatient } from "../services/defaultValues";
 import { convertPropsToDayjs } from "../utils/convertPropsToDayjs";
 
 const patientStore = atom<IPatient>(defaultPatient());
+const unoAnagraficaStore = atom<UnoAnagrafica | undefined>(undefined);
 const loadingPatientStore = atom<boolean>(false)
 const fetchingId = { current: '' };
 const abortController = {
@@ -19,6 +20,7 @@ export const usePatient = (patientId: string) => {
 
     const httpService = useService<IHttpService>(IOCServiceTypes.HttpService)
     const patient = useStore(patientStore);
+    const unoAnagrafica = useStore(unoAnagraficaStore);
     const loadingPatient = useStore(loadingPatientStore);
 
     React.useEffect(() => {
@@ -28,6 +30,13 @@ export const usePatient = (patientId: string) => {
     }, [])
 
     React.useEffect(() => {
+        getPatient(patientId);
+        return () => {
+
+        }
+    }, [patientId, patient])
+
+    const getPatient = async (id: string) => {
 
         if (fetchingId.current != patientId && patientId && (patient.id != patientId)) {
             fetchingId.current = patientId;
@@ -41,21 +50,34 @@ export const usePatient = (patientId: string) => {
             patientStore.set(defaultPatient());
 
             // const controller = new AbortController()
-            httpService.get<IPatient>(`/api/protected/patients/${patientId}`, { signal: abortController.current.signal }).then(d => {
-                // console.info(`/api/protected/patients/${patientId}`, d)
-                patientStore.set(convertPropsToDayjs(['dateOfBirth'], d.data));
-            })
-                .finally(() => {
-                    loadingPatientStore.set(false);
-                    // setLoading(false);
-                    fetchingId.current = '';
-                })
+            const res = await Promise.all([
+                httpService.get<IPatient>(`/api/protected/patients/${patientId}`, { signal: abortController.current.signal }),
+                httpService.get<UnoAnagrafica>(`/api/protected/patients/${patientId}/unodb`, { signal: abortController.current.signal })
+            ])
 
-            return () => {
-                // controller.abort();
-            }
+            patientStore.set(convertPropsToDayjs(['dateOfBirth'], res[0].data));
+            unoAnagraficaStore.set(res[1].data);
+
+            loadingPatientStore.set(false);
+            // setLoading(false);
+            fetchingId.current = '';
+
+            // .then(d => {
+            //     // console.info(`/api/protected/patients/${patientId}`, d)
+            //     patientStore.set(convertPropsToDayjs(['dateOfBirth'], d.data));
+            //     httpService.get<IPatient>(`/api/protected/patients/${patientId}/unodb`, { signal: abortController.current.signal })
+            //         .then(d => {
+            //             unoAnagraficaStore.set(d.data);
+            //         })
+            // })
+            // .finally(() => {
+            //     loadingPatientStore.set(false);
+            //     // setLoading(false);
+            //     fetchingId.current = '';
+            // })
+
         }
-    }, [patientId, patient])
+    }
 
-    return { patient, loadingPatient };
+    return { patient, loadingPatient, unoAnagrafica };
 }

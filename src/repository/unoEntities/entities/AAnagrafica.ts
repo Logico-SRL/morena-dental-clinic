@@ -1,8 +1,8 @@
 import { Column, Entity, Index, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import {
     AAnagraficaFamiglia, AAnagraficaIndirizzi, AAnagraficaRecapiti, AAnagraficaTutori, AgImpegni, APazienti, APazientiAnamnesi, APazientiMedici, APostit,
-    CRate, MDiarioAnnotazioni, MDocumentiT,
-    MIgieneTestata, MImpiantiTestata, MOrtoTestata, MPerioTestata, MRichiami, MSituazioneDente, TabSocieta
+    CRate, MCureTestata, MDiarioAnnotazioni, MDocumentiT,
+    MIgieneTestata, MImpiantiTestata, MOrtoTestata, MPerioTestata, MRichiami, MSituazioneDente
 } from '.';
 
 
@@ -155,8 +155,8 @@ export class AAnagrafica {
     // @OneToMany(() => MagOrdini, magOrdini => magOrdini.idFornitore2)
     // magOrdinis: MagOrdini[];
 
-    // @OneToMany(() => MCureTestata, mCureTestata => mCureTestata.idAnagrafica2)
-    // mCureTestatas: MCureTestata[];
+    @OneToMany(() => MCureTestata, mCureTestata => mCureTestata.idAnagrafica2)
+    mCureTestatas: MCureTestata[];
 
     @OneToMany(() => MDiarioAnnotazioni, mDiarioAnnotazioni => mDiarioAnnotazioni.idAnagrafica2)
     mDiarioAnnotazionis: MDiarioAnnotazioni[];
@@ -185,10 +185,10 @@ export class AAnagrafica {
     // @OneToOne(() => TabOperatori, tabOperatori => tabOperatori.)
     // tabOperatori: TabOperatori;
 
-    @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeOperativa)
-    tabSocietas: TabSocieta[];
+    // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeOperativa)
+    // tabSocietas: TabSocieta[];
 
-    @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeLegale)
-    tabSocietas2: TabSocieta[];
+    // @OneToMany(() => TabSocieta, tabSocieta => tabSocieta.idSedeLegale)
+    // tabSocietas2: TabSocieta[];
 
 }

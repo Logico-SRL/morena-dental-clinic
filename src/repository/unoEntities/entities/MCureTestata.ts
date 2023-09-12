@@ -1,10 +1,10 @@
 import {
   Column,
   Entity,
-  Index, OneToMany,
+  Index, JoinColumn, ManyToOne, OneToMany,
   PrimaryGeneratedColumn
 } from "typeorm";
-import { MCureAllegati, MCureChecklist, MCureRighe, MCureSedute, MPrescrizioni, MSterilizzazioneTray } from ".";
+import { AAnagrafica, MCureAllegati, MCureChecklist, MCureRighe, MCureSedute, MPrescrizioni, MSterilizzazioneTray } from ".";
 
 
 @Index("IX_M-CURE-TESTATA", ["idAnagrafica"], {})
@@ -107,9 +107,9 @@ export class MCureTestata {
   @OneToMany(() => MCureSedute, (mCureSedute) => mCureSedute.idTestata2)
   mCureSedutes: MCureSedute[];
 
-  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mCureTestatas)
-  // @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
-  // idAnagrafica2: AAnagrafica;
+  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.mCureTestatas)
+  @JoinColumn([{ name: "IDAnagrafica", referencedColumnName: "id" }])
+  idAnagrafica2: AAnagrafica;
 
   @OneToMany(() => MPrescrizioni, (mPrescrizioni) => mPrescrizioni.idTestata)
   mPrescrizionis: MPrescrizioni[];
