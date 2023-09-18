@@ -62,7 +62,7 @@ export class FilePreviewService implements IFilePreviewService {
                     const p = path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg')
                     this.loggerServ.info(`getPreview video ffmpeg path ${p}`)
                     ffmpeg.setFfmpegPath(p);
-                    const p2 = path.resolve('node_modules', 'ffprobe-static', 'linux', 'x64', 'ffprobe')
+                    const p2 = path.resolve('node_modules', 'ffprobe-static', 'bin', 'linux', 'x64', 'ffprobe')
                     this.loggerServ.info(`getPreview video ffprobe path ${p2}`)
                     ffmpeg.setFfprobePath(p2);
                 }
