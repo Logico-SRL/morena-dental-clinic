@@ -1,14 +1,9 @@
 import {
   Column,
   Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  Index, OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabSocieta } from "./TabSocieta";
-import { AAnagrafica } from "./AAnagrafica";
 import { MagOrdiniRighe } from "./MagOrdiniRighe";
 
 @Index("IX_MAG-ORDINI-T", ["idFornitore"], {})
@@ -51,13 +46,13 @@ export class MagOrdini {
   @Column("int", { name: "IDRiferimentoFornitore", nullable: true })
   idRiferimentoFornitore: number | null;
 
-  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magOrdinis)
-  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  idSociet: TabSocieta;
+  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magOrdinis)
+  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  // idSociet: TabSocieta;
 
-  @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.magOrdinis)
-  @JoinColumn([{ name: "IDFornitore", referencedColumnName: "id" }])
-  idFornitore2: AAnagrafica;
+  // @ManyToOne(() => AAnagrafica, (aAnagrafica) => aAnagrafica.magOrdinis)
+  // @JoinColumn([{ name: "IDFornitore", referencedColumnName: "id" }])
+  // idFornitore2: AAnagrafica;
 
   @OneToMany(() => MagOrdiniRighe, (magOrdiniRighe) => magOrdiniRighe.idOrdine2)
   magOrdiniRighes: MagOrdiniRighe[];

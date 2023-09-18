@@ -124,14 +124,14 @@ export const usePatients = () => {
             })
     }
 
-    const fetchROAnagraficaData = async (userData: AAnagrafica[]) => {
-        return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
-            .then(res => res.data)
-            .catch(err => {
-                logger.error('usePatients importExternalAnagrafica err', err);
-                throw err;
-            })
-    }
+    // const fetchROAnagraficaData = async (userData: AAnagrafica[]) => {
+    //     return httpService.post<IPatient[]>(`/api/protected/uno/import`, users)
+    //         .then(res => res.data)
+    //         .catch(err => {
+    //             logger.error('usePatients importExternalAnagrafica err', err);
+    //             throw err;
+    //         })
+    // }
 
     return { patients, loadingPatients, fetchFilteredPatients, createPatient, savePatient, searchExternalAnagrafica, importExternalAnagrafica };
 }

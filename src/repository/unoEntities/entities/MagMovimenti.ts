@@ -4,9 +4,8 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { TabSocieta } from "./TabSocieta";
 import { MagAnagrafica } from "./MagAnagrafica";
 
 @Index("IX_MAG-MOVIMENTI", ["idMagazzino", "idArticolo"], {})
@@ -73,9 +72,9 @@ export class MagMovimenti {
   @Column("bit", { name: "NoInventario", default: () => "(0)" })
   noInventario: boolean;
 
-  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magMovimentis)
-  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  idSociet: TabSocieta;
+  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magMovimentis)
+  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  // idSociet: TabSocieta;
 
   @ManyToOne(
     () => MagAnagrafica,

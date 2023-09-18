@@ -4,10 +4,9 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { MagAnagrafica } from "./MagAnagrafica";
-import { TabSocieta } from "./TabSocieta";
 
 @Index("MAG-ANAGRAFICAMAG-SALDI", ["idArticolo"], {})
 @Index("MAG-SALDI_PK", ["id"], { unique: true })
@@ -71,7 +70,7 @@ export class MagSaldi {
   @JoinColumn([{ name: "IDArticolo", referencedColumnName: "id" }])
   idArticolo2: MagAnagrafica;
 
-  @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magSaldis)
-  @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
-  idSociet: TabSocieta;
+  // @ManyToOne(() => TabSocieta, (tabSocieta) => tabSocieta.magSaldis)
+  // @JoinColumn([{ name: "IDSocietà", referencedColumnName: "id" }])
+  // idSociet: TabSocieta;
 }
