@@ -1,5 +1,4 @@
 // 'use client'
-import { AntdIcons } from "@icons";
 import UserControls from "@uc";
 // import { useAuthSession } from "../../hooks/useAuthSession";
 import { useAuthSession } from "../../hooks/useAuthSession";
@@ -24,6 +23,6 @@ export const UserAvatar: React.FunctionComponent<{ className?: string }> = ({ cl
                 {userId}
             </UserControls.Typography.Text>
         </div>
-        <UserControls.Avatar size={'large'} className={className} icon={<AntdIcons.UserOutlined />} />
+        {/* <UserControls.Avatar size={'large'} className={styles.avatar} icon={<AntdIcons.UserOutlined />} /> */}
     </div>)
 }

@@ -11,10 +11,10 @@ const MenuContainerComp = () => {
 
     return <UserControls.Menu
         // theme="dark"
-        style={{ backgroundColor: 'inherit', marginLeft: 'auto', width: 'fit-content' }}
+        style={{ backgroundColor: 'inherit', width: '100%', display: 'flex', justifyContent: 'flex-end' }}
         // mode="horizontal"
         items={items}
-        mode={'inline'}
+        mode={'horizontal'}
         inlineCollapsed={false}
     />
 }

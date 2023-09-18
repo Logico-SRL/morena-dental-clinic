@@ -7,12 +7,18 @@
     color: inherit;
   }
   .nameContainer {
+    background-color: #fff;
+    border-radius: 4px;
     text-align: center;
+    margin-right: 10px;
     :global(.ant-typography) {
       max-width: 150px;
       text-overflow: ellipsis;
       overflow: hidden;
     }
-    padding-right: 10px;
+  }
+  .avatar {
+    color: #2e4151;
+    background-color: #fff;
   }
 }
