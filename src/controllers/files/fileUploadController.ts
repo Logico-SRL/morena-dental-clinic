@@ -150,7 +150,7 @@ export class FileUploadController extends BaseController {
                         this.loggerService.info(`FileUploadController busboy  - got preview`);
                         resolve(prev)
                     }
-                    catch (err) {
+                    catch (err:any) {
                         this.loggerService.error(`FileUploadController busboy end error`, err);
                         reject(err)
                     }
