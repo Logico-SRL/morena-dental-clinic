@@ -1,61 +1,68 @@
 # 1. Install dependencies only when needed
-FROM node:18.3.0-alpine AS deps
+FROM node:18.3.0-alpine
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat git
 
-WORKDIR /app
+RUN apk update
+# RUN apk add libc6-compat pkgconfig python3 py3-pip pixman cairo pango git
+RUN apk add libc6-compat python3 py3-pip git g++ build-base cairo-dev jpeg-dev pango-dev musl-dev giflib-dev pixman-dev pangomm-dev libjpeg-turbo-dev freetype-dev
 
-# RUN vers_prev="$(yarn -v)" && echo $vers_prev
+
 ENV YARN_VERSION 3.6.1
 RUN yarn policies set-version $YARN_VERSION
-# RUN vers_next="$(yarn -v)" && echo $vers_next
+ENV SHARP_IGNORE_GLOBAL_LIBVIPS=1
+ENV npm_config_arch=x64
+ENV npm_config_platform=linux
+ENV NODE_ENV=production
+
+WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json ./ yarn.lock* ./
 
-ENV SHARP_IGNORE_GLOBAL_LIBVIPS=1
-ENV npm_config_arch=x64
-ENV npm_config_platform=linux
 # ENV npm_config_target_arch=x64 
 # ENV npm_config_target_platform=linux
 # ENV npm_config_target_libc=glib
 RUN yarn install
 
 # 2. Rebuild the source code only when needed
-FROM node:18.3.0-alpine AS builder
-RUN apk add --no-cache libc6-compat git
-ENV YARN_VERSION 3.6.1
-RUN yarn policies set-version $YARN_VERSION
+# FROM deps AS builder
+# RUN apk add libc6-compat python3 py3-pip git g++ build-base cairo-dev jpeg-dev pango-dev musl-dev giflib-dev pixman-dev pangomm-dev libjpeg-turbo-dev freetype-dev
+# ENV YARN_VERSION 3.6.1
+# RUN yarn policies set-version $YARN_VERSION
 
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# WORKDIR /app
+# COPY --from=deps /app/node_modules ./node_modules
+# COPY . .
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
 ENV NEXTAUTH_URL=http://192.168.1.133:3000
 RUN yarn build
 
 # 3. Production image, copy all the files and run next
-FROM node:18.3.0-alpine AS runner
-ENV YARN_VERSION 3.6.1
-RUN yarn policies set-version $YARN_VERSION
+# FROM builder AS runner
+# RUN apk add libc6-compat python3 py3-pip git g++ build-base cairo-dev jpeg-dev pango-dev musl-dev giflib-dev pixman-dev pangomm-dev libjpeg-turbo-dev freetype-dev
+# ENV YARN_VERSION 3.6.1
+# RUN yarn policies set-version $YARN_VERSION
 # RUN apk add --no-cache libc6-compat git
-WORKDIR /app
+# WORKDIR /app
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-COPY --from=builder /app/public ./public
+# COPY --from=builder /app/public ./public
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+
+
+RUN cp -R /app/.next/standalone/* ./
+# RUN CP /app/.next/static ./.next/static
 
 USER root
-RUN mkdir logs
+RUN mkdir -p logs
 RUN chmod -R 777 logs
 
 USER nextjs
@@ -63,6 +70,6 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-ENV NEXTAUTH_URL=http://192.168.1.133:3000
+# ENV NEXTAUTH_URL=http://192.168.1.133:3000
 
 CMD ["node", "server.js"]

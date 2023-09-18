@@ -11,8 +11,25 @@ services:
       - '3000:3000'
     networks:
       - morena-network
+    volumes:
+      - DatiUNO:/mnt/DatiUno
+      - logicoApp:/mnt/logicoApp
 networks:
   morena-network:
     name: docker_morena-network
     driver: bridge
     external: true
+volumes:
+  DatiUNO:
+    driver_opts:
+      type: cifs
+      o: "username=Administrator,password=pantarei"
+      device: "//192.168.1.10/Dati Uno/IMG"
+  logicoApp:
+    driver_opts:
+      type: cifs
+      o: "username=logico,password=ABCD!234,file_mode=0777,dir_mode=0777"
+      device: "//192.168.1.231/logicoApp"
+
+
+#docker volume create --driver local --opt type=cifs --opt device="//192.168.1.10/Dati UNO/IMG" --opt o=username=administrator,password=pantarei DatiUNO
