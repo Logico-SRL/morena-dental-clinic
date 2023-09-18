@@ -30,6 +30,7 @@ export class FileUploadController extends BaseController {
     private readonly visitsServ: IVisitsService;
     private readonly mediaServ: IMediaService;
     private readonly filePreviewServ: IFilePreviewService;
+    private readonly loggerService: ILogger;
 
     constructor(
         @inject(IOCServiceTypes.FilesService) fileServ: IFilesService,
@@ -37,13 +38,15 @@ export class FileUploadController extends BaseController {
         @inject(IOCServiceTypes.VisitsService) visitsServ: IVisitsService,
         @inject(IOCServiceTypes.MediaService) mediaServ: IMediaService,
         @inject(IOCServiceTypes.FilesPreviewService) filePreviewServ: IFilePreviewService,
+        @inject(IOCServiceTypes.LoggerService) loggerServ: ILogger
     ) {
         super();
         this.fileService = fileServ;
         this.settingsService = settingServ;
         this.visitsServ = visitsServ;
         this.mediaServ = mediaServ;
-        this.filePreviewServ = filePreviewServ
+        this.filePreviewServ = filePreviewServ;
+        this.loggerService = loggerServ;
     }
 
     POST = async () => {
@@ -81,21 +84,23 @@ export class FileUploadController extends BaseController {
 
         let fileExtension = 'notfound';
 
+        const busboy = Busboy({ headers: this.req.headers, preservePath: true });
+
         const snapshots = await new Promise<SnapShotType[]>((resolve, reject) => {
-            const busboy = Busboy({ headers: this.req.headers, preservePath: true });
 
             const chunks: Array<Uint8Array> = [];
+
+            this.loggerService.info('FileUploadController setting busboy');
 
             busboy.on('file', (fieldname: string, file: Readable, { encoding, filename, mimeType, ...rest }: FileInfo) => {
 
                 file.on('error', ({ message }) => {
                     reject(new Error(`File upload error: ${message}`));
                 })
+
                 media.encoding = encoding;
                 media.filename = filename;
                 media.mimeType = mimeType;
-
-
 
 
                 if (filename) {
@@ -109,18 +114,28 @@ export class FileUploadController extends BaseController {
 
                 media.path = saveTo;
 
+                this.loggerService.info(`FileUploadController busboy  - calling fs.mkdirSync`);
                 fs.mkdirSync(saveToDir, { recursive: true });
+
+                this.loggerService.info(`FileUploadController busboy  - calling fs.createWriteStream(${saveTo})`);
                 const stream = fs.createWriteStream(saveTo)
+
+                this.loggerService.info(`FileUploadController busboy  - calling file.pipe`);
                 file.pipe(stream)
 
                 file.on('data', async (chunk: any) => {
+                    // this.loggerService.info(`FileUploadController busboy  - adding chunks`);
                     chunks.push(chunk)
                 });
 
+
                 file.on('end', async () => {
-                    // console.log('File [' + fieldname + '] Finished');
+
+                    this.loggerService.info(`FileUploadController busboy  - ${fieldname} end`);
 
                     const buffer = Buffer.concat(chunks);
+
+                    this.loggerService.info(`FileUploadController busboy  - got buffer ${buffer.length}`);
 
                     try {
 
@@ -131,9 +146,12 @@ export class FileUploadController extends BaseController {
                             saveToDir: saveToDir,
                             type: media.source?.type,
                         })
+
+                        this.loggerService.info(`FileUploadController busboy  - got preview`);
                         resolve(prev)
                     }
                     catch (err) {
+                        this.loggerService.error(`FileUploadController busboy end error`, err);
                         reject(err)
                     }
 
@@ -144,12 +162,16 @@ export class FileUploadController extends BaseController {
             busboy.on('field', function (fieldname, val) {
                 // console.log('Field [' + fieldname + ']: value: ' + inspect(val));
             });
-            busboy.on('finish', function () {
-                // console.log('Done parsing form!');
-                // resolve(1);
-            });
+            // busboy.on('finish', function () {
+            //     this.loggerService.info(`FileUploadController busboy  - finish event`);
+            // console.log('Done parsing form!');
+            // resolve(1);
+            // });
+            // busboy.end(this.req.body);
             this.req.pipe(busboy);
         });
+
+        busboy.end();
 
         if (snapshots.length > 0) {
 
@@ -159,8 +181,10 @@ export class FileUploadController extends BaseController {
 
         if (media.filename) {
             await this.mediaServ.create(media);
+            this.loggerService.info(`FileUploadController sending response with media`);
             this.res.status(200).send({ ...media, snapshots })
         } else {
+            this.loggerService.info(`FileUploadController sending response null`);
             this.res.status(200).send(null);
         }
     }
