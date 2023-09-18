@@ -9,4 +9,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: run docker compose
       run: |
-        docker-compose -f .\docker\app-docker-compose.yaml up -d --build    
+        docker-compose -f C:\development\morena-dental-clinic\docker\app-docker-compose.yaml up -d --build    
