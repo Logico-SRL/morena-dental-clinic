@@ -18,7 +18,7 @@ export const buildController = (pars: symbol) => async (req: NextApiRequest, res
     if (callable && typeof callable === 'function') {
         try {
 
-            !whiteListUris.some(u => req.url?.startsWith(u)) && logger.debug(`callable calling api`, { url: req.url })
+            !whiteListUris.some(u => req.url?.startsWith(u)) && logger.info(`callable calling api`, { url: req.url })
             await callable(req, res)
         } catch (ex: any) {
             logger.error('callable error', { error: ex.message })

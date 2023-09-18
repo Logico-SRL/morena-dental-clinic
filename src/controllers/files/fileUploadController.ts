@@ -89,56 +89,14 @@ export class FileUploadController extends BaseController {
             busboy.on('file', (fieldname: string, file: Readable, { encoding, filename, mimeType, ...rest }: FileInfo) => {
 
                 file.on('error', ({ message }) => {
-                    throw new Error(`File upload error: ${message}`);
+                    reject(new Error(`File upload error: ${message}`));
                 })
-
-                // if (mediaSource.type === 'tac') {
-
-                //     console.info('uploading tac folder, file', filename);
-
-                //     if (!TacStartRegex.test(filename)) {
-                //         if (!TacRegex.test(filename)) {
-                //             throw new Error(`${TacStartRegex} not matched`);
-                //         } else {
-                //             const m = filename.match(TacRegex);
-                //             filename = m ? m[0] : '';
-                //         }
-                //     }
-
-                //     const saveToDirBase = `${mediaSource.basePath}/${this.projectId}/${this.visitId}/${media.id}`;
-                //     const parts = filename.split('/');
-                //     const name = parts.splice(parts.length - 1)[0];
-                //     const saveToDir = `${saveToDirBase}/${parts.join('/')}`;
-
-                //     const saveTo = `${saveToDir}/${name}`;
-
-                //     console.info('saving to dir', saveToDir, ' with name ', name);
-
-                //     fs.mkdirSync(saveToDir, { recursive: true });
-
-                //     const stream = fs.createWriteStream(saveTo)
-                //     file.pipe(stream)
-
-                //     file.on('data', async (chunk: any) => {
-                //         chunks.push(chunk)
-                //     });
-
-                //     if (TacStartFileRegex.test(filename)) {
-                //         media.filename = filename;
-                //         media.path = saveTo;
-                //     }
-
-                //     file.on('end', async () => {
-                //         resolve([]);
-                //     });
-
-                // } else {
-
-
-
                 media.encoding = encoding;
                 media.filename = filename;
                 media.mimeType = mimeType;
+
+
+
 
                 if (filename) {
                     const parts = filename.split('.');
@@ -164,13 +122,20 @@ export class FileUploadController extends BaseController {
 
                     const buffer = Buffer.concat(chunks);
 
-                    resolve(await this.filePreviewServ.getPreview({
-                        buffer,
-                        mediaId: media.id,
-                        path: saveTo,
-                        saveToDir: saveToDir,
-                        type: media.source?.type,
-                    }))
+                    try {
+
+                        const prev = await this.filePreviewServ.getPreview({
+                            buffer,
+                            mediaId: media.id,
+                            path: saveTo,
+                            saveToDir: saveToDir,
+                            type: media.source?.type,
+                        })
+                        resolve(prev)
+                    }
+                    catch (err) {
+                        reject(err)
+                    }
 
                 });
                 // }
