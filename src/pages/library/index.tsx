@@ -1,7 +1,7 @@
 import { SplittedPage } from "../../components/layout/splittedPage";
 import { Library } from "../../components/library/library";
 import { SearchOnline } from "../../components/search/searchOnline";
-import { useLibrary } from "../../hooks/useLIbrary";
+import { useLibrary } from "../../hooks/useLibrary";
 import UserControls from "../../userControls";
 
 

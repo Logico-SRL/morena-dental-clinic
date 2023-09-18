@@ -4,7 +4,7 @@ import { SplittedPage } from "../../components/layout/splittedPage";
 import { EditProject } from "../../components/projects/editProject";
 import { VisitMedia } from "../../components/screening/VisitMedia";
 import { SearchOnlineModal } from "../../components/search/searchOnlineModal";
-import { useLibrary } from "../../hooks/useLIbrary";
+import { useLibrary } from "../../hooks/useLibrary";
 import { useProject } from "../../hooks/useProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";

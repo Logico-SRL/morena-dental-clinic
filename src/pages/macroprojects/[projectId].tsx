@@ -4,7 +4,7 @@ import { SplittedPage } from "../../components/layout/splittedPage";
 import { LibraryInfo } from "../../components/library/libraryInfo";
 import { EditMacroProject } from "../../components/macroprojects/editMacroProject";
 import { SearchOnlineModal } from "../../components/search/searchOnlineModal";
-import { useLibrary } from "../../hooks/useLIbrary";
+import { useLibrary } from "../../hooks/useLibrary";
 import { useMacroProject } from "../../hooks/useMacroProject";
 import UserControls from "../../userControls";
 import { AntdIcons } from "../../userControls/icons";
