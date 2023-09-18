@@ -54,8 +54,18 @@ export class FilePreviewService implements IFilePreviewService {
                 break;
             }
             case 'video': {
-                ffmpeg.setFfmpegPath(path.resolve('ffmpeg', 'ffmpeg.exe'));
-                ffmpeg.setFfprobePath(path.resolve('ffmpeg', 'ffprobe.exe'));
+
+                if (processEnv().currentEnvName === 'development') {
+                    ffmpeg.setFfmpegPath(path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg.exe'));
+                    ffmpeg.setFfprobePath(path.resolve('node_modules', 'ffprobe-static', 'win32', 'x64', 'ffprobe.exe'));
+                } else {
+                    const p = path.resolve('node_modules', 'ffmpeg-static', 'ffmpeg')
+                    this.loggerServ.info(`getPreview video ffmpeg path ${p}`)
+                    ffmpeg.setFfmpegPath(p);
+                    const p2 = path.resolve('node_modules', 'ffprobe-static', 'linux', 'x64', 'ffprobe')
+                    this.loggerServ.info(`getPreview video ffprobe path ${p2}`)
+                    ffmpeg.setFfprobePath(p2);
+                }
 
                 const timemarks = [0.1, 0.33, 0.66];
                 // const timemarks = ['33%'];
