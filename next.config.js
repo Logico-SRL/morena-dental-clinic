@@ -54,7 +54,7 @@ const nextConfig = async function (phase) {
 
     let config = {
         reactStrictMode: true,
-        experimental: { appDir: false },
+        // experimental: { appDir: false },
         output: 'standalone',
         webpack(config) {
             config.resolve.fallback = {

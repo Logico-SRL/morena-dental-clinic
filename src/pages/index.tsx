@@ -6,8 +6,6 @@ import UserControls from "../userControls";
 
 const Home: PageComponent = () => {
 
-
-
     const LeftTitle = <UserControls.Typography.Title level={3} >
         UPCOMING APPOINTMENTS
     </UserControls.Typography.Title>

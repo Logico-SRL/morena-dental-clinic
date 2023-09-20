@@ -9,8 +9,7 @@ import { useRedirectEvent } from '../hooks/useRedirectEvent';
 import { IoCProvider } from "../inversify/useService";
 import "../styles/global.scss";
 
-function MyApp({ Component,
-  pageProps: { session, ...pageProps },
+function MyApp({ Component, pageProps: { session, ...pageProps },
   ...rest }: AppProps) {
 
   useRedirectEvent();

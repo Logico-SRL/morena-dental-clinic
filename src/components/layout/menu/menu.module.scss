@@ -2,6 +2,7 @@
 
 .menu {
   padding-right: 10px;
+  min-width: 86px;
 
   :global(.ant-menu-item) {
     line-height: normal;

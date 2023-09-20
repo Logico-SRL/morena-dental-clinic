@@ -20,3 +20,9 @@
     width: 100%;
   }
 }
+
+.disabledMenuItem {
+  :global(.ant-menu-title-content) {
+    color: #000 !important;
+  }
+}
