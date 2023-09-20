@@ -1,12 +1,13 @@
 name: Production Build
 
-on: [push]
-
+on:
+  push:
+    branches: [main]
 jobs:
   build:
     runs-on: [self-hosted]
     steps:
-    - uses: actions/checkout@v2
-    - name: run docker compose
-      run: |
-        docker-compose -f C:\development\morena-dental-clinic\docker\app-docker-compose.yaml up -d --build    
+      - uses: actions/checkout@v2
+      - name: run docker compose
+        run: |
+          docker-compose -f C:\development\morena-dental-clinic\docker\app-docker-compose.yaml up -d --build
