@@ -10,4 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: run docker compose
         run: |
+          cd C:\development\morena-dental-clinic
+          git stash
+          git pull
           docker-compose -f C:\development\morena-dental-clinic\docker\app-docker-compose.yaml up -d --build

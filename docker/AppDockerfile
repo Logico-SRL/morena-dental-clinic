@@ -16,9 +16,6 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-RUN git stash
-RUN git pull
-
 # Install dependencies based on the preferred package manager
 COPY package.json ./ yarn.lock* ./
 
